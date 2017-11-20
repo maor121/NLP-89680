@@ -10,12 +10,15 @@ def read_input_file(input_filename):
             for line in f:
                 wordsAndTags = line.split()
                 for w_t in wordsAndTags:
-                    for word, tag in zip(*w_t.split("\\")):
-                        words.append(word)
-                        tags.append(tag)
+                    word, tag = w_t.rsplit("/",1)
+                    words.append(word)
+                    tags.append(tag)
         return [words, tags]
     except Exception as e:
         raise
+
+#def write_q_mle_file(count_tags_triplets, count_tags_pairs, count_tags_single, T2I):
+
 
 def list_to_ids(L):
     from collections import Counter
