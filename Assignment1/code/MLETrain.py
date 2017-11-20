@@ -22,13 +22,23 @@ def list_to_ids(L):
     L2I = {t: i for i, t in enumerate(Counter(L).keys())}
     return L2I
 
-def count_triplets(tags, T2I):
+def count_triplets(tags_ids):
     from collections import Counter
     count_y1_y2_y3 = Counter()
-    for t1, t2, t3 in triplets(tags):
-        i1, i2, i3 = T2I[t1], T2I[t2], T2I[t3]
-        count_y1_y2_y3.update((i1,i2,i3)) #tuple, order does not matter for hashing
+    for i1, i2, i3 in triplets(tags_ids):
+        count_y1_y2_y3.update([frozenset([i1,i2,i3])]) #set, order does not matter for hashing
     return count_y1_y2_y3
+
+def count_pairs(tags_ids):
+    from collections import Counter
+    count_y1_y2 = Counter()
+    for i1, i2, i3 in triplets(tags_ids):
+        count_y1_y2.update([frozenset([i1, i2])])  # set, order does not matter for hashing
+    return count_y1_y2
+
+def count_single(tags_ids):
+    from collections import Counter
+    return Counter(tags_ids)
 
 def triplets(iterable):
     "s -> (s0,s1,s2), (s1,s2,s3), (s2, s3,s4), ..."
@@ -40,6 +50,11 @@ def triplets(iterable):
     return izip(a, b, c)
 
 if __name__ == '__main__':
+    from collections import Counter
+    c = Counter()
+    c.update([frozenset([1,2])])
+    c.update([frozenset([2,1])])
+
     args = sys.argv[1:]
     if len(args) != 3:
         print "Wrong number of arguments. Use:\n" + \
@@ -54,5 +69,9 @@ if __name__ == '__main__':
 
     W2I = list_to_ids(train_data[0])
     T2I = list_to_ids(train_data[1])
+    tags_ids = [T2I[t] for t in train_data[1]]
 
-    count_triplets = count_triplets(train_data[1], T2I)
+    count_tag_triplets = count_triplets(tags_ids)
+    count_tag_pairs = count_pairs(tags_ids)
+    count_tag_single = count_single(tags_ids)
+
