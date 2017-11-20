@@ -39,6 +39,15 @@ def write_q_mle_file(count_tags_triplets, count_tags_pairs, count_tags_single, I
     except Exception:
         raise
 
+def write_e_mle_file(count_word_tags, I2T, I2W, e_mle_filename):
+    try:
+        with open(e_mle_filename, 'w+') as f:  # Overwrite file if exists
+            for (word_id, tag_id), count in count_word_tags.iteritems():
+                line = "{} {}\t{}\n".format(I2W[word_id], I2T[tag_id], count)
+                f.write(line)
+    except Exception:
+        raise
+
 def list_to_ids(L):
     from collections import Counter
     L2I = {t: i for i, t in enumerate(Counter(L).keys())}
@@ -61,6 +70,10 @@ def count_pairs(tags_ids):
 def count_single(tags_ids):
     from collections import Counter
     return Counter(tags_ids)
+
+def count_word_tags(word_ids, tag_ids):
+    from collections import Counter
+    return Counter(zip(word_ids, tags_ids))
 
 def triplets(iterable):
     "s -> (s0,s1,s2), (s1,s2,s3), (s2, s3,s4), ..."
@@ -89,8 +102,10 @@ if __name__ == '__main__':
     W2I = list_to_ids(train_data[0])
     T2I = list_to_ids(train_data[1])
     tags_ids = [T2I[t] for t in train_data[1]]
+    word_ids = [W2I[w] for w in train_data[0]]
     #Inverse dictionary
     I2T = {v: k for k, v in T2I.iteritems()}
+    I2W = {v: k for k, v in W2I.iteritems()}
 
     print("- Counting tags: triplets"),
     count_tag_triplets = count_triplets(tags_ids)
@@ -101,4 +116,10 @@ if __name__ == '__main__':
 
     print("Writing to file {}".format(q_mle_filename))
     write_q_mle_file(count_tag_triplets, count_tag_pairs, count_tag_single, I2T, q_mle_filename)
+
+    print("- Counting tags per word")
+    count_word_tags = count_word_tags(word_ids, tags_ids)
+    print("Writing to file {}".format(e_mle_filename))
+    write_e_mle_file(count_word_tags, I2T, I2W, e_mle_filename)
+
     print("Done")
