@@ -20,25 +20,24 @@ def read_input_file(input_filename):
 def write_q_mle_file(count_tags_triplets, count_tags_pairs, count_tags_single, I2T, q_mle_filename):
     try:
         with open(q_mle_filename, 'w+') as f: #Overwrite file if exists
-            for triplet, count in count_tags_triplets:
+            for triplet, count in count_tags_triplets.iteritems():
                 i1, i2, i3 = triplet
                 t1, t2, t3 = I2T[i1], I2T[i2], I2T[i3]
                 line = "{} {} {}\t{}\n".format(t1,t2,t3,count)
                 f.write(line)
 
-            for pair, count in count_tags_pairs:
+            for pair, count in count_tags_pairs.iteritems():
                 i1, i2 = pair
                 t1, t2 = I2T[i1], I2T[i2]
                 line = "{} {}\t{}\n".format(t1,t2,count)
                 f.write(line)
 
-            for i1, count in count_tags_single:
+            for i1, count in count_tags_single.iteritems():
                 t1 = I2T[i1]
                 line = "{}\t{}\n".format(t1,count)
                 f.write(line)
     except Exception:
         raise
-
 
 def list_to_ids(L):
     from collections import Counter
@@ -49,14 +48,14 @@ def count_triplets(tags_ids):
     from collections import Counter
     count_y1_y2_y3 = Counter()
     for i1, i2, i3 in triplets(tags_ids):
-        count_y1_y2_y3.update([frozenset([i1,i2,i3])]) #set, order does not matter for hashing
+        count_y1_y2_y3.update([tuple(sorted([i1,i2,i3]))]) #allow repeat, order not important
     return count_y1_y2_y3
 
 def count_pairs(tags_ids):
     from collections import Counter
     count_y1_y2 = Counter()
     for i1, i2, i3 in triplets(tags_ids):
-        count_y1_y2.update([frozenset([i1, i2])])  # set, order does not matter for hashing
+        count_y1_y2.update([tuple(sorted([i1, i2]))])  #allow repeat, order not important
     return count_y1_y2
 
 def count_single(tags_ids):
@@ -73,11 +72,6 @@ def triplets(iterable):
     return izip(a, b, c)
 
 if __name__ == '__main__':
-    from collections import Counter
-    c = Counter()
-    c.update([frozenset([1,2])])
-    c.update([frozenset([2,1])])
-
     args = sys.argv[1:]
     if len(args) != 3:
         print "Wrong number of arguments. Use:\n" + \
@@ -88,18 +82,23 @@ if __name__ == '__main__':
     q_mle_filename = args[1]
     e_mle_filename = args[2]
 
+    print("Reading input file")
     train_data = read_input_file(input_filename)
 
+    print("- Converting words\\tags to ids")
     W2I = list_to_ids(train_data[0])
     T2I = list_to_ids(train_data[1])
     tags_ids = [T2I[t] for t in train_data[1]]
-
-    count_tag_triplets = count_triplets(tags_ids)
-    count_tag_pairs = count_pairs(tags_ids)
-    count_tag_single = count_single(tags_ids)
-
     #Inverse dictionary
     I2T = {v: k for k, v in T2I.iteritems()}
 
+    print("- Counting tags: triplets"),
+    count_tag_triplets = count_triplets(tags_ids)
+    print("... pairs"),
+    count_tag_pairs = count_pairs(tags_ids)
+    print("... singles")
+    count_tag_single = count_single(tags_ids)
+
+    print("Writing to file {}".format(q_mle_filename))
     write_q_mle_file(count_tag_triplets, count_tag_pairs, count_tag_single, I2T, q_mle_filename)
     print("Done")
