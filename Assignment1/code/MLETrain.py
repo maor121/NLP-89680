@@ -17,7 +17,27 @@ def read_input_file(input_filename):
     except Exception as e:
         raise
 
-#def write_q_mle_file(count_tags_triplets, count_tags_pairs, count_tags_single, T2I):
+def write_q_mle_file(count_tags_triplets, count_tags_pairs, count_tags_single, I2T, q_mle_filename):
+    try:
+        with open(q_mle_filename, 'w+') as f: #Overwrite file if exists
+            for triplet, count in count_tags_triplets:
+                i1, i2, i3 = triplet
+                t1, t2, t3 = I2T[i1], I2T[i2], I2T[i3]
+                line = "{} {} {}\t{}\n".format(t1,t2,t3,count)
+                f.write(line)
+
+            for pair, count in count_tags_pairs:
+                i1, i2 = pair
+                t1, t2 = I2T[i1], I2T[i2]
+                line = "{} {}\t{}\n".format(t1,t2,count)
+                f.write(line)
+
+            for i1, count in count_tags_single:
+                t1 = I2T[i1]
+                line = "{}\t{}\n".format(t1,count)
+                f.write(line)
+    except Exception:
+        raise
 
 
 def list_to_ids(L):
@@ -78,3 +98,8 @@ if __name__ == '__main__':
     count_tag_pairs = count_pairs(tags_ids)
     count_tag_single = count_single(tags_ids)
 
+    #Inverse dictionary
+    I2T = {v: k for k, v in T2I.iteritems()}
+
+    write_q_mle_file(count_tag_triplets, count_tag_pairs, count_tag_single, I2T, q_mle_filename)
+    print("Done")
