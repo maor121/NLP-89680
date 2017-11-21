@@ -3,7 +3,17 @@ import utils
 import logging
 
 class MLETrain:
-    def MLETrain(self, q_mle_file, e_mle_file):
+    __q_counts = None
+    __e_counts = None
+    __T2I = None
+    __W2I = None
+    def __init__(self, q_mle_file, e_mle_file):
+        self.__T2I, self.__W2I, self.__q_counts, self.__e_counts = \
+            utils.read_mle_files(q_mle_filename, e_mle_filename)
+    def getQ(self,t3,t2=None,t1=None):
+        #tags_tuple = tuple(filter(None, [t3,t2,t1]))
+        #tags_ids_tuple = tuple(sorted([self.__T2I[t] for t in tags_tuple]))
+        #return self.__q_counts[tags_ids_tuple]
         pass
     @staticmethod
     def createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename):
@@ -20,8 +30,8 @@ class MLETrain:
         tags_ids = [T2I[t] for t in train_data[1]]
         word_ids = [W2I[w] for w in train_data[0]]
         # Inverse dictionary
-        I2T = {v: k for k, v in T2I.iteritems()}
-        I2W = {v: k for k, v in W2I.iteritems()}
+        I2T = utils.inverse_dict(T2I)
+        I2W = utils.inverse_dict(W2I)
 
         log.debug("- Counting tags: triplets"),
         count_tag_triplets = utils.count_triplets(tags_ids)
@@ -51,4 +61,7 @@ if __name__ == '__main__':
     q_mle_filename = args[1]
     e_mle_filename = args[2]
 
-    MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
+    #MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
+
+    model = MLETrain(q_mle_filename, e_mle_filename)
+    print(model.getQ("DT","JJR",":"))

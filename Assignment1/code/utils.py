@@ -45,10 +45,54 @@ def write_e_mle_file(count_word_tags, I2T, I2W, e_mle_filename):
     except Exception:
         raise
 
+def read_mle_files(q_mle_filename, e_mle_filename):
+    try:
+        with open(q_mle_filename, "rb") as qFile, \
+             open(e_mle_filename, "rb") as eFile:
+            tags = []
+            counts = []
+            for line in qFile:
+                tags_line_count = line.rstrip().split("\t")
+                tags_line = tags_line_count[0].split()
+                count = int(tags_line_count[1])
+
+                tags.append(tuple(tags_line))
+                counts.append(count)
+            tags_set = set(sum(tags, ()))
+            T2I = list_to_ids(tags_set)
+            #Convert tags to ids
+            tags = [tuple(sorted([T2I[t] for t in tags_tuple])) for tags_tuple in tags]
+            q_counts = {}
+            for tags_tuple, count in zip(tags, counts):
+                q_counts[tags_tuple] = count
+
+            counts = []
+            words = []
+            tags = []
+            for line in eFile:
+                w_t, count = line.rstrip().split("\t")
+                word, tag = w_t.split()
+
+                words.append(word)
+                tags.append(tag)
+                counts.append(count)
+
+            W2I = list_to_ids(words)
+            e_counts = {}
+            for word, tag, count in zip(words, tags, counts):
+                e_counts[(W2I[word], T2I[tag])] = count
+
+            return T2I, W2I, q_counts, e_counts
+    except Exception:
+        raise
+
 def list_to_ids(L):
     from collections import Counter
     L2I = {t: i for i, t in enumerate(Counter(L).keys())}
     return L2I
+
+def inverse_dict(dict):
+    return {v: k for k, v in dict.iteritems()}
 
 def count_triplets(tags_ids):
     from collections import Counter
