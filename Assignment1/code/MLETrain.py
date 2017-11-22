@@ -13,15 +13,22 @@ class MLETrain:
             utils.read_mle_files(q_mle_filename, e_mle_filename)
     def getQ(self, c, b, a):
         three = self.__get_tag_count([c, b, a]) * 1.0 / self.__get_tag_count([b, a])
-        two = self.__get_tag_count([c, b]) * 1.0 / self.__get_tag_count(b)
+        two = self.__get_tag_count([c, b]) * 1.0 / self.__get_tag_count([b])
         one = self.__get_tag_count([c]) * 1.0 / len(self.__T2I)
-        return np.average(three, two, one)
+        return np.average([three, two, one])
+    def getE(self, word, tag):
+        word_id = self.__W2I.get(word)
+        tag_id = self.__T2I.get(tag)
+        if (word_id == None or tag_id == None):
+            return 0
+        word_count = self.__e_counts.get((word_id, tag_id))
+        tag_count = self.__get_tag_count([tag])
+        return float(word_count) / tag_count
     def __get_tag_count(self, tags):
         tags_ids = sorted(filter(None, [self.__T2I.get(t) for t in tags]))
         if len(tags_ids) != len(tags):
             return 0
         return self.__q_counts.get(tuple(tags_ids), 0)
-
     @staticmethod
     def createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename):
         logging.basicConfig()
@@ -72,3 +79,4 @@ if __name__ == '__main__':
 
     model = MLETrain(q_mle_filename, e_mle_filename)
     print(model.getQ("DT","JJR",":"))
+    print(model.getE("Law", "NN"))
