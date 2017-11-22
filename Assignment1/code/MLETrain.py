@@ -1,6 +1,7 @@
 import sys
 import utils
 import logging
+import numpy as np
 
 class MLETrain:
     __q_counts = None
@@ -10,11 +11,17 @@ class MLETrain:
     def __init__(self, q_mle_file, e_mle_file):
         self.__T2I, self.__W2I, self.__q_counts, self.__e_counts = \
             utils.read_mle_files(q_mle_filename, e_mle_filename)
-    def getQ(self,t3,t2=None,t1=None):
-        #tags_tuple = tuple(filter(None, [t3,t2,t1]))
-        #tags_ids_tuple = tuple(sorted([self.__T2I[t] for t in tags_tuple]))
-        #return self.__q_counts[tags_ids_tuple]
-        pass
+    def getQ(self, c, b, a):
+        three = self.__get_tag_count([c, b, a]) * 1.0 / self.__get_tag_count([b, a])
+        two = self.__get_tag_count([c, b]) * 1.0 / self.__get_tag_count(b)
+        one = self.__get_tag_count([c]) * 1.0 / len(self.__T2I)
+        return np.average(three, two, one)
+    def __get_tag_count(self, tags):
+        tags_ids = sorted(filter(None, [self.__T2I.get(t) for t in tags]))
+        if len(tags_ids) != len(tags):
+            return 0
+        return self.__q_counts.get(tuple(tags_ids), 0)
+
     @staticmethod
     def createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename):
         logging.basicConfig()
