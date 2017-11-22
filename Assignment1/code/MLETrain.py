@@ -21,7 +21,7 @@ class MLETrain:
         tag_id = self.__T2I.get(tag)
         if (word_id == None or tag_id == None):
             return 0
-        word_count = self.__e_counts.get((word_id, tag_id))
+        word_count = self.__e_counts.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
         return float(word_count) / tag_count
     def __get_tag_count(self, tags):
@@ -77,7 +77,12 @@ if __name__ == '__main__':
 
     MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
 
+    """
     #Testing
-    #model = MLETrain(q_mle_filename, e_mle_filename)
-    #print(model.getQ("DT","JJR",":"))
-    #print(model.getE("Law", "NN"))
+    model = MLETrain(q_mle_filename, e_mle_filename)
+    print(model.getQ("DT","JJR",":"))
+    print(model.getE("Law", "NN"))
+    print(model.getE("Start", "Start"))
+    print(model.getQ("PRP", "Start", "Start"))
+    print(model.getQ("DT", "JJR", "Start"))
+    """

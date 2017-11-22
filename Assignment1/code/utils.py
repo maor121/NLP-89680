@@ -5,6 +5,7 @@ def read_input_file(input_filename):
     try:
         with open(input_filename, 'rb') as f:
             for line in f:
+                line += "Start/Start Start/Start "
                 wordsAndTags = line.split()
                 for w_t in wordsAndTags:
                     word, tag = w_t.rsplit("/",1)
