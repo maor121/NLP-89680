@@ -75,8 +75,9 @@ if __name__ == '__main__':
     q_mle_filename = args[1]
     e_mle_filename = args[2]
 
-    #MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
+    MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
 
-    model = MLETrain(q_mle_filename, e_mle_filename)
-    print(model.getQ("DT","JJR",":"))
-    print(model.getE("Law", "NN"))
+    #Testing
+    #model = MLETrain(q_mle_filename, e_mle_filename)
+    #print(model.getQ("DT","JJR",":"))
+    #print(model.getE("Law", "NN"))
