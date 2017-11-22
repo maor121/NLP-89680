@@ -1,6 +1,13 @@
 from MLETrain import MLETrain
 import sys
 
+class GreedyTag:
+    __mletrain = None
+    def __init__(self, mletrain):
+        self.__mletrain = mletrain
+    def getP(self, sentance, word_index, tag):
+        #for i in
+        pass
 if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) not in (4, 5):
@@ -14,6 +21,6 @@ if __name__ == '__main__':
     out_filename = args[3]
     extra_filename = args[4] if len(args) >= 5 else None
 
-    MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
     model = MLETrain(q_mle_filename, e_mle_filename)
+
 
