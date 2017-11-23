@@ -10,7 +10,7 @@ def read_input_file(input_filename, is_tagged):
             for line in f:
                 sentence = line # In this assignment each line is a sentence
                 prefix = (START_WORD+'/'+START_TAG+' ')*2 if is_tagged else (START_WORD + ' ')*2
-                sentence += prefix
+                sentence = prefix + sentence
                 if is_tagged:
                     for w_t in sentence.split():
                         word, tag = w_t.rsplit("/",1)
