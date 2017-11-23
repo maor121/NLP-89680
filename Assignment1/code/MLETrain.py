@@ -1,4 +1,6 @@
 import sys
+from collections import Counter
+
 import utils
 import logging
 import numpy as np
@@ -36,29 +38,36 @@ class MLETrain:
         log.setLevel(logging.DEBUG)
 
         log.debug("Reading input file")
-        train_data = utils.read_input_file(input_filename, True)
+        train_data = utils.read_input_file(input_filename, is_tagged=True)
 
         log.debug("- Converting words\\tags to ids")
-        W2I = utils.list_to_ids(train_data[0])
-        T2I = utils.list_to_ids(train_data[1])
-        tags_ids = [T2I[t] for t in train_data[1]]
-        word_ids = [W2I[w] for w in train_data[0]]
+        from utils import list_to_ids, reduce_tuple_list, flatten
+        W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)))
+        T2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=1)))
+        train_data_ids = utils.sentences_to_ids(train_data, W2I, T2I)
         # Inverse dictionary
         I2T = utils.inverse_dict(T2I)
         I2W = utils.inverse_dict(W2I)
 
-        log.debug("- Counting tags: triplets"),
-        count_tag_triplets = utils.count_triplets(tags_ids)
-        log.debug("... pairs"),
-        count_tag_pairs = utils.count_pairs(tags_ids)
-        log.debug("... singles")
-        count_tag_single = utils.count_single(tags_ids)
+        log.debug("- Counting:")
+        count_tag_triplets = Counter()
+        count_tag_pairs = Counter()
+        count_tag_single = Counter()
+        count_word_tags = Counter()
+        count_word_tags.update()
+        for sentence in train_data_ids:
+            words_ids = sentence[0]
+            tags_ids = sentence[1]
+            #Q
+            count_tag_triplets.update(utils.count_triplets(tags_ids))
+            count_tag_pairs.update(utils.count_pairs(tags_ids))
+            count_tag_single.update(utils.count_single(tags_ids))
+            #E
+            count_word_tags.update(utils.count_word_tags(words_ids, tags_ids))
 
         log.debug("Writing to file {}".format(q_mle_filename))
         utils.write_q_mle_file(count_tag_triplets, count_tag_pairs, count_tag_single, I2T, q_mle_filename)
 
-        log.debug("- Counting tags per word")
-        count_word_tags = utils.count_word_tags(word_ids, tags_ids)
         log.debug("Writing to file {}".format(e_mle_filename))
         utils.write_e_mle_file(count_word_tags, I2T, I2W, e_mle_filename)
 
@@ -82,7 +91,6 @@ if __name__ == '__main__':
     model = MLETrain(q_mle_filename, e_mle_filename)
     print(model.getQ("DT","JJR",":"))
     print(model.getE("Law", "NN"))
-    print(model.getE(utils.START_WORD, utils.START_TAG))
-    print(model.getQ("PRP", "Start", utils.START_TAG))
+    print(model.getQ("NNP", utils.START_TAG, utils.START_TAG))
     print(model.getQ("DT", "JJR", utils.START_TAG))
     """
