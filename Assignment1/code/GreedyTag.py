@@ -47,14 +47,12 @@ if __name__ == '__main__':
         prediction = tagger.getPrediction(words)
         #Numbers are more easily compared then strings
         prediction_ids = model.getTagsIds(prediction)
-        tags_ids = model.getTagsIds(tags[:2]) #Skip START
+        tags_ids = model.getTagsIds(tags[2:]) #Skip START
         miss_total += sum(1 for i, j in zip(prediction_ids, tags_ids) if i != j)
         total += len(prediction_ids)
         sentences_processed += 1
 
         progress = utils.progress_hook(sentences_processed, sentences_count, progress)
-        if (progress == 10):
-            break
     hit_total = total - miss_total
     accuracy = hit_total * 1.0 / total
     print("accuracy: {} in {} words".format(str(accuracy), str(total)))
