@@ -1,16 +1,23 @@
-def read_input_file(input_filename):
+START_WORD = "_$tart"
+START_TAG = "Start"
+
+def read_input_file(input_filename, is_tagged):
     """Return a list of pairs, (word, tag)"""
     words = []
     tags = []
     try:
         with open(input_filename, 'rb') as f:
             for line in f:
-                line += "Start/Start Start/Start "
-                wordsAndTags = line.split()
-                for w_t in wordsAndTags:
-                    word, tag = w_t.rsplit("/",1)
-                    words.append(word)
-                    tags.append(tag)
+                sentence = line # In this assignment each line is a sentence
+                prefix = (START_WORD+'/'+START_TAG+' ')*2 if is_tagged else (START_WORD + ' ')*2
+                sentence += prefix
+                if is_tagged:
+                    for w_t in sentence.split():
+                        word, tag = w_t.rsplit("/",1)
+                        words.append(word)
+                        tags.append(tag)
+                else:
+                    words += sentence.split()
         return [words, tags]
     except Exception as e:
         raise

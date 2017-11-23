@@ -36,7 +36,7 @@ class MLETrain:
         log.setLevel(logging.DEBUG)
 
         log.debug("Reading input file")
-        train_data = utils.read_input_file(input_filename)
+        train_data = utils.read_input_file(input_filename, True)
 
         log.debug("- Converting words\\tags to ids")
         W2I = utils.list_to_ids(train_data[0])
@@ -77,12 +77,12 @@ if __name__ == '__main__':
 
     MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
 
-    """
     #Testing
+    """
     model = MLETrain(q_mle_filename, e_mle_filename)
     print(model.getQ("DT","JJR",":"))
     print(model.getE("Law", "NN"))
-    print(model.getE("Start", "Start"))
-    print(model.getQ("PRP", "Start", "Start"))
-    print(model.getQ("DT", "JJR", "Start"))
+    print(model.getE(utils.START_WORD, utils.START_TAG))
+    print(model.getQ("PRP", "Start", utils.START_TAG))
+    print(model.getQ("DT", "JJR", utils.START_TAG))
     """

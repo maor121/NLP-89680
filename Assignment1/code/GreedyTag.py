@@ -5,7 +5,7 @@ class GreedyTag:
     __mletrain = None
     def __init__(self, mletrain):
         self.__mletrain = mletrain
-    def getP(self, sentance, word_index, tag):
+    def getP(self, sentence, word_index, tag):
         #for i in
         pass
 if __name__ == '__main__':
