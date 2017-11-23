@@ -13,11 +13,23 @@ class MLETrain:
     def __init__(self, q_mle_file, e_mle_file):
         self.__T2I, self.__W2I, self.__q_counts, self.__e_counts = \
             utils.read_mle_files(q_mle_filename, e_mle_filename)
+
+    def getP(self, sentence_words, predictions):
+        predictions = [utils.START_TAG, utils.START_TAG].extend(predictions)
+        #[y0,y1,y2,y3,y4] -> [(y0,y1,y2),(y1,y2,y3),(y2,y3,y4)]
+        predictions_triplets = utils.triplets(predictions)
+        logSum = 0.0
+        for word, (t_prev_prev, t_prev ,t) in sentence_words, predictions_triplets:
+            logSum += np.log(self.getQ(t, t_prev, t_prev_prev)) + \
+                      np.log(self.getE(word, t))
+        return logSum
+
     def getQ(self, c, b, a):
         three = self.__get_tag_count([c, b, a]) * 1.0 / self.__get_tag_count([b, a])
         two = self.__get_tag_count([c, b]) * 1.0 / self.__get_tag_count([b])
         one = self.__get_tag_count([c]) * 1.0 / len(self.__T2I)
         return np.average([three, two, one])
+
     def getE(self, word, tag):
         word_id = self.__W2I.get(word)
         tag_id = self.__T2I.get(tag)
@@ -26,11 +38,16 @@ class MLETrain:
         word_count = self.__e_counts.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
         return float(word_count) / tag_count
+
+    def getTags(self):
+        return self.__T2I.keys()
+
     def __get_tag_count(self, tags):
         tags_ids = sorted(filter(None, [self.__T2I.get(t) for t in tags]))
         if len(tags_ids) != len(tags):
             return 0
         return self.__q_counts.get(tuple(tags_ids), 0)
+
     @staticmethod
     def createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename):
         logging.basicConfig()

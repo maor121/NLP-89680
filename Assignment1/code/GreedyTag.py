@@ -1,15 +1,14 @@
 from MLETrain import MLETrain
 import sys
 import utils
+import numpy as np
 
 class GreedyTag:
     __mletrain = None
     def __init__(self, mletrain):
         self.__mletrain = mletrain
-    def getP(self, sentence_words, sentence_predictions):
-
-        #[y0,y1,y2,y3,y4] -> [(y0,y1,y2),(y1,y2,y3),(y2,y3,y4)]
-        predictions_triplets = utils.triplets(sentence_predictions)
+    def getPrediction(self, sentence_words):
+        tags = self.__mletrain.getTags()
         pass
 
 if __name__ == '__main__':
