@@ -12,7 +12,7 @@ class MLETrain:
     __W2I = None
     def __init__(self, q_mle_file, e_mle_file):
         self.__T2I, self.__W2I, self.__q_counts, self.__e_counts = \
-            utils.read_mle_files(q_mle_filename, e_mle_filename)
+            utils.read_mle_files(q_mle_file, e_mle_file)
 
     def getP(self, sentence_words, predictions):
         predictions = [utils.START_TAG, utils.START_TAG].extend(predictions)
@@ -25,9 +25,15 @@ class MLETrain:
         return logSum
 
     def getQ(self, c, b, a):
-        three = self.__get_tag_count([c, b, a]) * 1.0 / self.__get_tag_count([b, a])
-        two = self.__get_tag_count([c, b]) * 1.0 / self.__get_tag_count([b])
-        one = self.__get_tag_count([c]) * 1.0 / len(self.__T2I)
+        cba_count = self.__get_tag_count([c, b, a]) * 1.0
+        cb_count = self.__get_tag_count([c,b]) * 1.0
+        c_count = self.__get_tag_count([c]) * 1.0
+        ba_count = self.__get_tag_count([b,a])
+        b_count = self.__get_tag_count([b])
+
+        three = cba_count / ba_count if ba_count != 0 else 0
+        two = cb_count / b_count if b_count != 0 else 0
+        one = c_count / len(self.__T2I)
         return np.average([three, two, one])
 
     def getE(self, word, tag):
@@ -41,6 +47,9 @@ class MLETrain:
 
     def getTags(self):
         return self.__T2I.keys()
+
+    def getTagsIds(self, tags):
+        return [self.__T2I[t] for t in tags]
 
     def __get_tag_count(self, tags):
         tags_ids = sorted(filter(None, [self.__T2I.get(t) for t in tags]))

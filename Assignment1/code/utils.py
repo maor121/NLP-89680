@@ -109,7 +109,7 @@ def flatten(L):
 
 def list_to_ids(L):
     from collections import Counter
-    L2I = {t: i for i, t in enumerate(Counter(L).keys())}
+    L2I = {t: i+1 for i, t in enumerate(Counter(L).keys())} # +1 not including 0, 0 is like None for python
     return L2I
 
 def sentences_to_ids(sentences, W2I, T2I):

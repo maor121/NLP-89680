@@ -1,7 +1,6 @@
 from MLETrain import MLETrain
 import sys
 import utils
-import numpy as np
 
 class GreedyTag:
     __mletrain = None
@@ -9,7 +8,17 @@ class GreedyTag:
         self.__mletrain = mletrain
     def getPrediction(self, sentence_words):
         tags = self.__mletrain.getTags()
-        pass
+
+        predictions = []
+        y_prev = utils.START_TAG
+        y_prev_prev = utils.START_TAG
+        for word in sentence_words:
+            y = max(tags, key=lambda t: self.__mletrain.getE(word, t)*self.__mletrain.getQ(t, y_prev, y_prev_prev))
+            predictions.append(y)
+
+            y_prev_prev = y_prev
+            y_prev = y
+        return predictions
 
 if __name__ == '__main__':
     args = sys.argv[1:]
@@ -25,5 +34,19 @@ if __name__ == '__main__':
     extra_filename = args[4] if len(args) >= 5 else None
 
     model = MLETrain(q_mle_filename, e_mle_filename)
+    tagger = GreedyTag(model)
 
+    sentences = utils.read_input_file(input_filename, is_tagged=True)
 
+    miss_total = 0
+    total = 0
+    for (words, tags) in sentences:
+        prediction = tagger.getPrediction(words)
+        #Numbers are more easily compared then strings
+        prediction_ids = model.getTagsIds(prediction)
+        tags_ids = model.getTagsIds(tags[:2]) #Skip START
+        miss_total += sum(1 for i, j in zip(prediction_ids, tags_ids) if i != j)
+        total += len(prediction_ids)
+    hit_total = total - miss_total
+    accuracy = hit_total * 1.0 / total
+    print("accuracy: {} in {} words" % accuracy, total)
