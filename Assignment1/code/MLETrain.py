@@ -32,7 +32,7 @@ class MLETrain:
 
         three = self.__get_tag_count([c, b, a]) * 1.0 / ba_count if ba_count != 0 else 0
         two = self.__get_tag_count([c,b]) * 1.0 / b_count if b_count != 0 else 0
-        one = c_count / len(self.__T2I)
+        one = c_count / self.__words_trained_count
         return np.average([three, two, one])
 
     def getE(self, word, tag):
