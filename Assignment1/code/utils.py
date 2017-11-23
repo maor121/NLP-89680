@@ -1,6 +1,7 @@
+import numpy as np
+
 START_TAG = "Start"
 END_TAG = "End"
-
 
 def read_input_file(input_filename, is_tagged):
     """Return a list of pairs, [[(words, tags],[(words,tags)], every pair is a sentence"""
@@ -17,7 +18,7 @@ def read_input_file(input_filename, is_tagged):
                         word, tag = w_t.rsplit("/", 1)
                         words.append(word)
                         tags.append(tag)
-                    #tags.append(END_TAG)
+                        # tags.append(END_TAG)
                 else:
                     words += sentence.split()
                 result.append((words, tags))
@@ -96,7 +97,11 @@ def read_mle_files(q_mle_filename, e_mle_filename):
             for word, tag, count in zip(words, tags, counts):
                 e_counts[(W2I[word], T2I[tag])] = count
 
-            return T2I, W2I, q_counts, e_counts
+            tags = T2I.keys()
+            total_word_count = np.sum(q_counts[tuple([T2I[t]])] for t in tags)
+            total_word_count -= q_counts[tuple([T2I[START_TAG]])]
+
+            return T2I, W2I, q_counts, e_counts, total_word_count
     except Exception:
         raise
 
@@ -104,13 +109,16 @@ def read_mle_files(q_mle_filename, e_mle_filename):
 def reduce_tuple_list(L, dim):
     return [l[dim] for l in L]
 
+
 def flatten(L):
     return [item for sublist in L for item in sublist]
 
+
 def list_to_ids(L):
     from collections import Counter
-    L2I = {t: i+1 for i, t in enumerate(Counter(L).keys())} # +1 not including 0, 0 is like None for python
+    L2I = {t: i + 1 for i, t in enumerate(Counter(L).keys())}  # +1 not including 0, 0 is like None for python
     return L2I
+
 
 def sentences_to_ids(sentences, W2I, T2I):
     result = []
@@ -119,6 +127,7 @@ def sentences_to_ids(sentences, W2I, T2I):
         t_ids = [T2I[t] for t in tags]
         result.append((w_ids, t_ids))
     return result
+
 
 def inverse_dict(dict):
     return {v: k for k, v in dict.iteritems()}
@@ -146,7 +155,7 @@ def count_single(tags_ids):
 
 
 def count_word_tags(word_ids, tag_ids):
-    #Ignore START END tags
+    # Ignore START END tags
     from collections import Counter
     return Counter(zip(word_ids, tag_ids[2:]))
 
@@ -159,3 +168,22 @@ def triplets(iterable):
     next(c, None)
     next(c, None)
     return izip(a, b, c)
+
+
+def progress_hook(count, total, last_percent_reported=None):
+    import sys
+
+    percent = int(count * 100 / total)
+
+    if last_percent_reported != percent:
+        if percent % 5 == 0:
+            sys.stdout.write("%s%%" % percent)
+            if (percent == 100):
+                sys.stdout.write("\n")
+            sys.stdout.flush()
+        else:
+            sys.stdout.write(".")
+            sys.stdout.flush()
+
+    last_percent_reported = percent
+    return last_percent_reported

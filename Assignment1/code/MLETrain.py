@@ -10,8 +10,9 @@ class MLETrain:
     __e_counts = None
     __T2I = None
     __W2I = None
+    __words_trained_count = None
     def __init__(self, q_mle_file, e_mle_file):
-        self.__T2I, self.__W2I, self.__q_counts, self.__e_counts = \
+        self.__T2I, self.__W2I, self.__q_counts, self.__e_counts, self.__words_trained_count = \
             utils.read_mle_files(q_mle_file, e_mle_file)
 
     def getP(self, sentence_words, predictions):
@@ -25,14 +26,12 @@ class MLETrain:
         return logSum
 
     def getQ(self, c, b, a):
-        cba_count = self.__get_tag_count([c, b, a]) * 1.0
-        cb_count = self.__get_tag_count([c,b]) * 1.0
         c_count = self.__get_tag_count([c]) * 1.0
         ba_count = self.__get_tag_count([b,a])
         b_count = self.__get_tag_count([b])
 
-        three = cba_count / ba_count if ba_count != 0 else 0
-        two = cb_count / b_count if b_count != 0 else 0
+        three = self.__get_tag_count([c, b, a]) * 1.0 / ba_count if ba_count != 0 else 0
+        two = self.__get_tag_count([c,b]) * 1.0 / b_count if b_count != 0 else 0
         one = c_count / len(self.__T2I)
         return np.average([three, two, one])
 
