@@ -1,3 +1,4 @@
+from collections import Counter
 from MLETrain import MLETrain
 import sys
 import utils
@@ -10,13 +11,42 @@ class HMMTag:
         self.__mletrain = mletrain
     def getPrediction(self, sentence_words):
         tags = self.__mletrain.getTags()
-        V = np.ndarray([len(sentence_words), len(tags), len(tags)])
+        T2I = {t: i for i, t in enumerate(Counter(tags).keys())}
+        I2T = utils.inverse_dict(T2I)
 
-        for i in range(len(sentence_words)):
-            for t_prev in tags:
-                for t in tags:
-                    V_prev_slice = V[i-1,:,:]
-                    V[i, t_prev, t] = np.max()
+        V = np.zeros([len(sentence_words)+1, len(tags), len(tags)], dtype=np.float32)
+        bp = np.ndarray([len(sentence_words)+1, len(tags), len(tags)], dtype=object)
+
+        V[0, T2I[utils.START_TAG], T2I[utils.START_TAG]] = 1
+        words_count = len(sentence_words)
+        words_itr = iter(sentence_words)
+        for i in range(1, words_count+1):
+            wi = words_itr.next()
+            for t in tags:
+                t_id = T2I[t]
+                E = self.__mletrain.getE(wi, t)
+                for t_prev in tags:
+                    t_prev_id = T2I[t_prev]
+
+                    prev_row_calc = [V[i - 1, T2I[t_prev_prev], t_prev_id] * \
+                        self.__mletrain.getQ(t, t_prev, t_prev_prev) * \
+                        E
+                        for t_prev_prev in tags]
+
+                    max_id = np.argmax(prev_row_calc)
+                    bp[i, t_prev_id, t_id] = max_id
+                    V[i, t_prev_id, t_id] = prev_row_calc[max_id]
+
+        pred_prev_last_id, pred_last_id  = np.argmax(V[words_count,:,:])
+
+        predictions_ids = np.array(words_count, dtype=np.int32)
+        predictions_ids[words_count-1] = pred_last_id
+        predictions_ids[words_count-2] = pred_prev_last_id
+        for i in xrange(words_count-2, 1, -1):
+            prediction_ids[i] = bp[i+2, prediction_ids[i+1], pred_last_id[i+2]]
+        predictions = [I2T[p_id] for p_id in prediction_ids]
+        return predictions
+
 
 if __name__ == '__main__':
     args = sys.argv[1:]

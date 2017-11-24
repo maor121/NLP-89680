@@ -38,7 +38,7 @@ class MLETrain:
     def getE(self, word, tag):
         word_id = self.__W2I.get(word)
         tag_id = self.__T2I.get(tag)
-        if (word_id == None or tag_id == None):
+        if word_id == None or tag_id == None:
             return 0
         word_count = self.__e_counts.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
