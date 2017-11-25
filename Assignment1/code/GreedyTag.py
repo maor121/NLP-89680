@@ -56,3 +56,5 @@ if __name__ == '__main__':
     hit_total = total - miss_total
     accuracy = hit_total * 1.0 / total
     print("accuracy: {} in {} words".format(str(accuracy), str(total)))
+
+    #TODO: Write predictions to file
