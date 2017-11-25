@@ -94,15 +94,18 @@ def read_mle_files(q_mle_filename, e_mle_filename):
                 counts.append(count)
 
             W2I = list_to_ids(words)
+            W2I_lower = list_to_ids([w.lower() for w in words])
             e_counts = {}
+            e_counts_lower = {}
             for word, tag, count in zip(words, tags, counts):
                 e_counts[(W2I[word], T2I[tag])] = count
+                e_counts_lower[W2I_lower[word.lower()], T2I[tag]] = count
 
             tags = T2I.keys()
             total_word_count = np.sum(q_counts[tuple([T2I[t]])] for t in tags)
             total_word_count -= q_counts[tuple([T2I[START_TAG]])]
 
-            return T2I, W2I, q_counts, e_counts, total_word_count
+            return T2I, W2I, W2I_lower, q_counts, e_counts, e_counts_lower, total_word_count
     except Exception:
         raise
 

@@ -18,7 +18,7 @@ class HMMTag:
         tags_count = len(tags)
 
         V = np.full([words_count+1, tags_count, tags_count], float('-inf'), dtype=np.float64)
-        bp = np.zeros([words_count, tags_count, tags_count], dtype=np.int32)
+        bp = np.full([words_count, tags_count, tags_count], -1, dtype=np.int32)
 
         V[0, T2I[utils.START_TAG], T2I[utils.START_TAG]] = np.log(1)
         words_itr = iter(sentence_words)
@@ -57,7 +57,7 @@ class HMMTag:
         prediction_ids = np.zeros(words_count, dtype=np.int32)
         prediction_ids[words_count-1] = pred_last_id
         prediction_ids[words_count-2] = pred_prev_last_id
-        for i in xrange(words_count-3, 1, -1):
+        for i in range(words_count-3, -1, -1):
             prediction_ids[i] = bp[i+2, prediction_ids[i+1], prediction_ids[i+2]]
         predictions = [I2T[p_id] for p_id in prediction_ids]
         return predictions
@@ -95,8 +95,17 @@ if __name__ == '__main__':
         total += len(prediction_ids)
         sentences_processed += 1
 
-        progress = utils.progress_hook(sentences_processed, sentences_count, progress)
+        #Temp for debugging
+        """misses = np.argwhere(np.array(prediction_ids) - np.array(tags_ids))
+        if (len(misses) > 0):
+            print(words)
+            print(prediction)
+            print(tags[2:])
+            for miss in misses:
+                print("{} {} [{}/{}]".format(miss[0],words[miss[0]],prediction[miss[0]],tags[2:][miss[0]]))"""
 
+        progress = utils.progress_hook(sentences_processed, sentences_count, progress)
+        #break
     hit_total = total - miss_total
     accuracy = hit_total * 1.0 / total
     print("accuracy: {} in {} words".format(str(accuracy), str(total)))

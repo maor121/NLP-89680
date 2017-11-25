@@ -5,14 +5,16 @@ import utils
 import logging
 import numpy as np
 
-VOCAB_SIZE = 12000
+VOCAB_SIZE = 15000
 
 
 class MLETrain:
     __q_counts = None
     __e_counts = None
+    __e_counts_lower = None
     __T2I = None
     __W2I = None
+    __W2I_lower = None
     __words_trained_count = None
 
     __Q_cache = None
@@ -20,7 +22,7 @@ class MLETrain:
     __cache_miss_count = None
 
     def __init__(self, q_mle_file, e_mle_file):
-        self.__T2I, self.__W2I, self.__q_counts, self.__e_counts, self.__words_trained_count = \
+        self.__T2I, self.__W2I, self.__W2I_lower, self.__q_counts, self.__e_counts, self.__e_counts_lower, self.__words_trained_count = \
             utils.read_mle_files(q_mle_file, e_mle_file)
         tags_count = len(self.__T2I)
         self.__Q_cache = np.full([tags_count, tags_count, tags_count], -1, dtype=np.float32)
@@ -61,6 +63,10 @@ class MLETrain:
         word_id = self.__W2I.get(word, self.__W2I[utils.UNK_Word])
         tag_id = self.__T2I.get(tag)
         word_count = self.__e_counts.get((word_id, tag_id), 0)
+        #if word_count == 0:
+        #    #Fallbacks
+        #    word_id = self.__W2I_lower.get(word.lower(), self.__W2I_lower[utils.UNK_Word.lower()])
+        #    word_count = self.__e_counts_lower.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
         return float(word_count) / tag_count
 
