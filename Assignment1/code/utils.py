@@ -142,7 +142,7 @@ def count_triplets(tags_ids):
     from collections import Counter
     count_y1_y2_y3 = Counter()
     for i1, i2, i3 in triplets(tags_ids):
-        count_y1_y2_y3.update([tuple(sorted([i1, i2, i3]))])  # allow repeat, order not important
+        count_y1_y2_y3.update([tuple([i1, i2, i3])])  # allow repeat, order important
     return count_y1_y2_y3
 
 
@@ -150,7 +150,7 @@ def count_pairs(tags_ids):
     from collections import Counter
     count_y1_y2 = Counter()
     for i1, i2, i3 in triplets(tags_ids):
-        count_y1_y2.update([tuple(sorted([i1, i2]))])  # allow repeat, order not important
+        count_y1_y2.update([tuple([i1, i2])])  # allow repeat, order important
     return count_y1_y2
 
 

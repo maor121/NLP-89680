@@ -47,12 +47,13 @@ class MLETrain:
         return self.__Q_cache[c_id, b_id, a_id]
 
     def __calc_Q(self, c, b, a):
+        """(c,b,a) - (tag, tag_prev, tag_prev_prev)"""
         c_count = self.__get_tag_count([c]) * 1.0
-        ba_count = self.__get_tag_count([b, a])
+        ba_count = self.__get_tag_count([a, b])
         b_count = self.__get_tag_count([b])
 
-        three = self.__get_tag_count([c, b, a]) * 1.0 / ba_count if ba_count != 0 else 0
-        two = self.__get_tag_count([c, b]) * 1.0 / b_count if b_count != 0 else 0
+        three = self.__get_tag_count([a, b, c]) * 1.0 / ba_count if ba_count != 0 else 0
+        two = self.__get_tag_count([b, c]) * 1.0 / b_count if b_count != 0 else 0
         one = c_count / self.__words_trained_count
         return three * 0.6 + two * 0.25 + one * 0.15
 
@@ -70,7 +71,7 @@ class MLETrain:
         return [self.__T2I[t] for t in tags]
 
     def __get_tag_count(self, tags):
-        tags_ids = sorted(filter(None, [self.__T2I.get(t) for t in tags]))
+        tags_ids = filter(None, [self.__T2I.get(t) for t in tags])
         if len(tags_ids) != len(tags):
             return 0
         return self.__q_counts.get(tuple(tags_ids), 0)
