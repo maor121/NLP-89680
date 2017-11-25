@@ -10,6 +10,7 @@ FLOAT_NUMBER_PATTERN = re.compile(r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?')
 NUMER_WORD_PATTERN = re.compile(r'One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Eleven|Twelve', flags=re.IGNORECASE)
 NUMBER_Word = "&#Num#&"
 
+CAPITAL_PATTERN = re.compile(r'[A-Z]')
 
 def read_input_file(input_filename, is_tagged, replace_numbers):
     """Return a list of pairs, [[(words, tags],[(words,tags)], every pair is a sentence"""
