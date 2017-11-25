@@ -7,7 +7,9 @@ END_TAG = "End"
 
 #Special word types
 FLOAT_NUMBER_PATTERN = re.compile(r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?')
+NUMER_WORD_PATTERN = re.compile(r'One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Eleven|Twelve', flags=re.IGNORECASE)
 NUMBER_Word = "&#Num#&"
+
 
 def read_input_file(input_filename, is_tagged):
     """Return a list of pairs, [[(words, tags],[(words,tags)], every pair is a sentence"""
@@ -17,6 +19,7 @@ def read_input_file(input_filename, is_tagged):
             for line in f:
                 sentence = line  # In this assignment each line is a sentence
                 sentence = FLOAT_NUMBER_PATTERN.sub(NUMBER_Word, sentence)
+                sentence = NUMER_WORD_PATTERN.sub(NUMBER_Word, sentence)
                 words = []
                 tags = []
                 if is_tagged:
