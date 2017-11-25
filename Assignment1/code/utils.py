@@ -1,5 +1,6 @@
 import numpy as np
 
+UNK_Word = "*UNK*"
 START_TAG = "Start"
 END_TAG = "End"
 
@@ -114,16 +115,20 @@ def flatten(L):
     return [item for sublist in L for item in sublist]
 
 
-def list_to_ids(L):
+def list_to_ids(L, MAX_SIZE=None, ID_SHIFT=1):
     from collections import Counter
-    L2I = {t: i + 1 for i, t in enumerate(Counter(L).keys())}  # +1 not including 0, 0 is like None for python
-    return L2I
+    if MAX_SIZE is None:
+        return {t: i + ID_SHIFT for i, t in enumerate(Counter(L).keys())}  # +1 not including 0, 0 is like None for python
+    else:
+        vocab = set([x for x, c in Counter(L).most_common(MAX_SIZE)])
+        vocab.add(UNK_Word)
+        return {t: i + ID_SHIFT for i, t in enumerate(vocab)}  # +1 not including 0, 0 is like None for python
 
 
 def sentences_to_ids(sentences, W2I, T2I):
     result = []
     for words, tags in sentences:
-        w_ids = [W2I[w] for w in words]
+        w_ids = [W2I.get(w, W2I[UNK_Word]) for w in words]
         t_ids = [T2I[t] for t in tags]
         result.append((w_ids, t_ids))
     return result

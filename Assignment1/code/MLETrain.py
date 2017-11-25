@@ -5,6 +5,8 @@ import utils
 import logging
 import numpy as np
 
+VOCAB_SIZE = 12000
+
 class MLETrain:
     __q_counts = None
     __e_counts = None
@@ -36,9 +38,9 @@ class MLETrain:
         return np.average([three, two, one])
 
     def getE(self, word, tag):
-        word_id = self.__W2I.get(word)
+        word_id = self.__W2I.get(word, utils.UNK_Word)
         tag_id = self.__T2I.get(tag)
-        if word_id == None or tag_id == None:
+        if tag_id == None:
             return 0
         word_count = self.__e_counts.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
@@ -67,7 +69,7 @@ class MLETrain:
 
         log.debug("- Converting words\\tags to ids")
         from utils import list_to_ids, reduce_tuple_list, flatten
-        W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)))
+        W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
         T2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=1)))
         train_data_ids = utils.sentences_to_ids(train_data, W2I, T2I)
         # Inverse dictionary

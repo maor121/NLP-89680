@@ -11,7 +11,7 @@ class HMMTag:
         self.__mletrain = mletrain
     def getPrediction(self, sentence_words):
         tags = self.__mletrain.getTags()
-        T2I = {t: i for i, t in enumerate(Counter(tags).keys())}
+        T2I = utils.list_to_ids(tags, ID_SHIFT=0)
         I2T = utils.inverse_dict(T2I)
 
         words_count = len(sentence_words)
