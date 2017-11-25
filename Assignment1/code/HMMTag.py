@@ -96,13 +96,22 @@ if __name__ == '__main__':
         sentences_processed += 1
 
         #Temp for debugging
-        """misses = np.argwhere(np.array(prediction_ids) - np.array(tags_ids))
-        if (len(misses) > 0):
-            print(words)
-            print(prediction)
-            print(tags[2:])
-            for miss in misses:
-                print("{} {} [{}/{}]".format(miss[0],words[miss[0]],prediction[miss[0]],tags[2:][miss[0]]))"""
+        is_debug = False
+        if (is_debug):
+            misses = np.argwhere(np.array(prediction_ids) - np.array(tags_ids))
+            if (len(misses) > 0):
+                print(words)
+                print(prediction)
+                print(tags[2:])
+                for miss in misses:
+                    print("{} {} [{}/{}] E-[{},{}]".format(
+                        miss[0],
+                        words[miss[0]],
+                        prediction[miss[0]],
+                        tags[2:][miss[0]],
+                        model.getE(miss[0], prediction[miss[0]]),
+                        model.getE(miss[0], tags[2:][miss[0]]))
+                    )
 
         progress = utils.progress_hook(sentences_processed, sentences_count, progress)
         #break
