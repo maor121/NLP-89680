@@ -10,7 +10,7 @@ def read_input_file(input_filename, is_tagged):
     try:
         with open(input_filename, 'rb') as f:
             for line in f:
-                sentence = line  # In this assignment each line is a sentence
+                sentence = line.lower()  # In this assignment each line is a sentence
                 words = []
                 tags = []
                 if is_tagged:
