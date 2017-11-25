@@ -27,7 +27,7 @@ def extract_features(words, tags, W2I):
         ###Extract features per condition table in paper: http://u.cs.biu.ac.il/~89-680/memm-paper.pdf###
         ################################################################################################
 
-        not_a_rare_word = wi in W2I.keys()
+        not_a_rare_word = wi in W2I
 
         if not_a_rare_word:
             features['w_i'] = wi
@@ -100,6 +100,7 @@ if __name__ == '__main__':
                 featuresList = extract_features(words, tags, W2I)
                 writeFeaturesListToFile(featuresList, f)
 
+                done_count += 1
                 progress = utils.progress_hook(done_count, sentences_count, progress)
     except Exception:
         raise
