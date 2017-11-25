@@ -17,8 +17,8 @@ class HMMTag:
         words_count = len(sentence_words)
         tags_count = len(tags)
 
-        V = np.full([words_count+1, tags_count, tags_count], float('-inf'), dtype=np.float32)
-        bp = np.zeros([words_count+1, tags_count, tags_count], dtype=np.int32)
+        V = np.full([words_count+1, tags_count, tags_count], float('-inf'), dtype=np.float64)
+        bp = np.zeros([words_count, tags_count, tags_count], dtype=np.int32)
 
         V[0, T2I[utils.START_TAG], T2I[utils.START_TAG]] = np.log(1)
         words_itr = iter(sentence_words)
@@ -29,8 +29,8 @@ class HMMTag:
             # Mt = highest score at time t
             # k = percentage (parameter)
             Mt = np.max(V[i-1,:,:])
-            threshold = Mt + np.log(0.1)
-            tag_ids_in_beam = np.argwhere(V[i-1,:,:] > threshold)
+            threshold = Mt + np.log(0.01)
+            tag_ids_in_beam = np.argwhere(V[i-1,:,:] >= threshold)
 
             tag_prev_prev_ids_beam = list(set(utils.reduce_tuple_list(tag_ids_in_beam, 0)))
             tag_prev_ids_beam = list(set(utils.reduce_tuple_list(tag_ids_in_beam, 1)))
@@ -38,6 +38,8 @@ class HMMTag:
             for t in tags:
                 t_id = T2I[t]
                 E = self.__mletrain.getE(wi, t)
+                if E == 0:
+                    continue
                 for t_prev_id in tag_prev_ids_beam:
                     t_prev = I2T[t_prev_id]
                     prev_row_calc = [V[i - 1, t_prev_prev_id, t_prev_id] + \
@@ -47,7 +49,7 @@ class HMMTag:
 
                     max_id_calc = np.argmax(prev_row_calc)
                     max_prev_prev_id = tag_prev_prev_ids_beam[max_id_calc]
-                    bp[i, t_prev_id, t_id] = max_prev_prev_id
+                    bp[i-1, t_prev_id, t_id] = max_prev_prev_id #bp does not have extra element, -1 then
                     V[i, t_prev_id, t_id] = prev_row_calc[max_id_calc]
 
         pred_prev_last_id, pred_last_id  = np.unravel_index(np.argmax(V[words_count,:,:]), [tags_count, tags_count])
@@ -94,6 +96,7 @@ if __name__ == '__main__':
         sentences_processed += 1
 
         progress = utils.progress_hook(sentences_processed, sentences_count, progress)
+
     hit_total = total - miss_total
     accuracy = hit_total * 1.0 / total
     print("accuracy: {} in {} words".format(str(accuracy), str(total)))
