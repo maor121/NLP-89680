@@ -23,7 +23,7 @@ class MLETrain:
         self.__T2I, self.__W2I, self.__q_counts, self.__e_counts, self.__words_trained_count = \
             utils.read_mle_files(q_mle_file, e_mle_file)
         tags_count = len(self.__T2I)
-        self.__Q_cache = np.full([tags_count, tags_count, tags_count], -1, dtype=np.float64)
+        self.__Q_cache = np.full([tags_count, tags_count, tags_count], -1, dtype=np.float32)
         self.__cache_hit_count = self.__cache_miss_count = 0
 
     def getP(self, sentence_words, predictions):
@@ -54,13 +54,11 @@ class MLETrain:
         three = self.__get_tag_count([c, b, a]) * 1.0 / ba_count if ba_count != 0 else 0
         two = self.__get_tag_count([c, b]) * 1.0 / b_count if b_count != 0 else 0
         one = c_count / self.__words_trained_count
-        return np.average([three, two, one])
+        return three * 0.6 + two * 0.25 + one * 0.15
 
     def getE(self, word, tag):
-        word_id = self.__W2I.get(word, utils.UNK_Word)
+        word_id = self.__W2I.get(word, self.__W2I[utils.UNK_Word])
         tag_id = self.__T2I.get(tag)
-        if tag_id == None:
-            return 0
         word_count = self.__e_counts.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
         return float(word_count) / tag_count
