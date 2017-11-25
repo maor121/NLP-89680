@@ -11,15 +11,16 @@ NUMER_WORD_PATTERN = re.compile(r'One|Two|Three|Four|Five|Six|Seven|Eight|Nine|E
 NUMBER_Word = "&#Num#&"
 
 
-def read_input_file(input_filename, is_tagged):
+def read_input_file(input_filename, is_tagged, replace_numbers):
     """Return a list of pairs, [[(words, tags],[(words,tags)], every pair is a sentence"""
     result = []
     try:
         with open(input_filename, 'rb') as f:
             for line in f:
                 sentence = line  # In this assignment each line is a sentence
-                sentence = FLOAT_NUMBER_PATTERN.sub(NUMBER_Word, sentence)
-                sentence = NUMER_WORD_PATTERN.sub(NUMBER_Word, sentence)
+                if replace_numbers:
+                    sentence = FLOAT_NUMBER_PATTERN.sub(NUMBER_Word, sentence)
+                    sentence = NUMER_WORD_PATTERN.sub(NUMBER_Word, sentence)
                 words = []
                 tags = []
                 if is_tagged:

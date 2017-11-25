@@ -79,7 +79,7 @@ if __name__ == '__main__':
     model = MLETrain(q_mle_filename, e_mle_filename)
     tagger = HMMTag(model)
 
-    sentences = utils.read_input_file(input_filename, is_tagged=True)
+    sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
 
     miss_total = 0
     total = 0

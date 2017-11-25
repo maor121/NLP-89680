@@ -89,7 +89,7 @@ class MLETrain:
         log.setLevel(logging.DEBUG)
 
         log.debug("Reading input file")
-        train_data = utils.read_input_file(input_filename, is_tagged=True)
+        train_data = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
 
         log.debug("- Converting words\\tags to ids")
         from utils import list_to_ids, reduce_tuple_list, flatten
