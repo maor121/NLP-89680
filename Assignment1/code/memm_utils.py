@@ -28,7 +28,7 @@ def create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_p
     features['w_i-1'] = w_prev
     features['w_i-2'] = w_prev_prev
     features['t_i-1'] = t_prev
-    features['t_i-1 t_i-2'] = t_prev + " " + t_prev_prev
+    features['t_i-1_t_i-2'] = t_prev + "&" + t_prev_prev
     features = dict((k, v) for k, v in features.iteritems() if v is not None)
 
     ################################################################################################

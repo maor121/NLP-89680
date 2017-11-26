@@ -20,13 +20,24 @@ if __name__ == '__main__':
     X_train, y_train = load_svmlight_file(feature_vec_filename)
 
     print "Initializing"
-    logreg = LogisticRegression(solver='sag',multi_class='multinomial', verbose=True, n_jobs=-1, tol=1e-4, max_iter=1)
+    logreg = LogisticRegression(solver='sag',multi_class='multinomial', verbose=True, n_jobs=-1, tol=1e-4, max_iter=10)
 
     print('training model...')
     logreg.fit(X_train, y_train)
 
     print('eval model (on the training set):')
     predictions = logreg.predict(X_train)
+
+    """
+    logreg = joblib.load(model_filename)
+    first_xtrain = X_train[0]
+    first_pred = predictions[0:first_xtrain.shape[1]]
+    first_ytrain = y_train[0:first_xtrain.shape[1]]
+    print(first_xtrain)
+    print(first_pred)
+    print(first_ytrain)
+    """
+
     predictions_count = collections.Counter(np.equal(predictions, y_train))
     success_rate = float(predictions_count[True]) / len(predictions) * 100
     print('success rate: ' + str(success_rate) + '%')
