@@ -5,11 +5,6 @@ from sklearn.externals import joblib
 import memm_utils
 import viterbi
 
-def one_hot(val, length):
-    result = np.zeros(length, dtype=np.int32)
-    result[val] = 1
-    return result
-
 
 class MEMMTag:
     def __init__(self, model, feature_map_dict_vect, T2I, common_words):
@@ -17,6 +12,7 @@ class MEMMTag:
         self.__feature_map_dict_vect = feature_map_dict_vect
         self.__common_words = common_words
         self.__I2T = utils.inverse_dict(T2I)
+        self.__prob_cache = {}
     def getPrediction(self, sentence_words):
         words_count = len(sentence_words)
         tags_count = len(self.__I2T)
@@ -25,20 +21,32 @@ class MEMMTag:
 
         words_fivlets = memm_utils.fivelets([None, None] + sentence_words + [None, None])
 
-        getLogScore = lambda w_window, t_id, t_prev_id, t_prev_prev_id : \
-            self.__model.score(
-                self.__feature_map_dict_vect.transform(
-                    memm_utils.create_feature_vec(w_window[0], w_window[1], w_window[2], w_window[3], w_window[4],
-                                                  self.__I2T[t_prev_id], self.__I2T[t_prev_prev_id],
-                                                  w_window[2] in self.__common_words)
-                ), [t_id]
-            )
+        getLogScore = self.__getLogScore
 
         prediction_ids = viterbi.run_viterbi_2nd_order_log_with_beam_search(
             words_fivlets, words_count, tags_count, start_tag_id, getLogScore
         )
-        return [self.__I2T[p_id] for p_id in prediction_ids]
+        self.__evictCache()
 
+        return [self.__I2T[p_id] for p_id in prediction_ids]
+    def __getLogScore(self, w_window, t_id, t_prev_id, t_prev_prev_id):
+        key = (w_window, t_prev_id, t_prev_prev_id)
+        if key not in self.__prob_cache:
+            self.__prob_cache[key] = self.__calcLogProb(w_window, t_prev_id, t_prev_prev_id)
+        #else:
+        #    print "hit"
+        return self.__prob_cache[key][0][t_id]
+    def __calcLogProb(self, w_window, t_prev_id, t_prev_prev_id):
+        return \
+            self.__model.predict_proba(
+            self.__feature_map_dict_vect.transform(
+                memm_utils.create_feature_vec(w_window[0], w_window[1], w_window[2], w_window[3], w_window[4],
+                                              self.__I2T[t_prev_id], self.__I2T[t_prev_prev_id],
+                                              w_window[2] in self.__common_words)
+            )
+        )
+    def __evictCache(self):
+        self.__prob_cache.clear()
 
 if __name__ == '__main__':
     args = sys.argv[1:]

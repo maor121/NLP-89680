@@ -3,7 +3,7 @@ import utils
 
 def run_viterbi_2nd_order_log_with_beam_search(sentence_words, words_count, tags_count, start_tag_id, getLogScore):
     """Note: tags_count includes START TAG"""
-    V = np.full([words_count + 1, tags_count, tags_count], float('-inf'), dtype=np.float64)
+    V = np.full([words_count + 1, tags_count, tags_count], float('-inf'), dtype=np.float32)
     bp = np.full([words_count, tags_count, tags_count], -1, dtype=np.int32)
 
     V[0, start_tag_id, start_tag_id] = np.log(1)
@@ -22,6 +22,8 @@ def run_viterbi_2nd_order_log_with_beam_search(sentence_words, words_count, tags
         tag_prev_ids_beam = list(set(utils.reduce_tuple_list(tag_ids_in_beam, 1)))
 
         for t_id in range(tags_count):
+            if t_id == start_tag_id:
+                continue
             for t_prev_id in tag_prev_ids_beam:
                 prev_row_calc = [V[i - 1, t_prev_prev_id, t_prev_id] + \
                                  getLogScore(wi, t_id, t_prev_id, t_prev_prev_id)
