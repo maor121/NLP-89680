@@ -47,6 +47,20 @@ def feature_map_file_to_dict(feature_map_filename):
         raise
     return dict
 
+def words_and_tags_from_map_dict(feature_map_dict):
+    #TODO: Make this method more efficient
+    common_words = []
+    tags = []
+
+    keys = feature_map_dict.keys()
+    for k in keys:
+        if k.startswith('w_i='):
+            common_words.append(k[4:])
+        else:
+            if not k.__contains__('='):
+                tags.append(k)
+    return set(common_words), tags
+
 
 def feature_string_vec_to_sparse_dict(feature_vec, feature_map_dict):
     vec_size = len(feature_map_dict)
