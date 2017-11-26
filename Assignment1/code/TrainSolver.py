@@ -1,6 +1,9 @@
+import collections
 import sys
-from sklearn.datasets import load_svmlight_file
 
+import numpy as np
+from sklearn.datasets import load_svmlight_file
+from sklearn.linear_model import LogisticRegression
 
 if __name__ == '__main__':
     args = sys.argv[1:]
@@ -12,4 +15,19 @@ if __name__ == '__main__':
     feature_vec_filename = args[0]
     model_filename = args[1]
 
+    print "Loading file"
     X_train, y_train = load_svmlight_file(feature_vec_filename)
+
+    print "Initializing"
+    logreg = LogisticRegression(solver='sag',multi_class='multinomial', verbose=True, tol=1e-4, max_iter=10)
+
+    print('training model...')
+    logreg.fit(X_train, y_train)
+
+    print('predicting...')
+    predictions = logreg.predict(X_train)
+    predictions_count = collections.Counter(np.equal(predictions, y_train))
+    success_rate = float(predictions_count[True]) / len(predictions) * 100
+    print('success rate: ' + str(success_rate) + '%')
+
+    print "Done"
