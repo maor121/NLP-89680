@@ -55,7 +55,7 @@ def feature_map_file_to_dict(feature_map_filename):
     DV.vocab = {}
 
     for k, v in feature_dict.iteritems():
-        f = "%s=%s" % (k, v)
+        f = k
         if f not in DV.vocab:
             DV.feature_names.append(f)
             DV.vocab[f] = len(DV.vocab)
