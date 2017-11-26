@@ -30,8 +30,6 @@ if __name__ == '__main__':
     print('eval model (on the training set):')
     predictions = logreg.predict(X_train)
 
-    predictions = logreg.predict(X_train)
-
     predictions_count = collections.Counter(np.equal(predictions, y_train))
     success_rate = float(predictions_count[True]) / len(predictions) * 100
     print('success rate: ' + str(success_rate) + '%')
