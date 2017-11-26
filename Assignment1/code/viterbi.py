@@ -1,7 +1,7 @@
 import numpy as np
 import utils
 
-def run_viterbi_hmm_log_with_beam_search(sentence_words, words_count, tags_count, start_tag_id, getE, getQ):
+def run_viterbi_2nd_order_log_with_beam_search(sentence_words, words_count, tags_count, start_tag_id, getLogScore):
     """Note: tags_count includes START TAG"""
     V = np.full([words_count + 1, tags_count, tags_count], float('-inf'), dtype=np.float64)
     bp = np.full([words_count, tags_count, tags_count], -1, dtype=np.int32)
@@ -15,21 +15,16 @@ def run_viterbi_hmm_log_with_beam_search(sentence_words, words_count, tags_count
         # Mt = highest score at time t
         # k = percentage (parameter)
         Mt = np.max(V[i - 1, :, :])
-        threshold = Mt + np.log(0.01)
+        threshold = Mt + np.log(0.5)
         tag_ids_in_beam = np.argwhere(V[i - 1, :, :] >= threshold)
 
         tag_prev_prev_ids_beam = list(set(utils.reduce_tuple_list(tag_ids_in_beam, 0)))
         tag_prev_ids_beam = list(set(utils.reduce_tuple_list(tag_ids_in_beam, 1)))
 
         for t_id in range(tags_count):
-            E = getE(wi, t_id)
-            if E == 0:
-                continue
             for t_prev_id in tag_prev_ids_beam:
-                t_prev = I2T[t_prev_id]
                 prev_row_calc = [V[i - 1, t_prev_prev_id, t_prev_id] + \
-                                 np.log(self.__mletrain.getQ(t, t_prev, I2T[t_prev_prev_id])) + \
-                                 np.log(E)
+                                 getLogScore(wi, t_id, t_prev_id, t_prev_prev_id)
                                  for t_prev_prev_id in tag_prev_prev_ids_beam]
 
                 max_id_calc = np.argmax(prev_row_calc)

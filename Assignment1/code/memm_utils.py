@@ -3,14 +3,12 @@ import re
 import numpy as np
 
 
-def create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_prev_prev, W2I, PREFIX_SUFFIX_LEN=4):
+def create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_prev_prev, not_a_rare_word, PREFIX_SUFFIX_LEN=4):
     features = {}
 
     ################################################################################################
     ###Extract features per condition table in paper: http://u.cs.biu.ac.il/~89-680/memm-paper.pdf###
     ################################################################################################
-
-    not_a_rare_word = wi in W2I
 
     if not_a_rare_word:
         features['w_i'] = wi

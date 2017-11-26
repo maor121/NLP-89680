@@ -1,7 +1,14 @@
 import sys
 import utils
+import numpy as np
 from sklearn.externals import joblib
 import memm_utils
+import viterbi
+
+def one_hot(val, length):
+    result = np.zeros(length, dtype=np.int32)
+    result[val] = 1
+    return result
 
 
 class MEMMTag:
@@ -11,6 +18,26 @@ class MEMMTag:
         self.__common_words = common_words
         self.__I2T = utils.inverse_dict(T2I)
     def getPrediction(self, sentence_words):
+        words_count = len(sentence_words)
+        tags_count = len(self.__I2T)
+
+        start_tag_id = T2I[utils.START_TAG]
+
+        words_fivlets = memm_utils.fivelets([None, None] + sentence_words + [None, None])
+
+        getLogScore = lambda w_window, t_id, t_prev_id, t_prev_prev_id : \
+            self.__model.score(
+                self.__feature_map_dict_vect.transform(
+                    memm_utils.create_feature_vec(w_window[0], w_window[1], w_window[2], w_window[3], w_window[4],
+                                                  self.__I2T[t_prev_id], self.__I2T[t_prev_prev_id],
+                                                  w_window[2] in self.__common_words)
+                ), [t_id]
+            )
+
+        prediction_ids = viterbi.run_viterbi_2nd_order_log_with_beam_search(
+            words_fivlets, words_count, tags_count, start_tag_id, getLogScore
+        )
+        return [self.__I2T[p_id] for p_id in prediction_ids]
 
 
 if __name__ == '__main__':
@@ -32,6 +59,9 @@ if __name__ == '__main__':
     T2I, feature_map_dict_vect = memm_utils.feature_dict_to_dict_vectorizer(feature_map_dict)
     common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict)
     model = joblib.load(model_filename)
+
+    # Add Start tag to dict
+    T2I[utils.START_TAG] = len(T2I)
 
     tagger = MEMMTag(model, feature_map_dict_vect, T2I, common_words)
 

@@ -16,7 +16,7 @@ class GreedyTag:
         y_prev = utils.START_TAG
         y_prev_prev = utils.START_TAG
         for w_prev_prev, w_prev, wi, w_next, w_next_next in words_fivlets:
-            wi_features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, y_prev_prev, y_prev, self.__common_words)
+            wi_features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, y_prev_prev, y_prev, wi in self.__common_words)
             wi_mapped_vec = self.__feature_map_dict_vect.transform(wi_features)
 
             y_id = self.__model.predict(wi_mapped_vec)[0]

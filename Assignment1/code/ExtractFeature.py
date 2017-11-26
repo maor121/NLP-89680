@@ -14,7 +14,7 @@ def extract_features(words, tags, W2I):
     words_fivlets = memm_utils.fivelets([None, None] + words + [None, None])
     tags_triplets = utils.triplets(tags)
     for (w_prev_prev, w_prev, wi, w_next, w_next_next), (t_prev_prev, t_prev, ti) in zip(words_fivlets, tags_triplets):
-        features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_prev_prev, W2I)
+        features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_prev_prev, wi in W2I)
         features['t_i'] = ti
 
         featuresList.append(features)
