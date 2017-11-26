@@ -25,18 +25,12 @@ if __name__ == '__main__':
     print('training model...')
     logreg.fit(X_train, y_train)
 
+    #logreg = joblib.load(model_filename)
+
     print('eval model (on the training set):')
     predictions = logreg.predict(X_train)
 
-    """
-    logreg = joblib.load(model_filename)
-    first_xtrain = X_train[0]
-    first_pred = predictions[0:first_xtrain.shape[1]]
-    first_ytrain = y_train[0:first_xtrain.shape[1]]
-    print(first_xtrain)
-    print(first_pred)
-    print(first_ytrain)
-    """
+    predictions = logreg.predict(X_train)
 
     predictions_count = collections.Counter(np.equal(predictions, y_train))
     success_rate = float(predictions_count[True]) / len(predictions) * 100

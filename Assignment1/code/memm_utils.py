@@ -63,8 +63,9 @@ def feature_dict_to_dict_vectorizer(feature_dict):
         if k not in vocab:
             if not k.__contains__('='):
                 T2I[k] = v
-            vocab[k] = v
-            feature_names.append(k)
+            else:
+                vocab[k] = v
+                feature_names.append(k)
 
     if DV.sort:
         feature_names.sort()

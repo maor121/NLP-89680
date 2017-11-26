@@ -42,8 +42,6 @@ if __name__ == '__main__':
 
     logreg = joblib.load(model_filename)
 
-    input_filename = "../data/ass1-tagger-train"
-
     sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=False)
     feature_map_dict = memm_utils.feature_map_file_to_dict(feature_map_filename)
     T2I, feature_map_dict_vect = memm_utils.feature_dict_to_dict_vectorizer(feature_map_dict)

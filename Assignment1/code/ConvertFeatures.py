@@ -18,8 +18,10 @@ if __name__ == '__main__':
     feature_vec_filename = args[1]
     feature_map_filename = args[2]
 
-    ID_COUNTER = 1
-    map_feature_dict = {}
+    F_ID_COUNTER = 0
+    L_ID_COUNTER = 0
+    feature_dict = {}
+    label_dict = {}
     progress = None
     done_count = 0
     input_file_line_count = get_line_count(feature_filename)
@@ -30,15 +32,22 @@ if __name__ == '__main__':
              open(feature_map_filename, "w+") as out_map_feature:
             for line in in_feature_f:
                 keys = line.split()
-                key_ids = []
+                label = keys[0]
+
                 # Convert keys to ids, write to map_file if new
-                for key in keys:
-                    if map_feature_dict.get(key) is None:
-                        map_feature_dict[key] = ID_COUNTER
-                        map_line = key + ' ' + str(ID_COUNTER)+'\n'
+                if (label not in label_dict):
+                    label_dict[label] = L_ID_COUNTER
+                    map_line = label + ' ' + str(L_ID_COUNTER) + '\n'
+                    out_map_feature.write(map_line)
+                    L_ID_COUNTER += 1
+                key_ids = [label_dict[label]]
+                for key in keys[1:]:
+                    if key not in feature_dict:
+                        feature_dict[key] = F_ID_COUNTER
+                        map_line = key + ' ' + str(F_ID_COUNTER)+'\n'
                         out_map_feature.write(map_line)
-                        ID_COUNTER += 1
-                    key_ids.append(map_feature_dict[key])
+                        F_ID_COUNTER += 1
+                    key_ids.append(feature_dict[key])
                 # Write vec line
                 label = str(key_ids[0])
                 on_features = [str(k_id)+':1' for k_id in sorted(key_ids[1:])]
