@@ -38,23 +38,18 @@ if __name__ == '__main__':
 
     sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
 
-    miss_total = 0
-    total = 0
-    sentences_processed = 0
-    sentences_count = len(sentences)
-    progress = None
-    for (words, tags) in sentences:
-        prediction = tagger.getPrediction(words)
-        #Numbers are more easily compared then strings
-        prediction_ids = model.getTagsIds(prediction)
-        tags_ids = model.getTagsIds(tags[2:]) #Skip START
-        miss_total += sum(1 for i, j in zip(prediction_ids, tags_ids) if i != j)
-        total += len(prediction_ids)
-        sentences_processed += 1
+    try:
+        with open(out_filename, "w+") as predict_file:
+            done_count = 0
+            sentences_count = len(sentences)
+            progress = None
+            for (words, tags) in sentences:
+                prediction = tagger.getPrediction(words)
 
-        progress = utils.progress_hook(sentences_processed, sentences_count, progress)
-    hit_total = total - miss_total
-    accuracy = hit_total * 1.0 / total
-    print("accuracy: {} in {} words".format(str(accuracy), str(total)))
+                line = ' '.join('{}/{}'.format(w,t) for w,t in zip(words, prediction))+'\n'
+                predict_file.write(line)
 
-    #TODO: Write predictions to file
+                done_count += 1
+                progress = utils.progress_hook(done_count, sentences_count, progress)
+    except Exception:
+        raise
