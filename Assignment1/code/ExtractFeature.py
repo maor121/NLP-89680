@@ -71,7 +71,7 @@ def extract_features(words, tags, W2I):
 
 def writeFeaturesListToFile(featuresList, f):
     for features in featuresList:
-        label = features.pop('t_i')
+        label = features.pop('t_i') # Remove label from feature vec
         line = label + ' ' + ' '.join(['{}={}'.format(k,v) for k,v in features.iteritems()]) + '\n'
         f.write(line)
 
