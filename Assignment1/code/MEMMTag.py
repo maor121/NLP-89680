@@ -73,23 +73,5 @@ if __name__ == '__main__':
 
     tagger = MEMMTag(model, feature_map_dict_vect, T2I, common_words)
 
-    miss_total = 0
-    total = 0
-    sentences_processed = 0
-    sentences_count = len(sentences)
-    progress = None
-    for (words, tags) in sentences:
-        prediction = tagger.getPrediction(words)
-        #Numbers are more easily compared then strings
-        prediction_ids = [T2I[t] for t in prediction]
-        tags_ids = [T2I[t] for t in tags[2:]] #Skip START
-        miss_total += sum(1 for i, j in zip(prediction_ids, tags_ids) if i != j)
-        total += len(prediction_ids)
-        sentences_processed += 1
-
-        progress = utils.progress_hook(sentences_processed, sentences_count, progress)
-    hit_total = total - miss_total
-    accuracy = hit_total * 1.0 / total
-    print("accuracy: {} in {} words".format(str(accuracy), str(total)))
-
-    #TODO: Write predictions to file
+    # Run tagger and write prediction to file
+    utils.predict_and_write_to_file(sentences, output_filename, tagger.getPrediction)

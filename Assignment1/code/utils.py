@@ -121,6 +121,24 @@ def read_mle_files(q_mle_filename, e_mle_filename):
         raise
 
 
+def predict_and_write_to_file(sentences, out_filename, getPredictionFunction):
+    try:
+        with open(out_filename, "w+") as predict_file:
+            done_count = 0
+            sentences_count = len(sentences)
+            progress = None
+            for (words, tags) in sentences:
+                prediction = getPredictionFunction(words)
+
+                line = ' '.join('{}/{}'.format(w,t) for w,t in zip(words, prediction))+'\n'
+                predict_file.write(line)
+
+                done_count += 1
+                progress = progress_hook(done_count, sentences_count, progress)
+    except Exception:
+        raise
+
+
 def reduce_tuple_list(L, dim):
     return [l[dim] for l in L]
 

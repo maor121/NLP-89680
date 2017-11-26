@@ -38,18 +38,5 @@ if __name__ == '__main__':
 
     sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
 
-    try:
-        with open(out_filename, "w+") as predict_file:
-            done_count = 0
-            sentences_count = len(sentences)
-            progress = None
-            for (words, tags) in sentences:
-                prediction = tagger.getPrediction(words)
-
-                line = ' '.join('{}/{}'.format(w,t) for w,t in zip(words, prediction))+'\n'
-                predict_file.write(line)
-
-                done_count += 1
-                progress = utils.progress_hook(done_count, sentences_count, progress)
-    except Exception:
-        raise
+    # Run tagger and write prediction to file
+    utils.predict_and_write_to_file(sentences, out_filename, tagger.getPrediction)

@@ -47,42 +47,5 @@ if __name__ == '__main__':
 
     sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
 
-    miss_total = 0
-    total = 0
-    sentences_processed = 0
-    sentences_count = len(sentences)
-    progress = None
-    for (words, tags) in sentences:
-        prediction = tagger.getPrediction(words)
-        # Numbers are more easily compared then strings
-        prediction_ids = model.getTagsIds(prediction)
-        tags_ids = model.getTagsIds(tags[2:])  # Skip START
-        miss_total += sum(1 for i, j in zip(prediction_ids, tags_ids) if i != j)
-        total += len(prediction_ids)
-        sentences_processed += 1
-
-        #Temp for debugging
-        is_debug = False
-        if (is_debug):
-            misses = np.argwhere(np.array(prediction_ids) - np.array(tags_ids))
-            if (len(misses) > 0):
-                print(words)
-                print(prediction)
-                print(tags[2:])
-                for miss in misses:
-                    print("{} {} [{}/{}] E-[{},{}]".format(
-                        miss[0],
-                        words[miss[0]],
-                        prediction[miss[0]],
-                        tags[2:][miss[0]],
-                        model.getE(miss[0], prediction[miss[0]]),
-                        model.getE(miss[0], tags[2:][miss[0]]))
-                    )
-
-        progress = utils.progress_hook(sentences_processed, sentences_count, progress)
-        #break
-    hit_total = total - miss_total
-    accuracy = hit_total * 1.0 / total
-    print("accuracy: {} in {} words".format(str(accuracy), str(total)))
-
-    #TODO: Write predictions to file
+    # Run tagger and write prediction to file
+    utils.predict_and_write_to_file(sentences, out_filename, tagger.getPrediction)
