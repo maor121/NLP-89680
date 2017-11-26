@@ -42,31 +42,36 @@ def feature_map_file_to_dict(feature_map_filename):
         with open(feature_map_filename, "rb") as map_file:
             for line in map_file:
                 key, value = line.split()
-                feature_dict[key] = value
+                feature_dict[key] = int(value)
     except Exception:
         raise
+    return feature_dict
 
 
-    #Convert to DictVectorizer
+def feature_dict_to_dict_vectorizer(feature_dict):
+    # Convert to DictVectorizer
     from sklearn.feature_extraction import DictVectorizer
-    DV = DictVectorizer(sparse=True)
 
-    DV.feature_names = []
-    DV.vocab = {}
+    DV = DictVectorizer(sparse=True)
+    T2I = {}
+
+
+    feature_names = []
+    vocab = {}
 
     for k, v in feature_dict.iteritems():
-        f = k
-        if f not in DV.vocab:
-            DV.feature_names.append(f)
-            DV.vocab[f] = len(DV.vocab)
+        if k not in vocab:
+            if not k.__contains__('='):
+                T2I[k] = v
+            vocab[k] = v
+            feature_names.append(k)
 
     if DV.sort:
-        DV.feature_names.sort()
-        DV.vocab = dict((f, i) for i, f in enumerate(DV.feature_names))
+        feature_names.sort()
 
-    DV.feature_names_ = DV.feature_names
-    DV.vocabulary_ = DV.vocab
-    return DV
+    DV.feature_names_ = feature_names
+    DV.vocabulary_ = vocab
+    return T2I, DV
 
 
 def words_and_tags_from_map_dict(feature_map_dict):

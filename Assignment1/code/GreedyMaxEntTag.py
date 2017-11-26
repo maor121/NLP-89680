@@ -4,12 +4,11 @@ from sklearn.externals import joblib
 import memm_utils
 
 class GreedyTag:
-    def __init__(self, model, feature_map_dict, tags, common_words):
+    def __init__(self, model, feature_map_dict_vect, T2I, common_words):
         self.__model = model
-        self.__feature_map_dict = feature_map_dict
-        self.__tags = tags
+        self.__feature_map_dict_vect = feature_map_dict_vect
         self.__common_words = common_words
-        self.__I2T = utils.inverse_dict(feature_map_dict.vocabulary_)
+        self.__I2T = utils.inverse_dict(T2I)
     def getPrediction(self, sentence_words):
         words_fivlets = memm_utils.fivelets([None, None] + sentence_words + [None, None])
 
@@ -18,7 +17,7 @@ class GreedyTag:
         y_prev_prev = utils.START_TAG
         for w_prev_prev, w_prev, wi, w_next, w_next_next in words_fivlets:
             wi_features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, y_prev_prev, y_prev, self.__common_words)
-            wi_mapped_vec = self.__feature_map_dict.transform(wi_features)
+            wi_mapped_vec = self.__feature_map_dict_vect.transform(wi_features)
 
             y_id = self.__model.predict(wi_mapped_vec)[0]
             y = self.__I2T[y_id]
@@ -45,10 +44,11 @@ if __name__ == '__main__':
 
     sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=False)
     feature_map_dict = memm_utils.feature_map_file_to_dict(feature_map_filename)
-    common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict.vocabulary_)
+    T2I, feature_map_dict_vect = memm_utils.feature_dict_to_dict_vectorizer(feature_map_dict)
+    common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict)
     model = joblib.load(model_filename)
 
-    tagger = GreedyTag(model, feature_map_dict, tags, common_words)
+    tagger = GreedyTag(model, feature_map_dict_vect, T2I, common_words)
 
     miss_total = 0
     total = 0
@@ -58,8 +58,8 @@ if __name__ == '__main__':
     for (words, tags) in sentences:
         prediction = tagger.getPrediction(words)
         #Numbers are more easily compared then strings
-        prediction_ids = model.getTagsIds(prediction)
-        tags_ids = model.getTagsIds(tags[2:]) #Skip START
+        prediction_ids = [T2I[t] for t in prediction]
+        tags_ids = [T2I[t] for t in tags[2:]] #Skip START
         miss_total += sum(1 for i, j in zip(prediction_ids, tags_ids) if i != j)
         total += len(prediction_ids)
         sentences_processed += 1

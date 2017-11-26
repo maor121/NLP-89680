@@ -20,7 +20,7 @@ if __name__ == '__main__':
     X_train, y_train = load_svmlight_file(feature_vec_filename)
 
     print "Initializing"
-    logreg = LogisticRegression(solver='sag',multi_class='multinomial', verbose=True, n_jobs=-1, tol=1e-4, max_iter=10)
+    logreg = LogisticRegression(solver='sag',multi_class='multinomial', verbose=True, n_jobs=-1, tol=1e-4, max_iter=1)
 
     print('training model...')
     logreg.fit(X_train, y_train)
