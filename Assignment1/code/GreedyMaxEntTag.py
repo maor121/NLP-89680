@@ -9,6 +9,7 @@ class GreedyTag:
         self.__feature_map_dict = feature_map_dict
         self.__tags = tags
         self.__common_words = common_words
+        self.__I2T = utils.inverse_dict(feature_map_dict.vocabulary_)
     def getPrediction(self, sentence_words):
         words_fivlets = memm_utils.fivelets([None, None] + sentence_words + [None, None])
 
@@ -17,9 +18,10 @@ class GreedyTag:
         y_prev_prev = utils.START_TAG
         for w_prev_prev, w_prev, wi, w_next, w_next_next in words_fivlets:
             wi_features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, y_prev_prev, y_prev, self.__common_words)
-            wi_mapped_vec = memm_utils.feature_string_vec_to_sparse_dict(wi_features)
+            wi_mapped_vec = self.__feature_map_dict.transform(wi_features)
 
-            y = self.__model.predict(wi_mapped_vec)
+            y_id = self.__model.predict(wi_mapped_vec)[0]
+            y = self.__I2T[y_id]
             predictions.append(y)
 
             y_prev_prev = y_prev
@@ -43,8 +45,10 @@ if __name__ == '__main__':
 
     sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=False)
     feature_map_dict = memm_utils.feature_map_file_to_dict(feature_map_filename)
-    common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict)
+    common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict.vocabulary_)
+    model = joblib.load(model_filename)
 
+    tagger = GreedyTag(model, feature_map_dict, tags, common_words)
 
     miss_total = 0
     total = 0

@@ -37,15 +37,37 @@ def create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_p
 
 
 def feature_map_file_to_dict(feature_map_filename):
-    dict = {}
+    feature_dict = {}
     try:
         with open(feature_map_filename, "rb") as map_file:
             for line in map_file:
                 key, value = line.split()
-                dict[key] = value
+                feature_dict[key] = value
     except Exception:
         raise
-    return dict
+
+
+    #Convert to DictVectorizer
+    from sklearn.feature_extraction import DictVectorizer
+    DV = DictVectorizer(sparse=True)
+
+    DV.feature_names = []
+    DV.vocab = {}
+
+    for k, v in feature_dict.iteritems():
+        f = "%s=%s" % (k, v)
+        if f not in DV.vocab:
+            DV.feature_names.append(f)
+            DV.vocab[f] = len(DV.vocab)
+
+    if DV.sort:
+        DV.feature_names.sort()
+        DV.vocab = dict((f, i) for i, f in enumerate(DV.feature_names))
+
+    DV.feature_names_ = DV.feature_names
+    DV.vocabulary_ = DV.vocab
+    return DV
+
 
 def words_and_tags_from_map_dict(feature_map_dict):
     #TODO: Make this method more efficient
@@ -60,16 +82,6 @@ def words_and_tags_from_map_dict(feature_map_dict):
             if not k.__contains__('='):
                 tags.append(k)
     return set(common_words), tags
-
-
-def feature_string_vec_to_sparse_dict(feature_vec, feature_map_dict):
-    vec_size = len(feature_map_dict)
-
-    from sklearn.feature_extraction import DictVectorizer
-    DV = DictVectorizer(sparse=True)
-
-    DV.fit(feature_vec)
-    print "a"
 
 
 def fivelets(iterable):
