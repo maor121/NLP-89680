@@ -1,5 +1,5 @@
 import sys
-import utils
+from common import utils
 import memm_utils
 import re
 import numpy as np
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     feature_filename = args[1]
 
     train_data = utils.read_input_file(corpus_filename, is_tagged=True, replace_numbers=False)
-    from utils import list_to_ids, reduce_tuple_list, flatten
+    from common.utils import list_to_ids, reduce_tuple_list, flatten
 
     W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
 

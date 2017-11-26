@@ -1,9 +1,11 @@
-from collections import Counter
-from MLETrain import MLETrain
 import sys
-import utils
+
 import numpy as np
-import viterbi
+
+from MLETrain import MLETrain
+from common import utils
+from common import viterbi
+
 
 class HMMTag:
     __mletrain = None

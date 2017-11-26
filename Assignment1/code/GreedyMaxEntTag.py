@@ -1,5 +1,5 @@
 import sys
-import utils
+from common import utils
 from sklearn.externals import joblib
 import memm_utils
 

@@ -1,9 +1,9 @@
 import sys
-import utils
-import numpy as np
+
 from sklearn.externals import joblib
+
 import memm_utils
-import viterbi
+from common import utils, viterbi
 
 
 class MEMMTag:

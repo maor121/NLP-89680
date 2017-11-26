@@ -1,7 +1,7 @@
 import sys
 from collections import Counter
 
-import utils
+from common import utils
 import logging
 import numpy as np
 
@@ -92,7 +92,7 @@ class MLETrain:
         train_data = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
 
         log.debug("- Converting words\\tags to ids")
-        from utils import list_to_ids, reduce_tuple_list, flatten
+        from common.utils import list_to_ids, reduce_tuple_list, flatten
         W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
         T2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=1)))
         train_data_ids = utils.sentences_to_ids(train_data, W2I, T2I)

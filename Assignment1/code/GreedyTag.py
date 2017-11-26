@@ -1,6 +1,7 @@
 from MLETrain import MLETrain
 import sys
-import utils
+from common import utils
+
 
 class GreedyTag:
     __mletrain = None
