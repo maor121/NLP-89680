@@ -1,8 +1,8 @@
 import sys
-from common import utils
-import memm_utils
-import re
-import numpy as np
+
+import code.memm1.memm_utils
+from code.common import utils
+from code.common.utils import list_to_ids, reduce_tuple_list, flatten
 
 VOCAB_SIZE = 15000
 PREFIX_SUFFIX_LEN = 4
@@ -11,10 +11,10 @@ PREFIX_SUFFIX_LEN = 4
 def extract_features(words, tags, W2I):
     featuresList = []
 
-    words_fivlets = memm_utils.fivelets([None, None] + words + [None, None])
+    words_fivlets = code.memm1.memm_utils.fivelets([None, None] + words + [None, None])
     tags_triplets = utils.triplets(tags)
     for (w_prev_prev, w_prev, wi, w_next, w_next_next), (t_prev_prev, t_prev, ti) in zip(words_fivlets, tags_triplets):
-        features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_prev_prev, wi in W2I)
+        features = code.memm1.memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_prev_prev, wi in W2I)
         features['t_i'] = ti
 
         featuresList.append(features)
@@ -42,8 +42,6 @@ if __name__ == '__main__':
     feature_filename = args[1]
 
     train_data = utils.read_input_file(corpus_filename, is_tagged=True, replace_numbers=False)
-    from common.utils import list_to_ids, reduce_tuple_list, flatten
-
     W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
 
     try:

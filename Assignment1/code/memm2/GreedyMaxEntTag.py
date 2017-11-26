@@ -1,7 +1,10 @@
 import sys
-from common import utils
+
 from sklearn.externals import joblib
-import memm_utils
+
+import code.memm1.memm_utils
+from code.common import utils
+
 
 class GreedyTag:
     def __init__(self, model, feature_map_dict_vect, T2I, common_words):
@@ -10,13 +13,13 @@ class GreedyTag:
         self.__common_words = common_words
         self.__I2T = utils.inverse_dict(T2I)
     def getPrediction(self, sentence_words):
-        words_fivlets = memm_utils.fivelets([None, None] + sentence_words + [None, None])
+        words_fivlets = code.memm1.memm_utils.fivelets([None, None] + sentence_words + [None, None])
 
         predictions = []
         y_prev = utils.START_TAG
         y_prev_prev = utils.START_TAG
         for w_prev_prev, w_prev, wi, w_next, w_next_next in words_fivlets:
-            wi_features = memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, y_prev_prev, y_prev, wi in self.__common_words)
+            wi_features = code.memm1.memm_utils.create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, y_prev_prev, y_prev, wi in self.__common_words)
             wi_mapped_vec = self.__feature_map_dict_vect.transform(wi_features)
 
             y_id = self.__model.predict(wi_mapped_vec)[0]
@@ -42,10 +45,10 @@ if __name__ == '__main__':
 
     logreg = joblib.load(model_filename)
 
-    sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=False)
-    feature_map_dict = memm_utils.feature_map_file_to_dict(feature_map_filename)
-    T2I, feature_map_dict_vect = memm_utils.feature_dict_to_dict_vectorizer(feature_map_dict)
-    common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict)
+    sentences = utils.read_input_file(input_filename, is_tagged=False, replace_numbers=False)
+    feature_map_dict = code.memm1.memm_utils.feature_map_file_to_dict(feature_map_filename)
+    T2I, feature_map_dict_vect = code.memm1.memm_utils.feature_dict_to_dict_vectorizer(feature_map_dict)
+    common_words, tags = code.memm1.memm_utils.words_and_tags_from_map_dict(feature_map_dict)
     model = joblib.load(model_filename)
 
     tagger = GreedyTag(model, feature_map_dict_vect, T2I, common_words)

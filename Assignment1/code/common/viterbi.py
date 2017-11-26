@@ -1,5 +1,5 @@
 import numpy as np
-from common import utils
+import utils
 
 
 def run_viterbi_2nd_order_log_with_beam_search(sentence_words, words_count, tags_count, start_tag_id, getLogScore):

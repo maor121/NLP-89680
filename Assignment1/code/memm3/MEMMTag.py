@@ -2,8 +2,8 @@ import sys
 
 from sklearn.externals import joblib
 
-import memm_utils
-from common import utils, viterbi
+from code.memm1 import memm_utils
+from code.common import utils, viterbi
 
 
 class MEMMTag:
@@ -33,8 +33,6 @@ class MEMMTag:
         key = (w_window, t_prev_id, t_prev_prev_id)
         if key not in self.__prob_cache:
             self.__prob_cache[key] = self.__calcLogProb(w_window, t_prev_id, t_prev_prev_id)
-        #else:
-        #    print "hit"
         return self.__prob_cache[key][0][t_id]
     def __calcLogProb(self, w_window, t_prev_id, t_prev_prev_id):
         return \
@@ -62,7 +60,7 @@ if __name__ == '__main__':
 
     logreg = joblib.load(model_filename)
 
-    sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=False)
+    sentences = utils.read_input_file(input_filename, is_tagged=False, replace_numbers=False)
     feature_map_dict = memm_utils.feature_map_file_to_dict(feature_map_filename)
     T2I, feature_map_dict_vect = memm_utils.feature_dict_to_dict_vectorizer(feature_map_dict)
     common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict)

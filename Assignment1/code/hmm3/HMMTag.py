@@ -1,10 +1,8 @@
 import sys
-
 import numpy as np
-
-from MLETrain import MLETrain
-from common import utils
-from common import viterbi
+from code.common import utils
+from code.common import viterbi
+from code.hmm1.MLETrain import MLETrain
 
 
 class HMMTag:
@@ -47,7 +45,7 @@ if __name__ == '__main__':
     model = MLETrain(q_mle_filename, e_mle_filename)
     tagger = HMMTag(model)
 
-    sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
+    sentences = utils.read_input_file(input_filename, is_tagged=False, replace_numbers=True)
 
     # Run tagger and write prediction to file
     utils.predict_and_write_to_file(sentences, out_filename, tagger.getPrediction)

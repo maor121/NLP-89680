@@ -1,7 +1,8 @@
 import sys
 from collections import Counter
 
-from common import utils
+from code.common import utils
+from code.common.utils import list_to_ids, reduce_tuple_list, flatten
 import logging
 import numpy as np
 
@@ -63,10 +64,6 @@ class MLETrain:
         word_id = self.__W2I.get(word, self.__W2I[utils.UNK_Word])
         tag_id = self.__T2I.get(tag)
         word_count = self.__e_counts.get((word_id, tag_id), 0)
-        #if word_count == 0:
-        #    #Fallbacks
-        #    word_id = self.__W2I_lower.get(word.lower(), self.__W2I_lower[utils.UNK_Word.lower()])
-        #    word_count = self.__e_counts_lower.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
         return float(word_count) / tag_count
 
@@ -92,7 +89,6 @@ class MLETrain:
         train_data = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=True)
 
         log.debug("- Converting words\\tags to ids")
-        from common.utils import list_to_ids, reduce_tuple_list, flatten
         W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
         T2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=1)))
         train_data_ids = utils.sentences_to_ids(train_data, W2I, T2I)
