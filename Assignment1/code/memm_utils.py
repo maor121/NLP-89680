@@ -36,6 +36,28 @@ def create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_p
     return features
 
 
+def feature_map_file_to_dict(feature_map_filename):
+    dict = {}
+    try:
+        with open(feature_map_filename, "rb") as map_file:
+            for line in map_file:
+                key, value = line.split()
+                dict[key] = value
+    except Exception:
+        raise
+    return dict
+
+
+def feature_string_vec_to_sparse_dict(feature_vec, feature_map_dict):
+    vec_size = len(feature_map_dict)
+
+    from sklearn.feature_extraction import DictVectorizer
+    DV = DictVectorizer(sparse=True)
+
+    DV.fit(feature_vec)
+    print "a"
+
+
 def fivelets(iterable):
     "s -> (s0,s1,s2,s3,s4), (s1,s2,s3,s4,s5), (s2, s3,s4,s5,s6), ..."
     from itertools import tee, izip
