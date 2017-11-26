@@ -25,7 +25,7 @@ if __name__ == '__main__':
     input_file_line_count = get_line_count(feature_filename)
 
     try:
-        with open(feature_filename, "rb") as in_feature_f,\
+        with open(feature_filename, "rb") as in_feature_f, \
              open(feature_vec_filename, "w+") as out_vec_feature_f,\
              open(feature_map_filename, "w+") as out_map_feature:
             for line in in_feature_f:
@@ -34,20 +34,19 @@ if __name__ == '__main__':
                 # Convert keys to ids, write to map_file if new
                 for key in keys:
                     if map_feature_dict.get(key) is None:
-                        map_feature_dict[key] = str(ID_COUNTER)
+                        map_feature_dict[key] = ID_COUNTER
                         map_line = key + ' ' + str(ID_COUNTER)+'\n'
                         out_map_feature.write(map_line)
                         ID_COUNTER += 1
                     key_ids.append(map_feature_dict[key])
                 # Write vec line
-                label = key_ids[0]
-                on_features = [k_id+':1' for k_id in key_ids[1:]]
+                label = str(key_ids[0])
+                on_features = [str(k_id)+':1' for k_id in sorted(key_ids[1:])]
                 vec_line = label + ' ' + ' '.join(on_features) + '\n'
                 out_vec_feature_f.write(vec_line)
                 # Progress
                 done_count += 1
                 progress = utils.progress_hook(done_count, input_file_line_count, progress)
-
     except Exception:
         raise
 
