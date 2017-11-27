@@ -1,8 +1,8 @@
 import sys
 from collections import Counter
 
-from code.common import utils
-from code.common.utils import list_to_ids, reduce_tuple_list, flatten
+from src.common import utils
+from src.common.utils import list_to_ids, reduce_tuple_list, flatten
 import logging
 import numpy as np
 

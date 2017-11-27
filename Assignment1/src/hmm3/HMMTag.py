@@ -1,8 +1,8 @@
 import sys
 import numpy as np
-from code.common import utils
-from code.common import viterbi
-from code.hmm1.MLETrain import MLETrain
+from src.common import utils
+from src.common import viterbi
+from src.hmm1.MLETrain import MLETrain
 
 
 class HMMTag:

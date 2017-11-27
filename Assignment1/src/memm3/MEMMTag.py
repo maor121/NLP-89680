@@ -2,8 +2,8 @@ import sys
 
 from sklearn.externals import joblib
 
-from code.memm1 import memm_utils
-from code.common import utils, viterbi
+from src.memm1 import memm_utils
+from src.common import utils, viterbi
 
 
 class MEMMTag:

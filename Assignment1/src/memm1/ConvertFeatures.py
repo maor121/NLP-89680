@@ -1,5 +1,5 @@
 import sys
-from code.common import utils
+from src.common import utils
 
 
 def get_line_count(file):

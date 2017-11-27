@@ -1,7 +1,7 @@
 import sys
 
-from code.common import utils
-from code.hmm1.MLETrain import MLETrain
+from src.common import utils
+from src.hmm1.MLETrain import MLETrain
 
 
 class GreedyTag:
