@@ -49,7 +49,7 @@ class MLETrain:
         return three * 0.6 + two * 0.25 + one * 0.15
 
     def getE(self, word, tag):
-        word_id = self.__get_word_id(word)
+        word_id = self.__get_word_id(word, self.__W2I)
         tag_id = self.__T2I.get(tag)
         word_count = self.__e_counts.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
@@ -80,7 +80,7 @@ class MLETrain:
         W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
         #Unknown words
         unk_words = MLETrain.__generate_unk_words()
-        i = len(W2I)
+        i = max(W2I.values())+1
         for w_unk in unk_words:
             W2I[w_unk] = i
             i +=1
