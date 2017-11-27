@@ -1,6 +1,5 @@
 #!/home/ofir/Devl/git/Deep-Learning-89687/venv/bin/activate
 
-#set $VENV = "/home/ofir/Devl/git/Deep-Learning-89687/venv"
 src_folder="../src/"
 data_folder="../data-ner/"
 output_folder="../output-ner/"
