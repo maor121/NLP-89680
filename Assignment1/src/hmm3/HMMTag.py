@@ -45,7 +45,7 @@ if __name__ == '__main__':
     model = MLETrain(q_mle_filename, e_mle_filename)
     tagger = HMMTag(model)
 
-    sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=False)
+    sentences = utils.read_input_file(input_filename, replace_numbers=False)
 
     # Run tagger and write prediction to file
     utils.predict_and_write_to_file(sentences, out_filename, tagger.getPrediction)
