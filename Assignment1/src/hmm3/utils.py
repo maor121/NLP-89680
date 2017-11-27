@@ -8,10 +8,11 @@ END_TAG = "End"
 #Special word types
 FLOAT_NUMBER_PATTERN = re.compile(r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?')
 NUMER_WORD_PATTERN = re.compile(r'One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Eleven|Twelve', flags=re.IGNORECASE)
-NUMBER_Word = "&#Num#&"
+NUMBER_Word = "**Number**"
 
 CAPITAL_PATTERN = re.compile(r'[A-Z]')
 
+COMMON_SUFFIXES= ["ed", "ing"] #Create an unknown UNK word for each
 
 def read_input_file(input_filename, replace_numbers, is_tagged=True):
     """Return a list of pairs, [[(words, tags],[(words,tags)], every pair is a sentence"""
@@ -107,18 +108,15 @@ def read_mle_files(q_mle_filename, e_mle_filename):
                 counts.append(count)
 
             W2I = list_to_ids(words)
-            W2I_lower = list_to_ids([w.lower() for w in words])
             e_counts = {}
-            e_counts_lower = {}
             for word, tag, count in zip(words, tags, counts):
                 e_counts[(W2I[word], T2I[tag])] = count
-                e_counts_lower[W2I_lower[word.lower()], T2I[tag]] = count
 
             tags = T2I.keys()
             total_word_count = np.sum(q_counts[tuple([T2I[t]])] for t in tags)
             total_word_count -= q_counts[tuple([T2I[START_TAG]])]
 
-            return T2I, W2I, W2I_lower, q_counts, e_counts, e_counts_lower, total_word_count
+            return T2I, W2I, q_counts, e_counts, total_word_count
     except Exception:
         raise
 
@@ -155,17 +153,7 @@ def list_to_ids(L, MAX_SIZE=None, ID_SHIFT=1):
         return {t: i + ID_SHIFT for i, t in enumerate(Counter(L).keys())}  # +1 not including 0, 0 is like None for python
     else:
         vocab = set([x for x, c in Counter(L).most_common(MAX_SIZE)])
-        vocab.add(UNK_Word)
         return {t: i + ID_SHIFT for i, t in enumerate(vocab)}  # +1 not including 0, 0 is like None for python
-
-
-def sentences_to_ids(sentences, W2I, T2I):
-    result = []
-    for words, tags in sentences:
-        w_ids = [W2I.get(w, W2I[UNK_Word]) for w in words]
-        t_ids = [T2I[t] for t in tags]
-        result.append((w_ids, t_ids))
-    return result
 
 
 def inverse_dict(dict):

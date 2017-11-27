@@ -12,10 +12,8 @@ VOCAB_SIZE = 15000
 class MLETrain:
     __q_counts = None
     __e_counts = None
-    __e_counts_lower = None
     __T2I = None
     __W2I = None
-    __W2I_lower = None
     __words_trained_count = None
 
     __Q_cache = None
@@ -23,21 +21,11 @@ class MLETrain:
     __cache_miss_count = None
 
     def __init__(self, q_mle_file, e_mle_file):
-        self.__T2I, self.__W2I, self.__W2I_lower, self.__q_counts, self.__e_counts, self.__e_counts_lower, self.__words_trained_count = \
+        self.__T2I, self.__W2I, self.__q_counts, self.__e_counts, self.__words_trained_count = \
             utils.read_mle_files(q_mle_file, e_mle_file)
         tags_count = len(self.__T2I)
         self.__Q_cache = np.full([tags_count, tags_count, tags_count], -1, dtype=np.float32)
         self.__cache_hit_count = self.__cache_miss_count = 0
-
-    def getP(self, sentence_words, predictions):
-        predictions = [utils.START_TAG, utils.START_TAG].extend(predictions)
-        # [y0,y1,y2,y3,y4] -> [(y0,y1,y2),(y1,y2,y3),(y2,y3,y4)]
-        predictions_triplets = utils.triplets(predictions)
-        logSum = 0.0
-        for word, (t_prev_prev, t_prev, t) in sentence_words, predictions_triplets:
-            logSum += np.log(self.getQ(t, t_prev, t_prev_prev)) + \
-                      np.log(self.getE(word, t))
-        return logSum
 
     def getQ(self, c, b, a):
         c_id, b_id, a_id = [self.__T2I[t]-1 for t in (c,b,a)]
@@ -61,7 +49,7 @@ class MLETrain:
         return three * 0.6 + two * 0.25 + one * 0.15
 
     def getE(self, word, tag):
-        word_id = self.__W2I.get(word, self.__W2I[utils.UNK_Word])
+        word_id = self.__get_word_id(word)
         tag_id = self.__T2I.get(tag)
         word_count = self.__e_counts.get((word_id, tag_id), 0)
         tag_count = self.__get_tag_count([tag])
@@ -90,8 +78,14 @@ class MLETrain:
 
         log.debug("- Converting words\\tags to ids")
         W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
+        #Unknown words
+        unk_words = MLETrain.__generate_unk_words()
+        i = len(W2I)
+        for w_unk in unk_words:
+            W2I[w_unk] = i
+            i +=1
         T2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=1)))
-        train_data_ids = utils.sentences_to_ids(train_data, W2I, T2I)
+        train_data_ids = MLETrain.__sentences_to_ids(train_data, W2I, T2I)
         # Inverse dictionary
         I2T = utils.inverse_dict(T2I)
         I2W = utils.inverse_dict(W2I)
@@ -119,6 +113,26 @@ class MLETrain:
         utils.write_e_mle_file(count_word_tags, I2T, I2W, e_mle_filename)
 
         log.debug("Done")
+    @staticmethod
+    def __generate_unk_words():
+        return [utils.UNK_Word] + [utils.UNK_Word+s for s in utils.COMMON_SUFFIXES]
+    @staticmethod
+    def __get_word_id(word, W2I):
+        w_id = W2I.get(word)
+        if w_id is None:
+            for suffix in utils.COMMON_SUFFIXES:
+                if word.endswith(suffix):
+                    return W2I[utils.UNK_Word+suffix]
+            w_id = W2I[utils.UNK_Word]
+        return w_id
+    @staticmethod
+    def __sentences_to_ids(sentences, W2I, T2I):
+        result = []
+        for words, tags in sentences:
+            w_ids = [MLETrain.__get_word_id(w,W2I) for w in words]
+            t_ids = [T2I[t] for t in tags]
+            result.append((w_ids, t_ids))
+        return result
 
 
 if __name__ == '__main__':
@@ -133,12 +147,3 @@ if __name__ == '__main__':
     e_mle_filename = args[2]
 
     MLETrain.createModelFilesFromInput(input_filename, q_mle_filename, e_mle_filename)
-
-    # Testing
-    """
-    model = MLETrain(q_mle_filename, e_mle_filename)
-    print(model.getQ("DT","JJR",":"))
-    print(model.getE("Law", "NN"))
-    print(model.getQ("NNP", utils.START_TAG, utils.START_TAG))
-    print(model.getQ("DT", "JJR", utils.START_TAG))
-    """
