@@ -13,7 +13,7 @@ NUMBER_Word = "&#Num#&"
 CAPITAL_PATTERN = re.compile(r'[A-Z]')
 
 
-def read_input_file(input_filename, replace_numbers):
+def read_input_file(input_filename, replace_numbers, is_tagged=True):
     """Return a list of pairs, [[(words, tags],[(words,tags)], every pair is a sentence"""
     result = []
     try:
@@ -25,20 +25,21 @@ def read_input_file(input_filename, replace_numbers):
                     sentence = NUMER_WORD_PATTERN.sub(NUMBER_Word, sentence)
                 words = []
                 tags = []
-                tags.extend([START_TAG, START_TAG])
-                for w_t in sentence.split():
-                    w_t_split = w_t.rsplit("/", 1)
-                    if len(w_t_split) > 1:
-                        word, tag = w_t_split
+                if is_tagged:
+                    tags.extend([START_TAG, START_TAG])
+                    for w_t in sentence.split():
+                        word, tag = w_t.rsplit("/", 1)
+                        words.append(word)
                         tags.append(tag)
-                    else:
-                        word = w_t_split[0]
-                    words.append(word)
+                        # tags.append(END_TAG)
+                else:
+                    words += sentence.split()
                 result.append((words, tags))
         return result
-    except Exception:
+    except ValueError:
+        if is_tagged:
+            return read_input_file(input_filename, replace_numbers, is_tagged=False)
         raise
-
 
 def write_q_mle_file(count_tags_triplets, count_tags_pairs, count_tags_single, I2T, q_mle_filename):
     try:
