@@ -1,7 +1,7 @@
 import sys
 
-from src.common import utils
-from src.hmm1.MLETrain import MLETrain
+import utils
+from MLETrain import MLETrain
 
 
 class GreedyTag:
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     model = MLETrain(q_mle_filename, e_mle_filename)
     tagger = GreedyTag(model)
 
-    sentences = utils.read_input_file(input_filename, is_tagged=False, replace_numbers=True)
+    sentences = utils.read_input_file(input_filename, replace_numbers=False)
 
     # Run tagger and write prediction to file
     utils.predict_and_write_to_file(sentences, out_filename, tagger.getPrediction)

@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     logreg = joblib.load(model_filename)
 
-    sentences = utils.read_input_file(input_filename, is_tagged=False, replace_numbers=False)
+    sentences = utils.read_input_file(input_filename, is_tagged=True, replace_numbers=False)
     feature_map_dict = memm_utils.feature_map_file_to_dict(feature_map_filename)
     T2I, feature_map_dict_vect = memm_utils.feature_dict_to_dict_vectorizer(feature_map_dict)
     common_words, tags = memm_utils.words_and_tags_from_map_dict(feature_map_dict)

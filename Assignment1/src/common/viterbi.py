@@ -1,7 +1,6 @@
 import numpy as np
 import utils
 
-
 def run_viterbi_2nd_order_log_with_beam_search(sentence_words, words_count, tags_count, start_tag_id, getLogScore):
     """Note: tags_count includes START TAG"""
     V = np.full([words_count + 1, tags_count, tags_count], float('-inf'), dtype=np.float64)
