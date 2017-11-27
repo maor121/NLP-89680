@@ -29,6 +29,6 @@ cd $proj_folder
 python $mle_train_file $train_file $q_mle_file $e_mle_file
 
 #MEMM
-python $extract_features_file $features_file
-python $convert_features_file $features_vec_file $features_map_file
+python $extract_features_file $train_file $features_file
+python $convert_features_file $features_file $features_vec_file $features_map_file
 python $train_solver_file $features_vec_file $sklearn_model_file
