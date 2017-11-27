@@ -39,7 +39,8 @@ def run_viterbi_2nd_order_log_with_beam_search(sentence_words, words_count, tags
 
     prediction_ids = np.zeros(words_count, dtype=np.int32)
     prediction_ids[words_count - 1] = pred_last_id
-    prediction_ids[words_count - 2] = pred_prev_last_id
-    for i in range(words_count - 3, -1, -1):
-        prediction_ids[i] = bp[i + 2, prediction_ids[i + 1], prediction_ids[i + 2]]
+    if words_count > 1:
+        prediction_ids[words_count - 2] = pred_prev_last_id
+        for i in range(words_count - 3, -1, -1):
+            prediction_ids[i] = bp[i + 2, prediction_ids[i + 1], prediction_ids[i + 2]]
     return prediction_ids
