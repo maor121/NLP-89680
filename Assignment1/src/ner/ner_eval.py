@@ -86,7 +86,8 @@ if __name__=='__main__':
         pents = set([e for e in pred_entities if e[1][1]==t])
         prec = len(gents.intersection(pents)) / float(len(pents))
         rec  = len(gents.intersection(pents)) / float(len(gents))
-        print "%10s \tPrec:%s Rec:%s" % (t, prec, rec)
+        f1 = prec * rec / (prec + rec)
+        print "%10s \tPrec:%s Rec:%s F1:%s" % (t, prec, rec,f1)
 
 
 
