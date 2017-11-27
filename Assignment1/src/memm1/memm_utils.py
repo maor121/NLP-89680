@@ -1,4 +1,4 @@
-from src.common import utils
+import utils
 import re
 import numpy as np
 
