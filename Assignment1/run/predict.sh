@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 
-source test.config
+source ner.config
 source general.config
 
 source $venv_folder
 
 cd $proj_folder
 
-echo "HMM Greedy"
-python $greedy_tag_file $test_file $q_mle_file $e_mle_file $predict_greedy_tag_file
+for file in $test_files; do
+    echo "------------------------------------------------------------------------------------------------------"
+    file_name=${file#*/}   # remove prefix ending in "/"
+    echo "File: ${file_name}"
+    echo "HMM Greedy"
+    python $greedy_tag_file $file $q_mle_file $e_mle_file "${file}.greedy_tag.pred"
 
-echo "HMM Viterbi"
-python $hmm_tag_file $test_file $q_mle_file $e_mle_file $predict_hmm_tag_file
+    echo "HMM Viterbi"
+    python $hmm_tag_file $file $q_mle_file $e_mle_file "${file}.hmm_tag.pred"
 
-echo "MEMM Greedy"
-python $greedy_max_ent_tag_file $test_file $sklearn_model_file $predict_greedy_max_ent_tag_file $features_map_file
+    echo "MEMM Greedy"
+    python $greedy_max_ent_tag_file $file $sklearn_model_file "${file}.greedy_max_ent_tag.pred" $features_map_file
 
-echo "MEMM Viterbi"
-python $memm_tag_file $test_file $sklearn_model_file $predict_memm_tag_file $features_map_file
+    echo "MEMM Viterbi"
+    python $memm_tag_file $file $sklearn_model_file "${file}.memm_tag.pred" $features_map_file
+    echo "------------------------------------------------------------------------------------------------------"
+done

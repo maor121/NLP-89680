@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source test.config
+source ner.config
 source general.config
 
 source $venv_folder
