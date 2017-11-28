@@ -71,7 +71,7 @@ if __name__=='__main__':
     assert(len(gold_data)==len(pred_data))
 
     acc = compare_accuracy(gold_data, pred_data)
-    print "Accuracy:", acc
+    print "Accuracy: %.3f" % acc
     print
 
     if is_spans:
@@ -89,7 +89,7 @@ if __name__=='__main__':
 
         prec = len(gold_entities.intersection(pred_entities)) / float(len(pred_entities))
         rec  = len(gold_entities.intersection(pred_entities)) / float(len(gold_entities))
-        print "All-types \tPrec:%s Rec:%s" % (prec, rec)
+        print "All-types \tPrec:%.3f Rec:%.3f" % (prec, rec)
 
         types = set([e[1][1] for e in gold_entities]) - set(["O"])
         for t in types:
@@ -98,7 +98,7 @@ if __name__=='__main__':
             prec = len(gents.intersection(pents)) / float(len(pents))
             rec  = len(gents.intersection(pents)) / float(len(gents))
             f1 = prec * rec / (prec + rec)
-            print "%10s \tPrec:%s Rec:%s F1:%s" % (t, prec, rec,f1)
+            print "%10s \tPrec:%.3f Rec:%.3f F1:%.3f" % (t, prec, rec,f1)
 
 
 
