@@ -4,7 +4,7 @@ import memm_utils
 import utils
 from utils import list_to_ids, reduce_tuple_list, flatten
 
-VOCAB_SIZE = 15000
+COMMON_WORD_MIN_COUNT = 5
 PREFIX_SUFFIX_LEN = 4
 
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     feature_filename = args[1]
 
     train_data = utils.read_input_file(corpus_filename, replace_numbers=False)
-    W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
+    W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MIN_COUNT=COMMON_WORD_MIN_COUNT)
 
     try:
         with open(feature_filename, "w+") as f:

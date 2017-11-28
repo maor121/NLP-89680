@@ -147,12 +147,14 @@ def flatten(L):
     return [item for sublist in L for item in sublist]
 
 
-def list_to_ids(L, MAX_SIZE=None, ID_SHIFT=1):
+def list_to_ids(L, MIN_COUNT=None, ID_SHIFT=1):
     from collections import Counter
-    if MAX_SIZE is None:
-        return {t: i + ID_SHIFT for i, t in enumerate(Counter(L).keys())}  # +1 not including 0, 0 is like None for python
+    from itertools import dropwhile
+    counter = Counter(L)
+    if MIN_COUNT is None:
+        return {t: i + ID_SHIFT for i, t in enumerate(counter.keys())}  # +1 not including 0, 0 is like None for python
     else:
-        vocab = set([x for x, c in Counter(L).most_common(MAX_SIZE)])
+        vocab = set([x for x, c in counter.most_common() if c>=MIN_COUNT])
         return {t: i + ID_SHIFT for i, t in enumerate(vocab)}  # +1 not including 0, 0 is like None for python
 
 

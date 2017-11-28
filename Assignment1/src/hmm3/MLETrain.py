@@ -6,7 +6,7 @@ import utils
 from utils import list_to_ids, reduce_tuple_list, flatten
 
 
-VOCAB_SIZE = 15000
+COMMON_WORD_MIN_COUNT = 5 # 5 times is common enough
 
 
 class MLETrain:
@@ -46,7 +46,7 @@ class MLETrain:
         three = self.__get_tag_count([a, b, c]) * 1.0 / ba_count if ba_count != 0 else 0
         two = self.__get_tag_count([b, c]) * 1.0 / b_count if b_count != 0 else 0
         one = c_count / self.__words_trained_count
-        return three * 0.6 + two * 0.25 + one * 0.15
+        return ( three + two + one ) / 3
 
     def getE(self, word, tag):
         word_id = self.__get_word_id(word, self.__W2I)
@@ -77,7 +77,7 @@ class MLETrain:
         train_data = utils.read_input_file(input_filename, replace_numbers=False)
 
         log.debug("- Converting words\\tags to ids")
-        W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MAX_SIZE=VOCAB_SIZE)
+        W2I = list_to_ids(flatten(reduce_tuple_list(train_data, dim=0)), MIN_COUNT=COMMON_WORD_MIN_COUNT)
         #Unknown words
         unk_words = MLETrain.__generate_unk_words()
         i = max(W2I.values())+1
