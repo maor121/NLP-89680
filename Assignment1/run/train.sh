@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source general.config
-source $profile_config_file
 
 source $venv_folder
 
@@ -9,7 +8,7 @@ cd $proj_folder
 
 #HMM
 echo "MLETrain.py"
-#python $mle_train_file $train_file $q_mle_file $e_mle_file
+python $mle_train_file $train_file $q_mle_file $e_mle_file
 
 #MEMM
 echo "ExtractFeatures.py"
