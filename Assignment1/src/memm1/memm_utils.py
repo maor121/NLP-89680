@@ -13,7 +13,7 @@ def create_feature_vec(w_prev_prev, w_prev, wi, w_next, w_next_next, t_prev, t_p
     if not_a_rare_word:
         features['w_i'] = wi
     else:
-        features['has_number'] = bool(re.search(utils.FLOAT_NUMBER_PATTERN, wi)) or bool(re.search(utils.NUMBER_Word, wi))
+        features['has_number'] = bool(re.search(utils.FLOAT_NUMBER_PATTERN, wi)) or bool(re.search(utils.NUMER_WORD_PATTERN, wi))
         features['has_capital'] = bool(re.search(utils.CAPITAL_PATTERN, wi))
         features['has_hyphen'] = wi.__contains__('-')
         wi_len = len(wi)
