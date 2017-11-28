@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source ner.config
 source general.config
+source $profile_config_file
 
 source $venv_folder
 
