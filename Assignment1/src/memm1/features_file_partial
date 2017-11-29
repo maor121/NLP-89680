@@ -1,0 +1,100 @@
+IN w_i=In w_i+2=Oct. w_i+1=an t_i-1=Start t_i-1_t_i-2=Start&Start
+DT w_i=an w_i+2=19 w_i+1=Oct. t_i-1=IN w_i-1=In t_i-1_t_i-2=IN&Start
+NNP w_i=Oct. w_i+2=review w_i+1=19 t_i-1=DT w_i-1=an t_i-1_t_i-2=DT&IN w_i-2=In
+CD w_i=19 w_i+2=of w_i+1=review t_i-1=NNP w_i-1=Oct. t_i-1_t_i-2=NNP&DT w_i-2=an
+NN w_i=review w_i+2=`` w_i+1=of t_i-1=CD w_i-1=19 t_i-1_t_i-2=CD&NNP w_i-2=Oct.
+IN w_i=of w_i+2=The w_i+1=`` t_i-1=NN w_i-1=review t_i-1_t_i-2=NN&CD w_i-2=19
+`` w_i=`` w_i+2=Misanthrope w_i+1=The t_i-1=IN w_i-1=of t_i-1_t_i-2=IN&NN w_i-2=review
+DT w_i=The w_i+2='' w_i+1=Misanthrope t_i-1=`` w_i-1=`` t_i-1_t_i-2=``&IN w_i-2=of
+NN has_capital=True w_i+2=at w_i+1='' prefix_1=M has_hyphen=False prefix_3=Mis t_i-1=DT prefix_4=Misa prefix_2=Mi suffix_2=pe suffix_3=ope has_number=False suffix_1=e w_i-1=The t_i-1_t_i-2=DT&`` suffix_4=rope w_i-2=``
+'' w_i='' w_i+2=Chicago w_i+1=at t_i-1=NN w_i-1=Misanthrope t_i-1_t_i-2=NN&DT w_i-2=The
+IN w_i=at w_i+2='s w_i+1=Chicago t_i-1='' w_i-1='' t_i-1_t_i-2=''&NN w_i-2=Misanthrope
+NNP w_i=Chicago w_i+2=Goodman w_i+1='s t_i-1=IN w_i-1=at t_i-1_t_i-2=IN&'' w_i-2=''
+POS w_i='s w_i+2=Theatre w_i+1=Goodman t_i-1=NNP w_i-1=Chicago t_i-1_t_i-2=NNP&IN w_i-2=at
+NNP w_i=Goodman w_i+2=( w_i+1=Theatre t_i-1=POS w_i-1='s t_i-1_t_i-2=POS&NNP w_i-2=Chicago
+NNP w_i=Theatre w_i+2=`` w_i+1=( t_i-1=NNP w_i-1=Goodman t_i-1_t_i-2=NNP&POS w_i-2='s
+( w_i=( w_i+2=Revitalized w_i+1=`` t_i-1=NNP w_i-1=Theatre t_i-1_t_i-2=NNP&NNP w_i-2=Goodman
+`` w_i=`` w_i+2=Classics w_i+1=Revitalized t_i-1=( w_i-1=( t_i-1_t_i-2=(&NNP w_i-2=Theatre
+VBN has_capital=True w_i+2=Take w_i+1=Classics prefix_1=R has_hyphen=False prefix_3=Rev t_i-1=`` prefix_4=Revi prefix_2=Re suffix_2=ed suffix_3=zed has_number=False suffix_1=d w_i-1=`` t_i-1_t_i-2=``&( suffix_4=ized w_i-2=(
+NNS has_capital=True w_i+2=the w_i+1=Take prefix_1=C has_hyphen=False prefix_3=Cla t_i-1=VBN prefix_4=Clas prefix_2=Cl suffix_2=cs suffix_3=ics has_number=False suffix_1=s w_i-1=Revitalized t_i-1_t_i-2=VBN&`` suffix_4=sics w_i-2=``
+VBP w_i=Take w_i+2=Stage w_i+1=the t_i-1=NNS w_i-1=Classics t_i-1_t_i-2=NNS&VBN w_i-2=Revitalized
+DT w_i=the w_i+2=in w_i+1=Stage t_i-1=VBP w_i-1=Take t_i-1_t_i-2=VBP&NNS w_i-2=Classics
+NN has_capital=True w_i+2=Windy w_i+1=in prefix_1=S has_hyphen=False prefix_3=Sta t_i-1=DT prefix_4=Stag prefix_2=St suffix_2=ge suffix_3=age has_number=False suffix_1=e w_i-1=the t_i-1_t_i-2=DT&VBP suffix_4=tage w_i-2=Take
+IN w_i=in w_i+2=City w_i+1=Windy t_i-1=NN w_i-1=Stage t_i-1_t_i-2=NN&DT w_i-2=the
+NNP has_capital=True w_i+2=, w_i+1=City prefix_1=W has_hyphen=False prefix_3=Win t_i-1=IN prefix_4=Wind prefix_2=Wi suffix_2=dy suffix_3=ndy has_number=False suffix_1=y w_i-1=in t_i-1_t_i-2=IN&NN suffix_4=indy w_i-2=Stage
+NNP w_i=City w_i+2='' w_i+1=, t_i-1=NNP w_i-1=Windy t_i-1_t_i-2=NNP&IN w_i-2=in
+, w_i=, w_i+2=Leisure w_i+1='' t_i-1=NNP w_i-1=City t_i-1_t_i-2=NNP&NNP w_i-2=Windy
+'' w_i='' w_i+2=& w_i+1=Leisure t_i-1=, w_i-1=, t_i-1_t_i-2=,&NNP w_i-2=City
+NN has_capital=True w_i+2=Arts w_i+1=& prefix_1=L has_hyphen=False prefix_3=Lei t_i-1='' prefix_4=Leis prefix_2=Le suffix_2=re suffix_3=ure has_number=False suffix_1=e w_i-1='' t_i-1_t_i-2=''&, suffix_4=sure w_i-2=,
+CC w_i=& w_i+2=) w_i+1=Arts t_i-1=NN w_i-1=Leisure t_i-1_t_i-2=NN&'' w_i-2=''
+NNS w_i=Arts w_i+2=, w_i+1=) t_i-1=CC w_i-1=& t_i-1_t_i-2=CC&NN w_i-2=Leisure
+) w_i=) w_i+2=the w_i+1=, t_i-1=NNS w_i-1=Arts t_i-1_t_i-2=NNS&CC w_i-2=&
+, w_i=, w_i+2=role w_i+1=the t_i-1=) w_i-1=) t_i-1_t_i-2=)&NNS w_i-2=Arts
+DT w_i=the w_i+2=of w_i+1=role t_i-1=, w_i-1=, t_i-1_t_i-2=,&) w_i-2=)
+NN w_i=role w_i+2=Celimene w_i+1=of t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&, w_i-2=,
+IN w_i=of w_i+2=, w_i+1=Celimene t_i-1=NN w_i-1=role t_i-1_t_i-2=NN&DT w_i-2=the
+NNP has_capital=True w_i+2=played w_i+1=, prefix_1=C has_hyphen=False prefix_3=Cel t_i-1=IN prefix_4=Celi prefix_2=Ce suffix_2=ne suffix_3=ene has_number=False suffix_1=e w_i-1=of t_i-1_t_i-2=IN&NN suffix_4=mene w_i-2=role
+, w_i=, w_i+2=by w_i+1=played t_i-1=NNP w_i-1=Celimene t_i-1_t_i-2=NNP&IN w_i-2=of
+VBN w_i=played w_i+2=Kim w_i+1=by t_i-1=, w_i-1=, t_i-1_t_i-2=,&NNP w_i-2=Celimene
+IN w_i=by w_i+2=Cattrall w_i+1=Kim t_i-1=VBN w_i-1=played t_i-1_t_i-2=VBN&, w_i-2=,
+NNP w_i=Kim w_i+2=, w_i+1=Cattrall t_i-1=IN w_i-1=by t_i-1_t_i-2=IN&VBN w_i-2=played
+NNP has_capital=True w_i+2=was w_i+1=, prefix_1=C has_hyphen=False prefix_3=Cat t_i-1=NNP prefix_4=Catt prefix_2=Ca suffix_2=ll suffix_3=all has_number=False suffix_1=l w_i-1=Kim t_i-1_t_i-2=NNP&IN suffix_4=rall w_i-2=by
+, w_i=, w_i+2=mistakenly w_i+1=was t_i-1=NNP w_i-1=Cattrall t_i-1_t_i-2=NNP&NNP w_i-2=Kim
+VBD w_i=was w_i+2=attributed w_i+1=mistakenly t_i-1=, w_i-1=, t_i-1_t_i-2=,&NNP w_i-2=Cattrall
+RB w_i=mistakenly w_i+2=to w_i+1=attributed t_i-1=VBD w_i-1=was t_i-1_t_i-2=VBD&, w_i-2=,
+VBN w_i=attributed w_i+2=Christina w_i+1=to t_i-1=RB w_i-1=mistakenly t_i-1_t_i-2=RB&VBD w_i-2=was
+IN w_i=to w_i+2=Haag w_i+1=Christina t_i-1=VBN w_i-1=attributed t_i-1_t_i-2=VBN&RB w_i-2=mistakenly
+NNP has_capital=True w_i+2=. w_i+1=Haag prefix_1=C has_hyphen=False prefix_3=Chr t_i-1=IN prefix_4=Chri prefix_2=Ch suffix_2=na suffix_3=ina has_number=False suffix_1=a w_i-1=to t_i-1_t_i-2=IN&VBN suffix_4=tina w_i-2=attributed
+NNP has_capital=True w_i+1=. prefix_1=H has_hyphen=False prefix_3=Haa t_i-1=NNP prefix_4=Haag prefix_2=Ha suffix_2=ag suffix_3=aag has_number=False suffix_1=g w_i-1=Christina t_i-1_t_i-2=NNP&IN suffix_4=Haag w_i-2=to
+. w_i=. t_i-1=NNP w_i-1=Haag t_i-1_t_i-2=NNP&NNP w_i-2=Christina
+NNP w_i=Ms. w_i+2=plays w_i+1=Haag t_i-1=Start t_i-1_t_i-2=Start&Start
+NNP has_capital=True w_i+2=Elianti w_i+1=plays prefix_1=H has_hyphen=False prefix_3=Haa t_i-1=NNP prefix_4=Haag prefix_2=Ha suffix_2=ag suffix_3=aag has_number=False suffix_1=g w_i-1=Ms. t_i-1_t_i-2=NNP&Start suffix_4=Haag
+VBZ w_i=plays w_i+2=. w_i+1=Elianti t_i-1=NNP w_i-1=Haag t_i-1_t_i-2=NNP&NNP w_i-2=Ms.
+NNP has_capital=True w_i+1=. prefix_1=E has_hyphen=False prefix_3=Eli t_i-1=VBZ prefix_4=Elia prefix_2=El suffix_2=ti suffix_3=nti has_number=False suffix_1=i w_i-1=plays t_i-1_t_i-2=VBZ&NNP suffix_4=anti w_i-2=Haag
+. w_i=. t_i-1=NNP w_i-1=Elianti t_i-1_t_i-2=NNP&VBZ w_i-2=plays
+NNP has_capital=True w_i+2=Cars w_i+1=Motor prefix_1=R has_hyphen=True prefix_3=Rol t_i-1=Start prefix_4=Roll prefix_2=Ro suffix_2=ce suffix_3=yce has_number=False suffix_1=e t_i-1_t_i-2=Start&Start suffix_4=oyce
+NNP w_i=Motor w_i+2=Inc. w_i+1=Cars t_i-1=NNP w_i-1=Rolls-Royce t_i-1_t_i-2=NNP&Start
+NNPS has_capital=True w_i+2=said w_i+1=Inc. prefix_1=C has_hyphen=False prefix_3=Car t_i-1=NNP prefix_4=Cars prefix_2=Ca suffix_2=rs suffix_3=ars has_number=False suffix_1=s w_i-1=Motor t_i-1_t_i-2=NNP&NNP suffix_4=Cars w_i-2=Rolls-Royce
+NNP w_i=Inc. w_i+2=it w_i+1=said t_i-1=NNPS w_i-1=Cars t_i-1_t_i-2=NNPS&NNP w_i-2=Motor
+VBD w_i=said w_i+2=expects w_i+1=it t_i-1=NNP w_i-1=Inc. t_i-1_t_i-2=NNP&NNPS w_i-2=Cars
+PRP w_i=it w_i+2=its w_i+1=expects t_i-1=VBD w_i-1=said t_i-1_t_i-2=VBD&NNP w_i-2=Inc.
+VBZ w_i=expects w_i+2=U.S. w_i+1=its t_i-1=PRP w_i-1=it t_i-1_t_i-2=PRP&VBD w_i-2=said
+PRP$ w_i=its w_i+2=sales w_i+1=U.S. t_i-1=VBZ w_i-1=expects t_i-1_t_i-2=VBZ&PRP w_i-2=it
+NNP w_i=U.S. w_i+2=to w_i+1=sales t_i-1=PRP$ w_i-1=its t_i-1_t_i-2=PRP$&VBZ w_i-2=expects
+NNS w_i=sales w_i+2=remain w_i+1=to t_i-1=NNP w_i-1=U.S. t_i-1_t_i-2=NNP&PRP$ w_i-2=its
+TO w_i=to w_i+2=steady w_i+1=remain t_i-1=NNS w_i-1=sales t_i-1_t_i-2=NNS&NNP w_i-2=U.S.
+VB w_i=remain w_i+2=at w_i+1=steady t_i-1=TO w_i-1=to t_i-1_t_i-2=TO&NNS w_i-2=sales
+JJ w_i=steady w_i+2=about w_i+1=at t_i-1=VB w_i-1=remain t_i-1_t_i-2=VB&TO w_i-2=to
+IN w_i=at w_i+2=1,200 w_i+1=about t_i-1=JJ w_i-1=steady t_i-1_t_i-2=JJ&VB w_i-2=remain
+IN w_i=about w_i+2=cars w_i+1=1,200 t_i-1=IN w_i-1=at t_i-1_t_i-2=IN&JJ w_i-2=steady
+CD w_i=1,200 w_i+2=in w_i+1=cars t_i-1=IN w_i-1=about t_i-1_t_i-2=IN&IN w_i-2=at
+NNS w_i=cars w_i+2=1990 w_i+1=in t_i-1=CD w_i-1=1,200 t_i-1_t_i-2=CD&IN w_i-2=about
+IN w_i=in w_i+2=. w_i+1=1990 t_i-1=NNS w_i-1=cars t_i-1_t_i-2=NNS&CD w_i-2=1,200
+CD w_i=1990 w_i+1=. t_i-1=IN w_i-1=in t_i-1_t_i-2=IN&NNS w_i-2=cars
+. w_i=. t_i-1=CD w_i-1=1990 t_i-1_t_i-2=CD&IN w_i-2=in
+DT w_i=The w_i+2=auto w_i+1=luxury t_i-1=Start t_i-1_t_i-2=Start&Start
+NN w_i=luxury w_i+2=maker w_i+1=auto t_i-1=DT w_i-1=The t_i-1_t_i-2=DT&Start
+NN w_i=auto w_i+2=last w_i+1=maker t_i-1=NN w_i-1=luxury t_i-1_t_i-2=NN&DT w_i-2=The
+NN w_i=maker w_i+2=year w_i+1=last t_i-1=NN w_i-1=auto t_i-1_t_i-2=NN&NN w_i-2=luxury
+JJ w_i=last w_i+2=sold w_i+1=year t_i-1=NN w_i-1=maker t_i-1_t_i-2=NN&NN w_i-2=auto
+NN w_i=year w_i+2=1,214 w_i+1=sold t_i-1=JJ w_i-1=last t_i-1_t_i-2=JJ&NN w_i-2=maker
+VBD w_i=sold w_i+2=cars w_i+1=1,214 t_i-1=NN w_i-1=year t_i-1_t_i-2=NN&JJ w_i-2=last
+CD has_capital=False w_i+2=in w_i+1=cars prefix_1=1 has_hyphen=False prefix_3=1,2 t_i-1=VBD prefix_4=1,21 prefix_2=1, suffix_2=14 suffix_3=214 has_number=True suffix_1=4 w_i-1=sold t_i-1_t_i-2=VBD&NN suffix_4=,214 w_i-2=year
+NNS w_i=cars w_i+2=the w_i+1=in t_i-1=CD w_i-1=1,214 t_i-1_t_i-2=CD&VBD w_i-2=sold
+IN w_i=in w_i+2=U.S. w_i+1=the t_i-1=NNS w_i-1=cars t_i-1_t_i-2=NNS&CD w_i-2=1,214
+DT w_i=the w_i+1=U.S. t_i-1=IN w_i-1=in t_i-1_t_i-2=IN&NNS w_i-2=cars
+NNP w_i=U.S. t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&IN w_i-2=in
+NNP w_i=Howard w_i+2=, w_i+1=Mosher t_i-1=Start t_i-1_t_i-2=Start&Start
+NNP has_capital=True w_i+2=president w_i+1=, prefix_1=M has_hyphen=False prefix_3=Mos t_i-1=NNP prefix_4=Mosh prefix_2=Mo suffix_2=er suffix_3=her has_number=False suffix_1=r w_i-1=Howard t_i-1_t_i-2=NNP&Start suffix_4=sher
+, w_i=, w_i+2=and w_i+1=president t_i-1=NNP w_i-1=Mosher t_i-1_t_i-2=NNP&NNP w_i-2=Howard
+NN w_i=president w_i+2=chief w_i+1=and t_i-1=, w_i-1=, t_i-1_t_i-2=,&NNP w_i-2=Mosher
+CC w_i=and w_i+2=executive w_i+1=chief t_i-1=NN w_i-1=president t_i-1_t_i-2=NN&, w_i-2=,
+JJ w_i=chief w_i+2=officer w_i+1=executive t_i-1=CC w_i-1=and t_i-1_t_i-2=CC&NN w_i-2=president
+NN w_i=executive w_i+2=, w_i+1=officer t_i-1=JJ w_i-1=chief t_i-1_t_i-2=JJ&CC w_i-2=and
+NN w_i=officer w_i+2=said w_i+1=, t_i-1=NN w_i-1=executive t_i-1_t_i-2=NN&JJ w_i-2=chief
+, w_i=, w_i+2=he w_i+1=said t_i-1=NN w_i-1=officer t_i-1_t_i-2=NN&NN w_i-2=executive
+VBD w_i=said w_i+2=anticipates w_i+1=he t_i-1=, w_i-1=, t_i-1_t_i-2=,&NN w_i-2=officer
+PRP w_i=he w_i+2=growth w_i+1=anticipates t_i-1=VBD w_i-1=said t_i-1_t_i-2=VBD&, w_i-2=,
+VBZ w_i=anticipates w_i+2=for w_i+1=growth t_i-1=PRP w_i-1=he t_i-1_t_i-2=PRP&VBD w_i-2=said
+NN w_i=growth w_i+2=the w_i+1=for t_i-1=VBZ w_i-1=anticipates t_i-1_t_i-2=VBZ&PRP w_i-2=he
+IN w_i=for w_i+2=luxury w_i+1=the t_i-1=NN w_i-1=growth t_i-1_t_i-2=NN&VBZ w_i-2=anticipates
