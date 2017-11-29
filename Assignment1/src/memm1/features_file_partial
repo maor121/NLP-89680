@@ -98,3 +98,103 @@ PRP w_i=he w_i+2=growth w_i+1=anticipates t_i-1=VBD w_i-1=said t_i-1_t_i-2=VBD&,
 VBZ w_i=anticipates w_i+2=for w_i+1=growth t_i-1=PRP w_i-1=he t_i-1_t_i-2=PRP&VBD w_i-2=said
 NN w_i=growth w_i+2=the w_i+1=for t_i-1=VBZ w_i-1=anticipates t_i-1_t_i-2=VBZ&PRP w_i-2=he
 IN w_i=for w_i+2=luxury w_i+1=the t_i-1=NN w_i-1=growth t_i-1_t_i-2=NN&VBZ w_i-2=anticipates
+NNS w_i=airplanes w_i+1=. t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&VB w_i-2=fly
+. w_i=. t_i-1=NNS w_i-1=airplanes t_i-1_t_i-2=NNS&DT w_i-2=the
+IN w_i=If w_i+2=were w_i+1=they t_i-1=Start t_i-1_t_i-2=Start&Start
+PRP w_i=they w_i+2=to w_i+1=were t_i-1=IN w_i-1=If t_i-1_t_i-2=IN&Start
+VBD w_i=were w_i+2=insist w_i+1=to t_i-1=PRP w_i-1=they t_i-1_t_i-2=PRP&IN w_i-2=If
+TO w_i=to w_i+2=on w_i+1=insist t_i-1=VBD w_i-1=were t_i-1_t_i-2=VBD&PRP w_i-2=they
+VB w_i=insist w_i+2=a w_i+1=on t_i-1=TO w_i-1=to t_i-1_t_i-2=TO&VBD w_i-2=were
+IN w_i=on w_i+2=low w_i+1=a t_i-1=VB w_i-1=insist t_i-1_t_i-2=VB&TO w_i-2=to
+DT w_i=a w_i+2=bid w_i+1=low t_i-1=IN w_i-1=on t_i-1_t_i-2=IN&VB w_i-2=insist
+JJ w_i=low w_i+2=of w_i+1=bid t_i-1=DT w_i-1=a t_i-1_t_i-2=DT&IN w_i-2=on
+NN w_i=bid w_i+2=, w_i+1=of t_i-1=JJ w_i-1=low t_i-1_t_i-2=JJ&DT w_i-2=a
+IN w_i=of w_i+2=say w_i+1=, t_i-1=NN w_i-1=bid t_i-1_t_i-2=NN&JJ w_i-2=low
+, w_i=, w_i+2=$ w_i+1=say t_i-1=IN w_i-1=of t_i-1_t_i-2=IN&NN w_i-2=bid
+VB w_i=say w_i+2=200 w_i+1=$ t_i-1=, w_i-1=, t_i-1_t_i-2=,&IN w_i-2=of
+$ w_i=$ w_i+2=a w_i+1=200 t_i-1=VB w_i-1=say t_i-1_t_i-2=VB&, w_i-2=,
+CD w_i=200 w_i+2=share w_i+1=a t_i-1=$ w_i-1=$ t_i-1_t_i-2=$&VB w_i-2=say
+DT w_i=a w_i+2=, w_i+1=share t_i-1=CD w_i-1=200 t_i-1_t_i-2=CD&$ w_i-2=$
+NN w_i=share w_i+2=the w_i+1=, t_i-1=DT w_i-1=a t_i-1_t_i-2=DT&CD w_i-2=200
+, w_i=, w_i+2=board w_i+1=the t_i-1=NN w_i-1=share t_i-1_t_i-2=NN&DT w_i-2=a
+DT w_i=the w_i+2=might w_i+1=board t_i-1=, w_i-1=, t_i-1_t_i-2=,&NN w_i-2=share
+NN w_i=board w_i+2=n't w_i+1=might t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&, w_i-2=,
+MD w_i=might w_i+2=be w_i+1=n't t_i-1=NN w_i-1=board t_i-1_t_i-2=NN&DT w_i-2=the
+RB w_i=n't w_i+2=able w_i+1=be t_i-1=MD w_i-1=might t_i-1_t_i-2=MD&NN w_i-2=board
+VB w_i=be w_i+2=to w_i+1=able t_i-1=RB w_i-1=n't t_i-1_t_i-2=RB&MD w_i-2=might
+JJ w_i=able w_i+2=obtain w_i+1=to t_i-1=VB w_i-1=be t_i-1_t_i-2=VB&RB w_i-2=n't
+TO w_i=to w_i+2=a w_i+1=obtain t_i-1=JJ w_i-1=able t_i-1_t_i-2=JJ&VB w_i-2=be
+VB w_i=obtain w_i+2=higher w_i+1=a t_i-1=TO w_i-1=to t_i-1_t_i-2=TO&JJ w_i-2=able
+DT w_i=a w_i+2=offer w_i+1=higher t_i-1=VB w_i-1=obtain t_i-1_t_i-2=VB&TO w_i-2=to
+JJR w_i=higher w_i+2=from w_i+1=offer t_i-1=DT w_i-1=a t_i-1_t_i-2=DT&VB w_i-2=obtain
+NN w_i=offer w_i+2=other w_i+1=from t_i-1=JJR w_i-1=higher t_i-1_t_i-2=JJR&DT w_i-2=a
+IN w_i=from w_i+2=bidders w_i+1=other t_i-1=NN w_i-1=offer t_i-1_t_i-2=NN&JJR w_i-2=higher
+JJ w_i=other w_i+2=because w_i+1=bidders t_i-1=IN w_i-1=from t_i-1_t_i-2=IN&NN w_i-2=offer
+NNS w_i=bidders w_i+2=banks w_i+1=because t_i-1=JJ w_i-1=other t_i-1_t_i-2=JJ&IN w_i-2=from
+IN w_i=because w_i+2=might w_i+1=banks t_i-1=NNS w_i-1=bidders t_i-1_t_i-2=NNS&JJ w_i-2=other
+NNS w_i=banks w_i+2=hesitate w_i+1=might t_i-1=IN w_i-1=because t_i-1_t_i-2=IN&NNS w_i-2=bidders
+MD w_i=might w_i+2=to w_i+1=hesitate t_i-1=NNS w_i-1=banks t_i-1_t_i-2=NNS&IN w_i-2=because
+VB w_i=hesitate w_i+2=finance w_i+1=to t_i-1=MD w_i-1=might t_i-1_t_i-2=MD&NNS w_i-2=banks
+TO w_i=to w_i+2=a w_i+1=finance t_i-1=VB w_i-1=hesitate t_i-1_t_i-2=VB&MD w_i-2=might
+VB w_i=finance w_i+2=transaction w_i+1=a t_i-1=TO w_i-1=to t_i-1_t_i-2=TO&VB w_i-2=hesitate
+DT w_i=a w_i+2=the w_i+1=transaction t_i-1=VB w_i-1=finance t_i-1_t_i-2=VB&TO w_i-2=to
+NN w_i=transaction w_i+2=pilots w_i+1=the t_i-1=DT w_i-1=a t_i-1_t_i-2=DT&VB w_i-2=finance
+DT w_i=the w_i+2=oppose w_i+1=pilots t_i-1=NN w_i-1=transaction t_i-1_t_i-2=NN&DT w_i-2=a
+NNS w_i=pilots w_i+2=. w_i+1=oppose t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&NN w_i-2=transaction
+VBP w_i=oppose w_i+1=. t_i-1=NNS w_i-1=pilots t_i-1_t_i-2=NNS&DT w_i-2=the
+. w_i=. t_i-1=VBP w_i-1=oppose t_i-1_t_i-2=VBP&NNS w_i-2=pilots
+RB w_i=Also w_i+2=because w_i+1=, t_i-1=Start t_i-1_t_i-2=Start&Start
+, w_i=, w_i+2=UAL w_i+1=because t_i-1=RB w_i-1=Also t_i-1_t_i-2=RB&Start
+IN w_i=because w_i+2=Chairman w_i+1=UAL t_i-1=, w_i-1=, t_i-1_t_i-2=,&RB w_i-2=Also
+NNP w_i=UAL w_i+2=Stephen w_i+1=Chairman t_i-1=IN w_i-1=because t_i-1_t_i-2=IN&, w_i-2=,
+NNP w_i=Chairman w_i+2=Wolf w_i+1=Stephen t_i-1=NNP w_i-1=UAL t_i-1_t_i-2=NNP&IN w_i-2=because
+NNP w_i=Stephen w_i+2=and w_i+1=Wolf t_i-1=NNP w_i-1=Chairman t_i-1_t_i-2=NNP&NNP w_i-2=UAL
+NNP w_i=Wolf w_i+2=other w_i+1=and t_i-1=NNP w_i-1=Stephen t_i-1_t_i-2=NNP&NNP w_i-2=Chairman
+CC w_i=and w_i+2=UAL w_i+1=other t_i-1=NNP w_i-1=Wolf t_i-1_t_i-2=NNP&NNP w_i-2=Stephen
+JJ w_i=other w_i+2=executives w_i+1=UAL t_i-1=CC w_i-1=and t_i-1_t_i-2=CC&NNP w_i-2=Wolf
+NNP w_i=UAL w_i+2=have w_i+1=executives t_i-1=JJ w_i-1=other t_i-1_t_i-2=JJ&CC w_i-2=and
+NNS w_i=executives w_i+2=joined w_i+1=have t_i-1=NNP w_i-1=UAL t_i-1_t_i-2=NNP&JJ w_i-2=other
+VBP w_i=have w_i+2=the w_i+1=joined t_i-1=NNS w_i-1=executives t_i-1_t_i-2=NNS&NNP w_i-2=UAL
+VBN w_i=joined w_i+2=pilots w_i+1=the t_i-1=VBP w_i-1=have t_i-1_t_i-2=VBP&NNS w_i-2=executives
+DT w_i=the w_i+2=' w_i+1=pilots t_i-1=VBN w_i-1=joined t_i-1_t_i-2=VBN&VBP w_i-2=have
+NNS w_i=pilots w_i+2=bid w_i+1=' t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&VBN w_i-2=joined
+POS w_i=' w_i+2=, w_i+1=bid t_i-1=NNS w_i-1=pilots t_i-1_t_i-2=NNS&DT w_i-2=the
+NN w_i=bid w_i+2=the w_i+1=, t_i-1=POS w_i-1=' t_i-1_t_i-2=POS&NNS w_i-2=pilots
+, w_i=, w_i+2=board w_i+1=the t_i-1=NN w_i-1=bid t_i-1_t_i-2=NN&POS w_i-2='
+DT w_i=the w_i+2=might w_i+1=board t_i-1=, w_i-1=, t_i-1_t_i-2=,&NN w_i-2=bid
+NN w_i=board w_i+2=be w_i+1=might t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&, w_i-2=,
+MD w_i=might w_i+2=forced w_i+1=be t_i-1=NN w_i-1=board t_i-1_t_i-2=NN&DT w_i-2=the
+VB w_i=be w_i+2=to w_i+1=forced t_i-1=MD w_i-1=might t_i-1_t_i-2=MD&NN w_i-2=board
+VBN w_i=forced w_i+2=exclude w_i+1=to t_i-1=VB w_i-1=be t_i-1_t_i-2=VB&MD w_i-2=might
+TO w_i=to w_i+2=him w_i+1=exclude t_i-1=VBN w_i-1=forced t_i-1_t_i-2=VBN&VB w_i-2=be
+VB w_i=exclude w_i+2=from w_i+1=him t_i-1=TO w_i-1=to t_i-1_t_i-2=TO&VBN w_i-2=forced
+PRP w_i=him w_i+2=its w_i+1=from t_i-1=VB w_i-1=exclude t_i-1_t_i-2=VB&TO w_i-2=to
+IN w_i=from w_i+2=deliberations w_i+1=its t_i-1=PRP w_i-1=him t_i-1_t_i-2=PRP&VB w_i-2=exclude
+PRP$ w_i=its w_i+2=in w_i+1=deliberations t_i-1=IN w_i-1=from t_i-1_t_i-2=IN&PRP w_i-2=him
+NNS w_i=deliberations w_i+2=order w_i+1=in t_i-1=PRP$ w_i-1=its t_i-1_t_i-2=PRP$&IN w_i-2=from
+IN w_i=in w_i+2=to w_i+1=order t_i-1=NNS w_i-1=deliberations t_i-1_t_i-2=NNS&PRP$ w_i-2=its
+NN w_i=order w_i+2=be w_i+1=to t_i-1=IN w_i-1=in t_i-1_t_i-2=IN&NNS w_i-2=deliberations
+TO w_i=to w_i+2=fair w_i+1=be t_i-1=NN w_i-1=order t_i-1_t_i-2=NN&IN w_i-2=in
+VB w_i=be w_i+2=to w_i+1=fair t_i-1=TO w_i-1=to t_i-1_t_i-2=TO&NN w_i-2=order
+JJ w_i=fair w_i+2=other w_i+1=to t_i-1=VB w_i-1=be t_i-1_t_i-2=VB&TO w_i-2=to
+IN w_i=to w_i+2=bidders w_i+1=other t_i-1=JJ w_i-1=fair t_i-1_t_i-2=JJ&VB w_i-2=be
+JJ w_i=other w_i+2=. w_i+1=bidders t_i-1=IN w_i-1=to t_i-1_t_i-2=IN&JJ w_i-2=fair
+NNS w_i=bidders w_i+1=. t_i-1=JJ w_i-1=other t_i-1_t_i-2=JJ&IN w_i-2=to
+. w_i=. t_i-1=NNS w_i-1=bidders t_i-1_t_i-2=NNS&JJ w_i-2=other
+DT w_i=That w_i+2=cost w_i+1=could t_i-1=Start t_i-1_t_i-2=Start&Start
+MD w_i=could w_i+2=him w_i+1=cost t_i-1=DT w_i-1=That t_i-1_t_i-2=DT&Start
+VB w_i=cost w_i+2=the w_i+1=him t_i-1=MD w_i-1=could t_i-1_t_i-2=MD&DT w_i-2=That
+PRP w_i=him w_i+2=chance w_i+1=the t_i-1=VB w_i-1=cost t_i-1_t_i-2=VB&MD w_i-2=could
+DT w_i=the w_i+2=to w_i+1=chance t_i-1=PRP w_i-1=him t_i-1_t_i-2=PRP&VB w_i-2=cost
+NN w_i=chance w_i+2=influence w_i+1=to t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&PRP w_i-2=him
+TO w_i=to w_i+2=the w_i+1=influence t_i-1=NN w_i-1=chance t_i-1_t_i-2=NN&DT w_i-2=the
+VB w_i=influence w_i+2=outcome w_i+1=the t_i-1=TO w_i-1=to t_i-1_t_i-2=TO&NN w_i-2=chance
+DT w_i=the w_i+2=and w_i+1=outcome t_i-1=VB w_i-1=influence t_i-1_t_i-2=VB&TO w_i-2=to
+NN w_i=outcome w_i+2=perhaps w_i+1=and t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&VB w_i-2=influence
+CC w_i=and w_i+2=join w_i+1=perhaps t_i-1=NN w_i-1=outcome t_i-1_t_i-2=NN&DT w_i-2=the
+RB w_i=perhaps w_i+2=the w_i+1=join t_i-1=CC w_i-1=and t_i-1_t_i-2=CC&NN w_i-2=outcome
+VB w_i=join w_i+2=winning w_i+1=the t_i-1=RB w_i-1=perhaps t_i-1_t_i-2=RB&CC w_i-2=and
+DT w_i=the w_i+2=bidder w_i+1=winning t_i-1=VB w_i-1=join t_i-1_t_i-2=VB&RB w_i-2=perhaps
+VBG w_i=winning w_i+2=. w_i+1=bidder t_i-1=DT w_i-1=the t_i-1_t_i-2=DT&VB w_i-2=join
+NN w_i=bidder w_i+1=. t_i-1=VBG w_i-1=winning t_i-1_t_i-2=VBG&DT w_i-2=the
+. w_i=. t_i-1=NN w_i-1=bidder t_i-1_t_i-2=NN&VBG w_i-2=winning
