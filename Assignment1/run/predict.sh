@@ -2,10 +2,6 @@
 
 source general.config
 
-source $venv_folder
-
-cd $proj_folder
-
 for file in $test_files; do
     echo "------------------------------------------------------------------------------------------------------"
     file_name=${file#*/}   # remove prefix ending in "/"

@@ -2,10 +2,6 @@
 
 source general.config
 
-source $venv_folder
-
-cd $proj_folder
-
 for pair in $eval_files; do
     input_file=${pair%+*}   # remove suffix starting with "+"
     tagged_file=${pair#*+}   # remove prefix ending in "+"

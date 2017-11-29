@@ -37,6 +37,9 @@ def compare_accuracy(gold, pred):
         assert(gws==pws)
         gtags = [t for w,t in gold_sent]
         ptags = [t for w,t in pred_sent]
+        diff = [1 if g==p else 0 for g,p in zip(gold_sent, pred_sent)]
+        missed = [w for w,d in zip(gws, diff) if d==0]
+        print missed
         correct += sum([1 if g==p else 0 for g,p in zip(gold_sent, pred_sent)])
         total += len(gold_sent)
     return correct/total
