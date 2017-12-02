@@ -4,9 +4,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 from torch.utils.data import TensorDataset
+import re
 
 UNK_WORD = "*UNK*"
-
+DIGIT_PATTERN = re.compile('\d')
 
 def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None):
     if is_train:
@@ -16,7 +17,7 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None):
     tags_ids = []
     with open(path) as data_file:
         for line in data_file:
-            line = line.strip()
+            line = re.sub(DIGIT_PATTERN,'#', line.strip())
             if len(line) > 0:
                 w, t = line.split()
                 if is_train:
@@ -77,32 +78,13 @@ class Net(nn.Module):
         self.embed1 = nn.Embedding(num_words, embed_depth, padding_idx=unk_id, sparse=True)
         self.fc1 = nn.Linear(embed_depth*(window_size*2+1), num_tags*2)
         self.fc2 = nn.Linear(num_tags*2, num_tags)
-        """
-        # 1 input image channel, 6 output channels, 5x5 square convolution
-        # kernel
-        self.conv1 = nn.Conv2d(1, 6, 5)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        # an affine operation: y = Wx + b
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)"""
 
     def forward(self, x):
         x = self.embed1(x)
         #x = torch.cat(x, dim=0)
         x = x.view(-1, self.embed_depth*(self.window_size*2+1))
-        x = F.relu(self.fc1(x))
+        x = F.tanh(self.fc1(x))
         x = self.fc2(x)
-        """
-        # Max pooling over a (2, 2) window
-        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
-        # If the size is a square you can only specify a single number
-        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-        x = x.view(-1, self.num_flat_features(x))
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        """
         return x
 
     def num_flat_features(self, x):
@@ -118,7 +100,7 @@ if __name__ == '__main__':
     import torch.utils.data
 
     window_size = 2
-    embedding_depth = 20
+    embedding_depth = 50
     batch_size = 100
 
     W2I, T2I, train, train_labels = load_dataset("../data/pos/train", window_size)
@@ -162,6 +144,8 @@ if __name__ == '__main__':
                 print('[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 50))
                 running_loss = 0.0
+            if i > 2000:
+                break
 
     print('Finished Training')
 
@@ -174,5 +158,5 @@ if __name__ == '__main__':
         total += labels.size(0)
         correct += (predicted == labels).sum()
 
-    print('Accuracy of the network on the %d test images: %d %%' % (
+    print('Accuracy of the network on the %d test words: %d %%' % (
         total, 100 * correct / total))
