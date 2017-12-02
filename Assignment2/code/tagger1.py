@@ -3,12 +3,15 @@ from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+from torch.utils.data import TensorDataset
 
 UNK_WORD = "*UNK*"
 
-def load_dataset(path, window_size=2):
-    W2I = StringCounter()
-    T2I = StringCounter()
+
+def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None):
+    if is_train:
+        W2I = StringCounter()
+        T2I = StringCounter()
     words_ids = []
     tags_ids = []
     with open(path) as data_file:
@@ -16,8 +19,12 @@ def load_dataset(path, window_size=2):
             line = line.strip()
             if len(line) > 0:
                 w, t = line.split()
-                w_id = W2I.get_id_and_update(w)
-                t_id = T2I.get_id_and_update(t)
+                if is_train:
+                    w_id = W2I.get_id_and_update(w)
+                    t_id = T2I.get_id_and_update(t)
+                else:
+                    w_id = W2I.get_id(w)
+                    t_id = T2I.get_id(t)
                 words_ids.append(w_id)
                 tags_ids.append(t_id)
 
@@ -50,6 +57,10 @@ class StringCounter:
         if not self.S2I.__contains__(str):
             self.S2I[str] = self.last_id
             self.last_id += 1
+        return self.S2I[str]
+    def get_id(self, str):
+        if not self.S2I.__contains__(str):
+            str = UNK_WORD
         return self.S2I[str]
 
 
@@ -108,19 +119,25 @@ if __name__ == '__main__':
 
     window_size = 2
     embedding_depth = 20
-    batch_size = 10
+    batch_size = 100
 
-    W2I, T2I, train, labels = load_dataset("../data/pos/train", window_size)
+    W2I, T2I, train, train_labels = load_dataset("../data/pos/train", window_size)
+    __, __, test, test_labels = load_dataset("../data/pos/dev", window_size, is_train=False, W2I=W2I, T2I=T2I)
 
     net = Net(W2I, T2I, embedding_depth, window_size)
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
-                                              shuffle=True, num_workers=2)
+    trainset = TensorDataset(torch.LongTensor(train), torch.LongTensor(train_labels))
+    testset = TensorDataset(torch.LongTensor(test), torch.LongTensor(test_labels))
 
-    for epoch in range(2):  # loop over the dataset multiple times
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
+                                              shuffle=True, num_workers=8)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
+                                             shuffle=True, num_workers=8)
+
+    for epoch in range(1):  # loop over the dataset multiple times
 
         running_loss = 0.0
         for i, data in enumerate(trainloader, 0):
@@ -141,23 +158,21 @@ if __name__ == '__main__':
 
             # print statistics
             running_loss += loss.data[0]
-            if i % 2000 == 1999:  # print every 2000 mini-batches
+            if i % 50 == 49:  # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.3f' %
-                      (epoch + 1, i + 1, running_loss / 2000))
+                      (epoch + 1, i + 1, running_loss / 50))
                 running_loss = 0.0
 
     print('Finished Training')
 
+    correct = 0
+    total = 0
+    for data in testloader:
+        features, labels = data
+        outputs = net(Variable(features))
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum()
 
-    """train_size = len(train)
-    for i in range(0, train_size, batch_size):
-        train_batch = train[i:i + batch_size]
-
-    batch = train[:10]
-    input = Variable(torch.LongTensor(batch))
-    out = net(input)
-    print(out)
-
-    net.zero_grad()
-    out.backward(torch.randn(1, 10))
-    """
+    print('Accuracy of the network on the %d test images: %d %%' % (
+        total, 100 * correct / total))
