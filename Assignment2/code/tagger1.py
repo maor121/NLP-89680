@@ -9,8 +9,12 @@ import re
 UNK_WORD = "*UNK*"
 START_WORD = "*START*"
 END_WORD = "*END*"
+RARE_WORDS_MAX_COUNT = 3
 DIGIT_PATTERN = re.compile('\d')
 
+
+def inverse_dict(dict):
+    return {v: k for k, v in dict.iteritems()}
 
 def windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id):
     sentence_ids = [w_start_id]*window_size + sentence_ids + [w_end_id]*window_size
@@ -52,6 +56,16 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None):
                 is_end_sentence = True
     words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
 
+    # Filter rare words from dataset
+    if is_train:
+        W2I.filter_rare_words(RARE_WORDS_MAX_COUNT+1)
+        W2I_2 = StringCounter(W2I.S2I.keys())
+        I2W = inverse_dict(W2I.S2I)
+        words_ids_2 = []
+        for window in words_ids:
+            words_ids_2.append(tuple([W2I_2.S2I[I2W.get(w_id,UNK_WORD)] for w_id in window]))
+        W2I = W2I_2
+        words_ids = words_ids_2
 
     assert len(words_ids)==len(tags_ids)
     return W2I, T2I, words_ids, tags_ids
@@ -69,7 +83,9 @@ def list_to_tuples(L, tup_size):
 
 class StringCounter:
     def __init__(self, strlist):
+        from collections import Counter
         self.S2I = {}
+        self.S2C = Counter()
         self.last_id = 0
         for s in strlist:
             self.get_id_and_update(s)
@@ -78,11 +94,17 @@ class StringCounter:
         if not self.S2I.__contains__(str):
             self.S2I[str] = self.last_id
             self.last_id += 1
+        self.S2C.update(str)
         return self.S2I[str]
     def get_id(self, str):
         if not self.S2I.__contains__(str):
             str = UNK_WORD
         return self.S2I[str]
+    def filter_rare_words(self, min_count):
+        w_to_filter = [k for k,v in self.S2C.iteritems() if v<min_count]
+        for w in w_to_filter:
+            self.S2C.pop(w)
+            self.S2I.pop(w)
 
 
 class Net(nn.Module):
@@ -121,7 +143,7 @@ if __name__ == '__main__':
 
     window_size = 2
     embedding_depth = 50
-    batch_size = 10000
+    batch_size = 1000
 
     W2I, T2I, train, train_labels = load_dataset("../data/pos/train", window_size)
     __, __, test, test_labels = load_dataset("../data/pos/dev", window_size, is_train=False, W2I=W2I, T2I=T2I)
