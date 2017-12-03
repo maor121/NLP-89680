@@ -7,18 +7,38 @@ from torch.utils.data import TensorDataset
 import re
 
 UNK_WORD = "*UNK*"
+START_WORD = "*START*"
+END_WORD = "*END*"
 DIGIT_PATTERN = re.compile('\d')
+
+
+def windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id):
+    sentence_ids = [w_start_id]*window_size + sentence_ids + [w_end_id]*window_size
+    w_windows = []
+    for window in list_to_tuples(sentence_ids, window_size * 2 + 1):
+        w_windows.append(window)
+    return w_windows
 
 def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None):
     if is_train:
-        W2I = StringCounter()
-        T2I = StringCounter()
+        W2I = StringCounter([START_WORD, END_WORD, UNK_WORD])
+        T2I = StringCounter([])
+
+    w_start_id = W2I.get_id(START_WORD)
+    w_end_id = W2I.get_id(END_WORD)
+
+    sentence_ids = []
     words_ids = []
     tags_ids = []
+    is_end_sentence = False
     with open(path) as data_file:
         for line in data_file:
             line = re.sub(DIGIT_PATTERN,'#', line.strip())
             if len(line) > 0:
+                if is_end_sentence:
+                    words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
+                    sentence_ids = []
+                    is_end_sentence = False
                 w, t = line.split()
                 if is_train:
                     w_id = W2I.get_id_and_update(w)
@@ -26,17 +46,15 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None):
                 else:
                     w_id = W2I.get_id(w)
                     t_id = T2I.get_id(t)
-                words_ids.append(w_id)
+                sentence_ids.append(w_id)
                 tags_ids.append(t_id)
+            else:
+                is_end_sentence = True
+    words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
 
-    unk_id = W2I.get_id_and_update(UNK_WORD)
-    words_ids = [unk_id]*window_size + words_ids + [unk_id]*window_size
 
-    w_windows = []
-    for window in list_to_tuples(words_ids, window_size * 2 + 1):
-        w_windows.append(window)
-    assert len(w_windows)==len(tags_ids)
-    return W2I, T2I, w_windows, tags_ids
+    assert len(words_ids)==len(tags_ids)
+    return W2I, T2I, words_ids, tags_ids
 
 
 def list_to_tuples(L, tup_size):
@@ -50,9 +68,11 @@ def list_to_tuples(L, tup_size):
 
 
 class StringCounter:
-    def __init__(self):
+    def __init__(self, strlist):
         self.S2I = {}
         self.last_id = 0
+        for s in strlist:
+            self.get_id_and_update(s)
 
     def get_id_and_update(self, str):
         if not self.S2I.__contains__(str):
@@ -101,7 +121,7 @@ if __name__ == '__main__':
 
     window_size = 2
     embedding_depth = 50
-    batch_size = 100
+    batch_size = 10000
 
     W2I, T2I, train, train_labels = load_dataset("../data/pos/train", window_size)
     __, __, test, test_labels = load_dataset("../data/pos/dev", window_size, is_train=False, W2I=W2I, T2I=T2I)
@@ -109,7 +129,7 @@ if __name__ == '__main__':
     net = Net(W2I, T2I, embedding_depth, window_size)
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
 
     trainset = TensorDataset(torch.LongTensor(train), torch.LongTensor(train_labels))
     testset = TensorDataset(torch.LongTensor(test), torch.LongTensor(test_labels))
@@ -144,8 +164,6 @@ if __name__ == '__main__':
                 print('[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 50))
                 running_loss = 0.0
-            if i > 2000:
-                break
 
     print('Finished Training')
 
