@@ -5,6 +5,7 @@ import torch.nn.functional as F
 import numpy as np
 from torch.utils.data import TensorDataset
 import re
+import time
 
 UNK_WORD = "*UNK*"
 START_WORD = "*START*"
@@ -117,7 +118,7 @@ class Net(nn.Module):
         self.embed_depth=embed_depth
         self.window_size=window_size
         # an Embedding module containing 10 tensors of size 3
-        self.embed1 = nn.Embedding(num_words, embed_depth, padding_idx=unk_id, sparse=True)
+        self.embed1 = nn.Embedding(num_words, embed_depth, padding_idx=unk_id, sparse=False)
         self.fc1 = nn.Linear(embed_depth*(window_size*2+1), num_tags*2)
         self.fc2 = nn.Linear(num_tags*2, num_tags)
 
@@ -144,6 +145,7 @@ if __name__ == '__main__':
     window_size = 2
     embedding_depth = 50
     batch_size = 1000
+    epoches = 8
 
     W2I, T2I, train, train_labels = load_dataset("../data/pos/train", window_size)
     __, __, test, test_labels = load_dataset("../data/pos/dev", window_size, is_train=False, W2I=W2I, T2I=T2I)
@@ -151,25 +153,28 @@ if __name__ == '__main__':
     net = Net(W2I, T2I, embedding_depth, window_size)
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
+    #optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
+    optimizer = optim.Adam(net.parameters(), lr = 0.001)
 
     trainset = TensorDataset(torch.LongTensor(train), torch.LongTensor(train_labels))
     testset = TensorDataset(torch.LongTensor(test), torch.LongTensor(test_labels))
 
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
-                                              shuffle=True, num_workers=8)
+                                              shuffle=False, num_workers=4)
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                             shuffle=True, num_workers=8)
+                                             shuffle=True, num_workers=4)
 
-    for epoch in range(1):  # loop over the dataset multiple times
+    for epoch in range(epoches):  # loop over the dataset multiple times
 
         running_loss = 0.0
         for i, data in enumerate(trainloader, 0):
+            start_t = time.time()
+
             # get the inputs
             inputs, labels = data
 
             # wrap them in Variable
-            inputs, labels = Variable(inputs), Variable(labels)
+            inputs, labels = Variable(inputs, requires_grad=False), Variable(labels, requires_grad=False)
 
             # zero the parameter gradients
             optimizer.zero_grad()
@@ -180,11 +185,13 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
 
+            end_t = time.time()
+
             # print statistics
             running_loss += loss.data[0]
             if i % 50 == 49:  # print every 2000 mini-batches
-                print('[%d, %5d] loss: %.3f' %
-                      (epoch + 1, i + 1, running_loss / 50))
+                print('[%d, %5d] loss: %.3f timer_per_batch: %.3f' %
+                      (epoch + 1, i + 1, running_loss / 50, (end_t-start_t)))
                 running_loss = 0.0
 
     print('Finished Training')
