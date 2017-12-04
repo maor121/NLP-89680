@@ -106,7 +106,7 @@ class StringCounter:
         if not self.S2I.__contains__(str):
             self.S2I[str] = self.last_id
             self.last_id += 1
-        self.S2C.update(str)
+        self.S2C.update([str])
         return self.S2I[str]
     def get_id(self, str):
         if not self.S2I.__contains__(str):
@@ -117,6 +117,7 @@ class StringCounter:
         for w in w_to_filter:
             self.S2C.pop(w)
             self.S2I.pop(w)
+        self.get_id_and_update(UNK_WORD)
 
 
 class Net(nn.Module):
@@ -130,16 +131,15 @@ class Net(nn.Module):
         self.window_size=window_size
 
         # an Embedding module containing 10 tensors of size 3
-        self.embed1 = nn.Embedding(num_words, embed_depth, padding_idx=unk_id)
+        self.embed1 = nn.Embedding(num_words, embed_depth)
         self.norm1 = nn.BatchNorm1d(embed_depth*(window_size*2+1))
         self.fc1 = nn.Linear(embed_depth*(window_size*2+1), num_tags*2)
         self.fc2 = nn.Linear(num_tags*2, num_tags)
 
     def forward(self, x):
         x = self.embed1(x)
-        #x = torch.cat(x, dim=0)
         x = x.view(-1, self.embed_depth*(self.window_size*2+1))
-        x = self.norm1(x)
+        #x = self.norm1(x)
         x = F.tanh(self.fc1(x))
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
@@ -150,13 +150,16 @@ if __name__ == '__main__':
     import torch.optim as optim
     import torch.utils.data
 
+    train_filename = "../data/pos/train"
+    test_filename = "../data/pos/dev"
+
     window_size = 2
     embedding_depth = 50
     batch_size = 1000
     epoches = 8
 
-    W2I, T2I, train, train_labels = load_dataset("../data/pos/train", window_size)
-    __, __, test, test_labels = load_dataset("../data/pos/dev", window_size, is_train=False, W2I=W2I, T2I=T2I)
+    W2I, T2I, train, train_labels = load_dataset(train_filename, window_size)
+    __, __, test, test_labels = load_dataset(test_filename, window_size, is_train=False, W2I=W2I, T2I=T2I)
 
     net = Net(W2I, T2I, embedding_depth, window_size)
 
