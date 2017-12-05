@@ -14,14 +14,7 @@ END_WORD = "*END*"
 RARE_WORDS_MAX_COUNT = 3
 
 DIGIT_PATTERN = re.compile('\d')
-CAPITAL_PATTERN = re.compile(r'[A-Z]')
 
-
-def word_to_features(word, F2I):
-    features = []
-    #F2I.get_id('has_capital') = bool(re.search(utils.CAPITAL_PATTERN, word))
-    #features['has_hyphen'] = word.__contains__('-')
-    return features
 
 def inverse_dict(dict):
     return {v: k for k, v in dict.iteritems()}
@@ -37,7 +30,6 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=Non
     if is_train:
         W2I = StringCounter([START_WORD, END_WORD, UNK_WORD])
         T2I = StringCounter([])
-        F2I = StringCounter(['has_capital', 'has_hyphen'])
 
     w_start_id = W2I.get_id(START_WORD)
     w_end_id = W2I.get_id(END_WORD)
@@ -45,7 +37,6 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=Non
     sentence_ids = []
     words_ids = []
     tags_ids = []
-    features_ids = []
     is_end_sentence = False
     with open(path) as data_file:
         for line in data_file:
