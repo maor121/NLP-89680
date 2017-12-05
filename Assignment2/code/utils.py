@@ -36,3 +36,5 @@ class StringCounter:
             self.S2C.pop(w)
             self.S2I.pop(w)
         self.get_id_and_update(self.UNK_WORD)
+    def len(self):
+        return len(self.S2I)

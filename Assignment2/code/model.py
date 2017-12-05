@@ -2,6 +2,8 @@ import re
 from utils import StringCounter, list_to_tuples, inverse_dict
 import torch.nn as nn
 import torch.nn.functional as F
+import time
+from torch.autograd import Variable
 
 UNK_WORD = "*UNK*"
 START_WORD = "*START*"
@@ -67,16 +69,11 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=Non
 
 
 class Model(nn.Module):
-    def __init__(self, W2I, T2I, embed_depth, window_size):
+    def __init__(self, num_words, num_tags, embed_depth, window_size):
         super(Model, self).__init__()
-
-        unk_id = W2I.S2I[UNK_WORD]
-        num_words = len(W2I.S2I)
-        num_tags = len(T2I.S2I)
         self.embed_depth=embed_depth
         self.window_size=window_size
 
-        # an Embedding module containing 10 tensors of size 3
         self.embed1 = nn.Embedding(num_words, embed_depth)
         self.norm1 = nn.BatchNorm1d(embed_depth*(window_size*2+1))
         self.fc1 = nn.Linear(embed_depth*(window_size*2+1), num_tags*4)
