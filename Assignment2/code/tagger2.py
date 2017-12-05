@@ -1,6 +1,7 @@
 import numpy as np
 from torch.utils.data import TensorDataset
 
+from utils import StringCounter
 from model_runner import ModelRunner
 from model import load_dataset
 import torch.utils.data
@@ -13,23 +14,26 @@ if __name__ == '__main__':
     vocab_filename = "../data/pretrained/vocab.txt"                 #sys.argv[0]
     word_vectors_filename = "../data/pretrained/wordVectors.txt"    #sys.argv[1]
 
-    words = np.loadtxt(vocab_filename, dtype=object, comments=None)
-    embeds = np.loadtxt(word_vectors_filename)
-    assert len(words) == len(embeds)
+    vocab = np.loadtxt(vocab_filename, dtype=object, comments=None)
+    embeds = np.loadtxt(word_vectors_filename, dtype=np.float32)
+    assert len(vocab) == len(embeds)
 
     train_filename = "../data/pos/train"
     test_filename = "../data/pos/dev"
     is_ner = False #Used for eval
 
-    is_cuda = True
+    is_cuda = False
     window_size = 2
     embedding_depth = 50
     learning_rate = 0.001
     batch_size = 1000
-    epoches = 8
+    epoches = 0
 
-    W2I, T2I, train, train_labels = load_dataset(train_filename, window_size)
-    __, __, test, test_labels = load_dataset(test_filename, window_size, is_train=False, W2I=W2I, T2I=T2I)
+    UNK_WORD = vocab[0]
+    W2I = StringCounter(vocab, UNK_WORD)
+
+    __, T2I, train, train_labels = load_dataset(train_filename, window_size, W2I=W2I, lower_case=True)
+    __, __, test, test_labels = load_dataset(test_filename, window_size, W2I=W2I, T2I=T2I, lower_case=True)
 
     num_words = W2I.len()
     num_tags = T2I.len()

@@ -18,7 +18,7 @@ if __name__ == '__main__':
     epoches = 8
 
     W2I, T2I, train, train_labels = load_dataset(train_filename, window_size)
-    __, __, test, test_labels = load_dataset(test_filename, window_size, is_train=False, W2I=W2I, T2I=T2I)
+    __, __, test, test_labels = load_dataset(test_filename, window_size, W2I=W2I, T2I=T2I)
 
     num_words = W2I.len()
     num_tags = T2I.len()

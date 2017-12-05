@@ -1,11 +1,9 @@
 import re
 from utils import StringCounter, list_to_tuples, inverse_dict
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import time
-from torch.autograd import Variable
 
-UNK_WORD = "*UNK*"
 START_WORD = "*START*"
 END_WORD = "*END*"
 
@@ -20,9 +18,12 @@ def windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id):
         w_windows.append(window)
     return w_windows
 
-def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=None):
-    if is_train:
+def load_dataset(path, window_size=2, W2I=None, T2I=None, UNK_WORD="*UNK*", lower_case=False):
+    calc_W = W2I == None
+    calc_T = T2I == None
+    if calc_W:
         W2I = StringCounter([START_WORD, END_WORD, UNK_WORD], UNK_WORD)
+    if calc_T:
         T2I = StringCounter([], UNK_WORD)
 
     w_start_id = W2I.get_id(START_WORD)
@@ -35,18 +36,16 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=Non
     with open(path) as data_file:
         for line in data_file:
             line = re.sub(DIGIT_PATTERN,'#', line.strip())
+            if lower_case:
+                line = line.lower()
             if len(line) > 0:
                 if is_end_sentence:
                     words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
                     sentence_ids = []
                     is_end_sentence = False
                 w, t = line.split()
-                if is_train:
-                    w_id = W2I.get_id_and_update(w)
-                    t_id = T2I.get_id_and_update(t)
-                else:
-                    w_id = W2I.get_id(w)
-                    t_id = T2I.get_id(t)
+                w_id = W2I.get_id_and_update(w) if calc_W else W2I.get_id(w)
+                t_id = T2I.get_id_and_update(t) if calc_T else T2I.get_id(t)
                 sentence_ids.append(w_id)
                 tags_ids.append(t_id)
             else:
@@ -54,7 +53,7 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=Non
     words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
 
     # Filter rare words from dataset
-    if is_train:
+    if calc_W:
         W2I.filter_rare_words(RARE_WORDS_MAX_COUNT+1)
         W2I_2 = StringCounter(W2I.S2I.keys(), UNK_WORD)
         I2W = inverse_dict(W2I.S2I)
@@ -92,5 +91,5 @@ class Model(nn.Module):
         num_words = embeddings.shape[0]
         embed_depth = embeddings.shape[1]
         model = cls(num_words, num_tags, embed_depth, window_size)
-        model.embed1 = embeddings
+        model.embed1.weight = nn.Parameter(torch.from_numpy(embeddings))
         return model
