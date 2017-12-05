@@ -15,7 +15,7 @@ if __name__ == '__main__':
     embedding_depth = 50
     learning_rate = 0.001
     batch_size = 1000
-    epoches = 8
+    epoches = 1
 
     W2I, T2I, train, train_labels = load_dataset(train_filename, window_size)
     __, __, test, test_labels = load_dataset(test_filename, window_size, W2I=W2I, T2I=T2I)

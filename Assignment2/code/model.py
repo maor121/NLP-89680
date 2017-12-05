@@ -18,11 +18,15 @@ def windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id):
         w_windows.append(window)
     return w_windows
 
-def load_dataset(path, window_size=2, W2I=None, T2I=None, UNK_WORD="*UNK*", lower_case=False):
+def load_dataset(path, window_size=2, W2I=None, T2I=None, UNK_WORD="*UNK*", lower_case=False, replace_numbers=True):
     calc_W = W2I == None
     calc_T = T2I == None
     if calc_W:
         W2I = StringCounter([START_WORD, END_WORD, UNK_WORD], UNK_WORD)
+    else:
+        #Pretrained
+        W2I.get_id_and_update(START_WORD)
+        W2I.get_id_and_update(END_WORD)
     if calc_T:
         T2I = StringCounter([], UNK_WORD)
 
@@ -35,9 +39,10 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, UNK_WORD="*UNK*", lowe
     is_end_sentence = False
     with open(path) as data_file:
         for line in data_file:
-            line = re.sub(DIGIT_PATTERN,'#', line.strip())
+            if replace_numbers:
+                line = re.sub(DIGIT_PATTERN,'#', line.strip())
             if lower_case:
-                line = line.lower()
+                line = line.strip().lower()
             if len(line) > 0:
                 if is_end_sentence:
                     words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
