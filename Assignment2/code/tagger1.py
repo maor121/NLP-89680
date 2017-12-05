@@ -133,13 +133,13 @@ class Net(nn.Module):
         # an Embedding module containing 10 tensors of size 3
         self.embed1 = nn.Embedding(num_words, embed_depth)
         self.norm1 = nn.BatchNorm1d(embed_depth*(window_size*2+1))
-        self.fc1 = nn.Linear(embed_depth*(window_size*2+1), num_tags*2)
-        self.fc2 = nn.Linear(num_tags*2, num_tags)
+        self.fc1 = nn.Linear(embed_depth*(window_size*2+1), num_tags*4)
+        self.fc2 = nn.Linear(num_tags*4, num_tags)
 
     def forward(self, x):
         x = self.embed1(x)
         x = x.view(-1, self.embed_depth*(self.window_size*2+1))
-        #x = self.norm1(x)
+        x = self.norm1(x)
         x = F.tanh(self.fc1(x))
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
@@ -150,13 +150,14 @@ if __name__ == '__main__':
     import torch.optim as optim
     import torch.utils.data
 
-    train_filename = "../data/pos/train"
-    test_filename = "../data/pos/dev"
+    train_filename = "../data/ner/train"
+    test_filename = "../data/ner/dev"
+    is_ner = True #Used for eval
 
     window_size = 2
     embedding_depth = 50
     batch_size = 1000
-    epoches = 8
+    epoches = 50
 
     W2I, T2I, train, train_labels = load_dataset(train_filename, window_size)
     __, __, test, test_labels = load_dataset(test_filename, window_size, is_train=False, W2I=W2I, T2I=T2I)
@@ -215,7 +216,14 @@ if __name__ == '__main__':
             outputs = net(Variable(features, volatile=True))
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
-            correct += (predicted == labels).sum()
+            if is_ner:
+                O_tag_id = T2I.get_id('O')
+                diff_O_tag = sum([1 for p, l in zip(predicted, labels) if p == l and l == O_tag_id])
+                correct += (predicted == labels).sum()
+                correct -= diff_O_tag
+                total -= diff_O_tag
+            else:
+                correct += (predicted == labels).sum()
         net.train(True) #Resume train mode
         print('Accuracy of the network on the %d test words: %d %%' % (
             total, 100 * correct / total))
