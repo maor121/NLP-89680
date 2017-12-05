@@ -87,3 +87,10 @@ class Model(nn.Module):
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
         return x
+    @classmethod
+    def pretrained(cls, num_tags, window_size, embeddings):
+        num_words = embeddings.shape[0]
+        embed_depth = embeddings.shape[1]
+        model = cls(num_words, num_tags, embed_depth, window_size)
+        model.embed1 = embeddings
+        return model

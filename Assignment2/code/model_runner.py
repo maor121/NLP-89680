@@ -12,16 +12,18 @@ class ModelRunner:
         self.is_cuda = is_cuda
     def initialize_random(self, num_words, num_tags, embed_depth):
         net = Model(num_words, num_tags, embed_depth, self.window_size)
+        self.__initialize(net)
+    def initialize_pretrained(self, num_tags, embeddings):
+        net = Model.pretrained(num_tags, self.window_size, embeddings)
+        self.__initialize(net)
+    def __initialize(self, net):
         if (self.is_cuda):
             # from torch.backends import cudnn
             # cudnn.benchmark = True
             net.cuda()
-
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(net.parameters(), lr=self.learning_rate)
         self.net = net
-    def initialize_pretrained(self):
-        pass
     def train(self, trainloader, epoches):
         self.net.train(True)
         for epoch in range(epoches):  # loop over the dataset multiple times

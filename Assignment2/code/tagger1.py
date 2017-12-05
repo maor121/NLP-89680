@@ -1,10 +1,9 @@
 from torch.utils.data import TensorDataset
 
 from model_runner import ModelRunner
-from model import Model, load_dataset
+from model import load_dataset
 
 if __name__ == '__main__':
-    import torch.optim as optim
     import torch.utils.data
 
     train_filename = "../data/pos/train"
