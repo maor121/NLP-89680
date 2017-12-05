@@ -4,9 +4,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-START_WORD = "*START*"
-END_WORD = "*END*"
-
 RARE_WORDS_MAX_COUNT = 3
 
 DIGIT_PATTERN = re.compile('\d')
@@ -18,7 +15,9 @@ def windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id):
         w_windows.append(window)
     return w_windows
 
-def load_dataset(path, window_size=2, W2I=None, T2I=None, UNK_WORD="*UNK*", lower_case=False, replace_numbers=True):
+def load_dataset(path, window_size=2, W2I=None, T2I=None,
+                 UNK_WORD="*UNK*", START_WORD="*START*", END_WORD="*END*",
+                 lower_case=False, replace_numbers=True):
     calc_W = W2I == None
     calc_T = T2I == None
     if calc_W:
