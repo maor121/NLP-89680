@@ -74,7 +74,7 @@ class ModelRunner:
             outputs = self.net(input)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
-            if omit_tag_id:
+            if omit_tag_id is not None:
                 O_tag_id = omit_tag_id
                 diff_O_tag = sum([1 for p, l in zip(predicted, labels) if p == l and l == O_tag_id])
                 correct += (predicted == labels).sum()

@@ -22,15 +22,15 @@ if __name__ == '__main__':
     START_WORD = END_WORD = "start/finish"
     embed_depth = embeds.shape[1]
 
-    train_filename = "../data/pos/train"
-    test_filename = "../data/pos/dev"
-    is_ner = False #Used for eval
+    train_filename = "../data/ner/train"
+    test_filename = "../data/ner/dev"
+    is_ner = True #Used for eval
 
     is_cuda = False
     window_size = 2
     learning_rate = 0.001
     batch_size = 1000
-    epoches = 1
+    epoches = 4
 
     W2I = StringCounter(vocab, UNK_WORD)
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     runner.initialize_pretrained(num_tags, embeds)
     runner.train(trainloader, epoches)
 
-    omit_tag_id = T2I['O'] if is_ner else None
+    omit_tag_id = T2I.get_id('o') if is_ner else None
     runner.eval(testloader, omit_tag_id)
 
     print('Finished Training')
