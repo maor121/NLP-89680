@@ -150,10 +150,11 @@ if __name__ == '__main__':
     import torch.optim as optim
     import torch.utils.data
 
-    train_filename = "../data/ner/train"
-    test_filename = "../data/ner/dev"
-    is_ner = True #Used for eval
+    train_filename = "../data/pos/train"
+    test_filename = "../data/pos/dev"
+    is_ner = False #Used for eval
 
+    is_cuda = True
     window_size = 2
     embedding_depth = 50
     batch_size = 1000
@@ -163,6 +164,10 @@ if __name__ == '__main__':
     __, __, test, test_labels = load_dataset(test_filename, window_size, is_train=False, W2I=W2I, T2I=T2I)
 
     net = Net(W2I, T2I, embedding_depth, window_size)
+    if (is_cuda):
+        #from torch.backends import cudnn
+        #cudnn.benchmark = True
+        net.cuda()
 
     criterion = nn.CrossEntropyLoss()
     #optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
@@ -189,6 +194,9 @@ if __name__ == '__main__':
             # wrap them in Variable
             inputs, labels = Variable(inputs, requires_grad=False), Variable(labels, requires_grad=False)
 
+            if is_cuda:
+                inputs, labels = inputs.cuda(), labels.cuda()
+
             # zero the parameter gradients
             optimizer.zero_grad()
 
@@ -213,7 +221,10 @@ if __name__ == '__main__':
         net.train(False) #Disable dropout during eval mode
         for data in testloader:
             features, labels = data
-            outputs = net(Variable(features, volatile=True))
+            input = Variable(features, volatile=True)
+            if is_cuda:
+                input, labels = input.cuda(), labels.cuda()
+            outputs = net(input)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             if is_ner:
