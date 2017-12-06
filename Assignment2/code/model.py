@@ -112,7 +112,7 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
                     if F2I is not None:
                         features_ids = [extract_features(w, F2I, updateF2I=False) for w in sentence]
 
-                        input_tensor[word_index-sentence_len:word_index,:,:] = windows_from_sentence(features_ids, window_size)
+                        input_tensor[word_index-sentence_len:word_index,:,1:] = windows_from_sentence(features_ids, window_size)
                 saw_empty_line = True
 
     return W2I, T2I, F2I, input_tensor, labels_tensor
