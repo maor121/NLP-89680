@@ -31,8 +31,10 @@ def filter_rare_features(F2I, f_ids):
     I2F = inverse_dict(F2I.S2I)
     f_ids_2 = []
     for f_window in f_ids:
+        f_window_2 = []
         for f_list_per_word in f_window:
-            f_ids_2.append(filter(None, [F2I_2.S2I.get(I2F.get(f_id, None), None) for f_id in f_list_per_word]))
+            f_window_2.append(filter(None, [F2I_2.S2I.get(I2F.get(f_id, None), None) for f_id in f_list_per_word]))
+        f_ids_2.append(f_window_2)
     return F2I_2, f_ids_2
 
 def filter_rare_words(W2I, words_ids, UNK_WORD):
