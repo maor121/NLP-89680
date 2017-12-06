@@ -41,20 +41,24 @@ def scan_input_file(path, W2I=None, T2I=None, F2I=None,
                     W2I.get_id_and_update(w)
                 if calc_T:
                     T2I.get_id_and_update(t)
-                if calc_F:
-                    extract_features(w, F2I, updateF2I=True)
                 num_words += 1
 
+    # Calc word features
+    if calc_F:
+        for word, count in W2I.S2C.iteritems():
+            extract_features(word, F2I, updateF2I=True, count=count)
+        # Filter rare features
+        F2I.filter_rare_words(RARE_FEATURE_MAX_COUNT + 1)
+        F2I = StringCounter(F2I.S2I.keys(), F2I.UNK_WORD)
+
+    # Filter rare words
     if calc_W:
         W2I.filter_rare_words(RARE_WORDS_MAX_COUNT+1)
         W2I = StringCounter(W2I.S2I.keys(), W2I.UNK_WORD)
-    if calc_F:
-        F2I.filter_rare_words(RARE_FEATURE_MAX_COUNT+1)
-        F2I = StringCounter(F2I.S2I.keys(), F2I.UNK_WORD)
 
     return num_words, W2I, T2I, F2I
 
-def extract_features(word, F2I, updateF2I):
+def extract_features(word, F2I, updateF2I, count=1):
     """Return a torch.LongTensor of features per word."""
 
     prefix_3 = word[:3]  # Will work even for words of size < 3
@@ -114,21 +118,21 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
 
                         input_tensor[word_index-sentence_len:word_index,:,1:] = windows_from_sentence(features_ids, window_size)
                 saw_empty_line = True
+                sentence = []
 
-    return W2I, T2I, F2I, input_tensor, labels_tensor
+    if calc_sub_word:
+        return W2I, T2I, F2I, input_tensor, labels_tensor
+    else:
+        return W2I, T2I, input_tensor, labels_tensor
 
 
 class Model(nn.Module):
-    def __init__(self, num_words, num_tags, embed_depth, window_size, sub_words, num_features):
+    def __init__(self, num_words, num_tags, embed_depth, window_size, num_features=0):
         super(Model, self).__init__()
         self.embed_depth = embed_depth
         self.window_size = window_size
-        self.sub_words=sub_words
 
-        if self.sub_words:
-            self.embed1 = nn.Embedding(num_words+num_features, embed_depth)
-        else:
-            self.embed1 = nn.Embedding(num_words,embed_depth)
+        self.embed1 = nn.Embedding(num_words+num_features, embed_depth)
         self.norm1 = nn.BatchNorm1d(embed_depth * (window_size * 2 + 1))
         self.fc1 = nn.Linear(embed_depth * (window_size * 2 + 1), num_tags * 4)
         self.fc2 = nn.Linear(num_tags * 4, num_tags)

@@ -20,11 +20,11 @@ class StringCounter:
         for s in initialStrList:
             self.get_id_and_update(s)
 
-    def get_id_and_update(self, str):
+    def get_id_and_update(self, str, count=1):
         if not self.S2I.__contains__(str):
             self.S2I[str] = self.last_id
             self.last_id += 1
-        self.S2C.update([str])
+        self.S2C[str] = self.S2C.get(str, 0) + count
         return self.S2I[str]
     def get_id(self, str):
         if not self.S2I.__contains__(str):
