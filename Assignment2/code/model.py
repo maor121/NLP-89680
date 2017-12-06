@@ -17,7 +17,13 @@ def extract_features(word, F2I, updateF2I):
 
     prefix_3 = word[:3] # Will work even for words of size < 3
     suffix_3 = word[-3:]
-    return [prefix_3, suffix_3]
+    if updateF2I:
+        prefix_3_id = F2I.get_id_and_update(prefix_3)
+        suffix_3_id = F2I.get_id_and_update(suffix_3)
+    else:
+        prefix_3_id = F2I.get_id(prefix_3)
+        suffix_3_id = F2I.get_id(suffix_3)
+    return [prefix_3_id, suffix_3_id]
 
 def filter_rare_features(F2I, f_ids):
     F2I.filter_rare_words(RARE_FEATURE_MAX_COUNT+1)
@@ -101,6 +107,8 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
             f_ids.append(f_windpw)
         # Filter rare features
         F2I, f_ids = filter_rare_features(F2I, f_ids)
+
+        assert len(f_ids) == len(words_ids)
     else:
         f_ids = None
 
@@ -111,7 +119,7 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
     assert len(words_ids)==len(tags_ids)
 
     if F2I is not None:
-        return W2I, T2I, words_ids, tags_ids, f_ids
+        return W2I, T2I, F2I, words_ids, tags_ids, f_ids
     else:
         return W2I, T2I, words_ids, tags_ids
 
