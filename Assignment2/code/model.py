@@ -47,16 +47,15 @@ def scan_input_file(path, W2I=None, T2I=None, F2I=None,
 
     if calc_W:
         W2I.filter_rare_words(RARE_WORDS_MAX_COUNT+1)
+        W2I = StringCounter(W2I.S2I.keys(), W2I.UNK_WORD)
     if calc_F:
         F2I.filter_rare_words(RARE_FEATURE_MAX_COUNT+1)
+        F2I = StringCounter(F2I.S2I.keys(), F2I.UNK_WORD)
 
     return num_words, W2I, T2I, F2I
 
 def extract_features(word, F2I, updateF2I):
-    """Return a list of features per word. Does not have to be uniform in size.
-       Because, features embeddings are SUMMED, so we can sum 1 feature embedding to word vector, or 10.
-       In this exercise we were asked to have only two features: prefix, suffix of len 3, but since we filter rare features
-       (To save running time), the ending feature liUNst might not be uniform in size"""
+    """Return a torch.LongTensor of features per word."""
 
     prefix_3 = word[:3]  # Will work even for words of size < 3
     suffix_3 = word[-3:]
@@ -72,7 +71,7 @@ def windows_from_sentence(sentence, window_size):
     w_windows = []
     for window in list_to_tuples(sentence, window_size * 2 + 1):
         w_windows.append(window)
-    return w_windows
+    return torch.LongTensor(w_windows)
 
 
 def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
@@ -85,10 +84,7 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
 
     train_w_depth = FEATURES_PER_WORD+1 if calc_sub_word else 1
     input_tensor = torch.LongTensor(num_words, window_size*2+1, train_w_depth)
-    labels_tensor = torch.LongTensor(T2I.len())
-
-    w_start_id = W2I.get_id(START_WORD)
-    w_end_id = W2I.get_id(END_WORD)
+    labels_tensor = torch.LongTensor(num_words)
 
     sentence = []
     word_index = 0
@@ -108,14 +104,15 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
             else:
                 if not saw_empty_line: # END of sentence
                     sentence_len = len(sentence)
-                    sentence = [w_start_id]*window_size + sentence + [w_end_id]*window_size
+                    sentence = [START_WORD]*window_size + sentence + [END_WORD]*window_size
                     sentence_ids = [W2I.get_id(w) for w in sentence]
-                    for w_window, w_pos in enumerate(windows_from_sentence(sentence_ids, window_size)):
-                        input_tensor[word_index-sentence_len+w_pos,:,0] = w_window
+
+                    input_tensor[word_index-sentence_len:word_index,:,0] = windows_from_sentence(sentence_ids, window_size)
+
                     if F2I is not None:
                         features_ids = [extract_features(w, F2I, updateF2I=False) for w in sentence]
-                        for f_window, w_pos in enumerate(windows_from_sentence(features_ids, window_size)):
-                            input_tensor[word_index-sentence_len+w_pos,:,:] = f_window
+
+                        input_tensor[word_index-sentence_len:word_index,:,:] = windows_from_sentence(features_ids, window_size)
                 saw_empty_line = True
 
     return W2I, T2I, F2I, input_tensor, labels_tensor
