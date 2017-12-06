@@ -58,9 +58,9 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
         W2I.get_id_and_update(START_WORD)
         W2I.get_id_and_update(END_WORD)
     if calc_T:
-        T2I = StringCounter(UNK_WORD=UNK_WORD)
+        T2I = StringCounter()
     if calc_F:
-        F2I = StringCounter(UNK_WORD=UNK_WORD) # Unknown feature to filter rare features
+        F2I = StringCounter()
 
     w_start_id = W2I.get_id(START_WORD)
     w_end_id = W2I.get_id(END_WORD)
