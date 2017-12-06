@@ -7,15 +7,58 @@ import torch.nn.functional as F
 RARE_WORDS_MAX_COUNT = 3
 RARE_FEATURE_MAX_COUNT = 3
 
+FEATURES_PER_WORD = 2
+
 DIGIT_PATTERN = re.compile('\d')
+
+def scan_input_file(path, W2I=None, T2I=None, F2I=None,
+                    UNK_WORD="*UNK*", START_WORD="*START*", END_WORD="*END*",
+                    lower_case=False, replace_numbers=True, calc_sub_word=False):
+    calc_W = W2I == None
+    calc_T = T2I == None
+    calc_F = F2I == None and calc_sub_word
+    if calc_W:
+        W2I = StringCounter([START_WORD, END_WORD, UNK_WORD], UNK_WORD)
+    else:
+        # Pretrained
+        W2I.get_id_and_update(START_WORD)
+        W2I.get_id_and_update(END_WORD)
+    if calc_T:
+        T2I = StringCounter()
+    if calc_F:
+        F2I = StringCounter([UNK_WORD], UNK_WORD=UNK_WORD)
+
+    num_words = 0
+    with open(path) as data_file:
+        for line in data_file:
+            if replace_numbers:
+                line = re.sub(DIGIT_PATTERN, '#', line.strip())
+            if lower_case:
+                line = line.strip().lower()
+            if len(line) > 0: # Not end of sentence
+                w, t = line.split()
+                if calc_W:
+                    W2I.get_id_and_update(w)
+                if calc_T:
+                    T2I.get_id_and_update(t)
+                if calc_F:
+                    extract_features(w, F2I, updateF2I=True)
+                num_words += 1
+
+    if calc_W:
+        W2I.filter_rare_words(RARE_WORDS_MAX_COUNT+1)
+    if calc_F:
+        F2I.filter_rare_words(RARE_FEATURE_MAX_COUNT+1)
+
+    return num_words, W2I, T2I, F2I
 
 def extract_features(word, F2I, updateF2I):
     """Return a list of features per word. Does not have to be uniform in size.
        Because, features embeddings are SUMMED, so we can sum 1 feature embedding to word vector, or 10.
        In this exercise we were asked to have only two features: prefix, suffix of len 3, but since we filter rare features
-       (To save running time), the ending feature list might not be uniform in size"""
+       (To save running time), the ending feature liUNst might not be uniform in size"""
 
-    prefix_3 = word[:3] # Will work even for words of size < 3
+    prefix_3 = word[:3]  # Will work even for words of size < 3
     suffix_3 = word[-3:]
     if updateF2I:
         prefix_3_id = F2I.get_id_and_update(prefix_3)
@@ -25,130 +68,87 @@ def extract_features(word, F2I, updateF2I):
         suffix_3_id = F2I.get_id(suffix_3)
     return [prefix_3_id, suffix_3_id]
 
-def filter_rare_features(F2I, f_ids):
-    F2I.filter_rare_words(RARE_FEATURE_MAX_COUNT+1)
-    F2I_2 = StringCounter(F2I.S2I.keys())
-    I2F = inverse_dict(F2I.S2I)
-    f_ids_2 = []
-    for f_window in f_ids:
-        f_window_2 = []
-        for f_list_per_word in f_window:
-            f_window_2.append(filter(None, [F2I_2.S2I.get(I2F.get(f_id, None), None) for f_id in f_list_per_word]))
-        f_ids_2.append(f_window_2)
-    return F2I_2, f_ids_2
-
-def filter_rare_words(W2I, words_ids, UNK_WORD):
-    W2I.filter_rare_words(RARE_WORDS_MAX_COUNT + 1)
-    W2I_2 = StringCounter(W2I.S2I.keys(), UNK_WORD)
-    I2W = inverse_dict(W2I.S2I)
-    words_ids_2 = []
-    for window in words_ids:
-        words_ids_2.append(tuple([W2I_2.S2I[I2W.get(w_id, UNK_WORD)] for w_id in window]))
-    return W2I_2, words_ids_2
-
-def windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id):
-    sentence_ids = [w_start_id]*window_size + sentence_ids + [w_end_id]*window_size
+def windows_from_sentence(sentence, window_size):
     w_windows = []
-    for window in list_to_tuples(sentence_ids, window_size * 2 + 1):
+    for window in list_to_tuples(sentence, window_size * 2 + 1):
         w_windows.append(window)
     return w_windows
+
 
 def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
                  UNK_WORD="*UNK*", START_WORD="*START*", END_WORD="*END*",
                  lower_case=False, replace_numbers=True, calc_sub_word=False):
-    calc_W = W2I == None
-    calc_T = T2I == None
-    calc_F = F2I == None and calc_sub_word
-    if calc_W:
-        W2I = StringCounter([START_WORD, END_WORD, UNK_WORD], UNK_WORD)
-    else:
-        #Pretrained
-        W2I.get_id_and_update(START_WORD)
-        W2I.get_id_and_update(END_WORD)
-    if calc_T:
-        T2I = StringCounter()
-    if calc_F:
-        F2I = StringCounter()
+    num_words, W2I, T2I, F2I = scan_input_file(path, W2I=W2I, T2I=T2I, F2I=F2I,
+                                    UNK_WORD=UNK_WORD, START_WORD=START_WORD, END_WORD=END_WORD,
+                                    lower_case=lower_case, replace_numbers=replace_numbers,
+                                    calc_sub_word=calc_sub_word)
+
+    train_w_depth = FEATURES_PER_WORD+1 if calc_sub_word else 1
+    input_tensor = torch.LongTensor(num_words, window_size*2+1, train_w_depth)
+    labels_tensor = torch.LongTensor(T2I.len())
 
     w_start_id = W2I.get_id(START_WORD)
     w_end_id = W2I.get_id(END_WORD)
 
-    sentence_ids = []
-    words_ids = []
-    tags_ids = []
-    is_end_sentence = False
+    sentence = []
+    word_index = 0
+    saw_empty_line = True
     with open(path) as data_file:
         for line in data_file:
             if replace_numbers:
-                line = re.sub(DIGIT_PATTERN,'#', line.strip())
+                line = re.sub(DIGIT_PATTERN, '#', line.strip())
             if lower_case:
                 line = line.strip().lower()
             if len(line) > 0:
-                if is_end_sentence:
-                    words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
-                    sentence_ids = []
-                    is_end_sentence = False
                 w, t = line.split()
-                w_id = W2I.get_id_and_update(w) if calc_W else W2I.get_id(w)
-                t_id = T2I.get_id_and_update(t) if calc_T else T2I.get_id(t)
-                sentence_ids.append(w_id)
-                tags_ids.append(t_id)
+                sentence.append(w)
+                labels_tensor[word_index] = T2I.get_id(t)
+                word_index += 1
+                saw_empty_line = False
             else:
-                is_end_sentence = True
-    words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
+                if not saw_empty_line: # END of sentence
+                    sentence_len = len(sentence)
+                    sentence = [w_start_id]*window_size + sentence + [w_end_id]*window_size
+                    sentence_ids = [W2I.get_id(w) for w in sentence]
+                    for w_window, w_pos in enumerate(windows_from_sentence(sentence_ids, window_size)):
+                        input_tensor[word_index-sentence_len+w_pos,:,0] = w_window
+                    if F2I is not None:
+                        features_ids = [extract_features(w, F2I, updateF2I=False) for w in sentence]
+                        for f_window, w_pos in enumerate(windows_from_sentence(features_ids, window_size)):
+                            input_tensor[word_index-sentence_len+w_pos,:,:] = f_window
+                saw_empty_line = True
 
-    # Calc sub word features
-    if F2I is not None:
-        I2W = inverse_dict(W2I.S2I)
-        f_ids = []
-        for window in words_ids:
-            f_windpw = []
-            for w in window:
-                w_features = extract_features(I2W[w], F2I, updateF2I=calc_F)
-                f_windpw.append(w_features)
-            f_ids.append(f_windpw)
-        # Filter rare features
-        F2I, f_ids = filter_rare_features(F2I, f_ids)
-
-        assert len(f_ids) == len(words_ids)
-    else:
-        f_ids = None
-
-    # Filter rare words from dataset
-    if calc_W:
-        W2I, words_ids = filter_rare_words(W2I, words_ids, UNK_WORD)
-
-    assert len(words_ids)==len(tags_ids)
-
-    if F2I is not None:
-        return W2I, T2I, F2I, words_ids, tags_ids, f_ids
-    else:
-        return W2I, T2I, words_ids, tags_ids
+    return W2I, T2I, F2I, input_tensor, labels_tensor
 
 
 class Model(nn.Module):
-    def __init__(self, num_words, num_tags, embed_depth, window_size):
+    def __init__(self, num_words, num_tags, embed_depth, window_size, sub_words, num_features):
         super(Model, self).__init__()
-        self.embed_depth=embed_depth
-        self.window_size=window_size
+        self.embed_depth = embed_depth
+        self.window_size = window_size
+        self.sub_words=sub_words
 
-        self.embed1 = nn.Embedding(num_words, embed_depth)
-        self.norm1 = nn.BatchNorm1d(embed_depth*(window_size*2+1))
-        self.fc1 = nn.Linear(embed_depth*(window_size*2+1), num_tags*4)
-        self.fc2 = nn.Linear(num_tags*4, num_tags)
+        if self.sub_words:
+            self.embed1 = nn.Embedding(num_words+num_features, embed_depth)
+        else:
+            self.embed1 = nn.Embedding(num_words,embed_depth)
+        self.norm1 = nn.BatchNorm1d(embed_depth * (window_size * 2 + 1))
+        self.fc1 = nn.Linear(embed_depth * (window_size * 2 + 1), num_tags * 4)
+        self.fc2 = nn.Linear(num_tags * 4, num_tags)
 
     def forward(self, x):
         x = self.embed1(x)
-        x = x.view(-1, self.embed_depth*(self.window_size*2+1))
+        x = x.view(-1, self.embed_depth * (self.window_size * 2 + 1))
         x = self.norm1(x)
         x = F.tanh(self.fc1(x))
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
         return x
+
     @classmethod
-    def pretrained(cls, num_tags, window_size, embeddings):
+    def pretrained(cls, num_tags, window_size, embeddings,sub_words, num_features):
         num_words = embeddings.shape[0]
         embed_depth = embeddings.shape[1]
-        model = cls(num_words, num_tags, embed_depth, window_size)
+        model = cls(num_words, num_tags, embed_depth, window_size,sub_words, num_features)
         model.embed1.weight = nn.Parameter(torch.from_numpy(embeddings))
         return model

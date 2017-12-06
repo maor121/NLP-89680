@@ -34,13 +34,13 @@ if __name__ == '__main__':
 
     W2I = StringCounter(vocab, UNK_WORD)
 
-    __, T2I, F2I, train, train_labels, train_features = load_dataset(train_filename, window_size, W2I=W2I,
+    __, T2I, F2I, train_words, train_labels = load_dataset(train_filename, window_size, W2I=W2I,
                                                 UNK_WORD=UNK_WORD,
                                                 START_WORD=START_WORD,
                                                 END_WORD=END_WORD,
                                                 lower_case=True, replace_numbers=False,
                                                 calc_sub_word=True)
-    __, __, __, test, test_labels, test_features = load_dataset(test_filename, window_size, W2I=W2I, T2I=T2I, F2I=F2I,
+    __, __, __, test_words, test_labels = load_dataset(test_filename, window_size, W2I=W2I, T2I=T2I, F2I=F2I,
                                              UNK_WORD=UNK_WORD,
                                              START_WORD=START_WORD,
                                              END_WORD=END_WORD,
@@ -49,10 +49,14 @@ if __name__ == '__main__':
 
     num_words = W2I.len()
     num_tags = T2I.len()
+    num_features = F2I.len()
     omit_tag_id = T2I.get_id('o') if is_ner else None
 
-    trainset = TensorDataset(torch.LongTensor(train), torch.LongTensor(train_labels))
-    testset = TensorDataset(torch.LongTensor(test), torch.LongTensor(test_labels))
+    train = torch.cat([torch.LongTensor(train_features), torch.unsqueeze(torch.LongTensor(train_words), 2)], dim=2)
+    test = torch.cat([torch.LongTensor(test_features), torch.unsqueeze(torch.LongTensor(test_words), 2)], dim=2)
+
+    trainset = TensorDataset(train, torch.LongTensor(train_labels))
+    testset = TensorDataset(test, torch.LongTensor(test_labels))
 
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                               shuffle=True, num_workers=4)
@@ -64,7 +68,7 @@ if __name__ == '__main__':
     gc.collect()
 
     runner = ModelRunner(window_size, learning_rate, is_cuda)
-    runner.initialize_pretrained(num_tags, embeds)
+    runner.initialize_pretrained(num_tags, num_features, embeds)
     runner.train(trainloader, epoches)
 
     runner.eval(testloader, omit_tag_id)
