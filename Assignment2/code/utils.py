@@ -11,7 +11,7 @@ def inverse_dict(dict):
     return {v: k for k, v in dict.iteritems()}
 
 class StringCounter:
-    def __init__(self, initialStrList, UNK_WORD):
+    def __init__(self, initialStrList=[], UNK_WORD=None):
         from collections import Counter
         self.S2I = {}
         self.S2C = Counter()

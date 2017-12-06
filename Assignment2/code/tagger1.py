@@ -6,9 +6,9 @@ from model import load_dataset
 if __name__ == '__main__':
     import torch.utils.data
 
-    train_filename = "../data/ner/train"
-    test_filename = "../data/ner/dev"
-    is_ner = True #Used for eval
+    train_filename = "../data/pos/train"
+    test_filename = "../data/pos/dev"
+    is_ner = False #Used for eval
 
     is_cuda = False
     window_size = 2
@@ -22,6 +22,7 @@ if __name__ == '__main__':
 
     num_words = W2I.len()
     num_tags = T2I.len()
+    omit_tag_id = T2I.get_id('O') if is_ner else None
 
     trainset = TensorDataset(torch.LongTensor(train), torch.LongTensor(train_labels))
     testset = TensorDataset(torch.LongTensor(test), torch.LongTensor(test_labels))
@@ -31,11 +32,15 @@ if __name__ == '__main__':
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                              shuffle=True, num_workers=4)
 
+
+    del W2I, T2I, train, train_labels, test, test_labels, trainset, testset
+    import gc
+    gc.collect()
+
     runner = ModelRunner(window_size, learning_rate, is_cuda)
     runner.initialize_random(num_words, num_tags, embedding_depth)
     runner.train(trainloader, epoches)
 
-    omit_tag_id = T2I.get_id('O') if is_ner else None
     runner.eval(testloader, omit_tag_id)
 
     print('Finished Training')
