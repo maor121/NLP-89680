@@ -32,10 +32,11 @@ def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
     saw_empty_line = True
     with open(path) as data_file:
         for line in data_file:
+            line = line.strip()
             if replace_numbers:
-                line = re.sub(DIGIT_PATTERN, '#', line.strip())
+                line = re.sub(DIGIT_PATTERN, '#', line)
             if lower_case:
-                line = line.strip().lower()
+                line = line.lower()
             if len(line) > 0: # Not end of sentence
                 w, t = line.split()
                 if calc_W:
@@ -110,10 +111,11 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
     saw_empty_line = True
     with open(path) as data_file:
         for line in data_file:
+            line = line.strip()
             if replace_numbers:
-                line = re.sub(DIGIT_PATTERN, '#', line.strip())
+                line = re.sub(DIGIT_PATTERN, '#', line)
             if lower_case:
-                line = line.strip().lower()
+                line = line.lower()
             if len(line) > 0:
                 w, t = line.split()
                 sentence.append(w)
