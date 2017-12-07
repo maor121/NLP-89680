@@ -56,6 +56,9 @@ def scan_input_file(path, W2I=None, T2I=None, F2I=None,
         W2I.filter_rare_words(RARE_WORDS_MAX_COUNT+1)
         W2I = StringCounter(W2I.S2I.keys(), W2I.UNK_WORD)
 
+    if calc_F:
+        F2I.shift_ids_by(W2I.len())
+
     return num_words, W2I, T2I, F2I
 
 def extract_features(word, F2I, updateF2I, count=1):
@@ -142,17 +145,17 @@ class Model(nn.Module):
         b = a.view(-1, words_depth*(self.window_size*2+1)) # Unroll to (batch, 5*3)
         c = self.embed1(b) # To (batch, 5*3, embed_depth)
         d = c.view(-1, self.window_size*2+1, words_depth, self.embed_depth) # Roll to (batch, 5, 3, 50)
-        x = d.sum(2) # Sum along 3rd axis -> (batch, 5, 50)
-        x = x.view(-1, self.embed_depth * (self.window_size * 2 + 1))
+        e = d.sum(2) # Sum along 3rd axis -> (batch, 5, 50)
+        x = e.view(-1, self.embed_depth * (self.window_size * 2 + 1))
         x = self.norm1(x)
         x = F.tanh(self.fc1(x))
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
 
         # To verify all the reshaping works correctly
-        #assert b[0,5].data[0] == a[0,1,2].data[0]
-        #assert c[0,5,15].data[0] == d[0,1,2,15].data[0]
-        #assert x[0,0,1].data[0] == (d[0,0,0,1]+d[0,0,1,1]+d[0,0,2,1]).data[0]
+        # assert b[0,5].data[0] == a[0,1,2].data[0]
+        # assert c[0,5,15].data[0] == d[0,1,2,15].data[0]
+        # assert e[0,0,1].data[0] == (d[0,0,0,1]+d[0,0,1,1]+d[0,0,2,1]).data[0]
 
         return x
 
@@ -161,5 +164,5 @@ class Model(nn.Module):
         num_words = embeddings.shape[0]
         embed_depth = embeddings.shape[1]
         model = cls(num_words, num_tags, embed_depth, window_size, num_features)
-        model.embed1.weight = nn.Parameter(torch.from_numpy(embeddings))
+        model.embed1.weight[:num_words].data.copy_(torch.from_numpy(embeddings))
         return model

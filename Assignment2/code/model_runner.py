@@ -14,7 +14,7 @@ class ModelRunner:
         net = Model(num_words, num_tags, embed_depth, self.window_size, num_features)
         self.__initialize(net)
     def initialize_pretrained(self, num_tags, embeddings, num_features=0):
-        net = Model.pretrained(num_tags, self.window_size, embeddings, num_features=0)
+        net = Model.pretrained(num_tags, self.window_size, embeddings, num_features)
         self.__initialize(net)
     def __initialize(self, net):
         if (self.is_cuda):
