@@ -11,7 +11,7 @@ FEATURES_PER_WORD = 2
 
 DIGIT_PATTERN = re.compile('\d')
 
-def scan_input_file(path, W2I=None, T2I=None, F2I=None,
+def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
                     UNK_WORD="*UNK*", START_WORD="*START*", END_WORD="*END*",
                     lower_case=False, replace_numbers=True, calc_sub_word=False):
     calc_W = W2I == None
@@ -29,6 +29,7 @@ def scan_input_file(path, W2I=None, T2I=None, F2I=None,
         F2I = StringCounter([UNK_WORD], UNK_WORD=UNK_WORD)
 
     num_words = 0
+    saw_empty_line = True
     with open(path) as data_file:
         for line in data_file:
             if replace_numbers:
@@ -42,6 +43,14 @@ def scan_input_file(path, W2I=None, T2I=None, F2I=None,
                 if calc_T:
                     T2I.get_id_and_update(t)
                 num_words += 1
+                saw_empty_line = False
+            else:
+                if not saw_empty_line:
+                    if calc_W:
+                        for i in range(window_size):
+                            W2I.get_id_and_update(START_WORD)
+                            W2I.get_id_and_update(END_WORD)
+                saw_empty_line = True
 
     # Calc word features
     if calc_F:
@@ -55,6 +64,9 @@ def scan_input_file(path, W2I=None, T2I=None, F2I=None,
     if calc_W:
         W2I.filter_rare_words(RARE_WORDS_MAX_COUNT+1)
         W2I = StringCounter(W2I.S2I.keys(), W2I.UNK_WORD)
+        assert START_WORD in W2I.S2I
+        assert END_WORD in W2I.S2I
+        assert UNK_WORD in W2I.S2I
 
     if calc_F:
         F2I.shift_ids_by(W2I.len())
@@ -84,7 +96,7 @@ def windows_from_sentence(sentence, window_size):
 def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
                  UNK_WORD="*UNK*", START_WORD="*START*", END_WORD="*END*",
                  lower_case=False, replace_numbers=True, calc_sub_word=False):
-    num_words, W2I, T2I, F2I = scan_input_file(path, W2I=W2I, T2I=T2I, F2I=F2I,
+    num_words, W2I, T2I, F2I = scan_input_file(path, window_size, W2I=W2I, T2I=T2I, F2I=F2I,
                                     UNK_WORD=UNK_WORD, START_WORD=START_WORD, END_WORD=END_WORD,
                                     lower_case=lower_case, replace_numbers=replace_numbers,
                                     calc_sub_word=calc_sub_word)
