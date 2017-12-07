@@ -24,7 +24,7 @@ class ModelRunner:
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(net.parameters(), lr=self.learning_rate)
         self.net = net
-    def train(self, trainloader, epoches):
+    def train_and_eval(self, trainloader, epoches, testloader, omit_tag_id=None, eval_every_epoch=False):
         self.net.train(True)
         for epoch in range(epoches):  # loop over the dataset multiple times
 
@@ -61,6 +61,10 @@ class ModelRunner:
                     running_loss = 0.0
             end_e_t = time.time()
             print('epoch time: %.3f' % (end_e_t - start_e_t))
+            if eval_every_epoch:
+                self.eval(testloader, omit_tag_id)
+        if not eval_every_epoch:
+            self.eval(testloader, omit_tag_id)
 
     def eval(self, testloader, omit_tag_id=None):
         self.net.train(False)  # Disable dropout during eval mode

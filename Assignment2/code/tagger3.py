@@ -67,8 +67,6 @@ if __name__ == '__main__':
     runner = ModelRunner(window_size, learning_rate, is_cuda)
     runner.initialize_pretrained(num_tags, embeds, num_features)
     #runner.initialize_random(num_words,num_tags,embed_depth,num_features)
-    runner.train(trainloader, epoches)
-
-    runner.eval(testloader, omit_tag_id)
+    runner.train_and_eval(trainloader, epoches, testloader, omit_tag_id, eval_every_epoch=True)
 
     print('Finished Training')
