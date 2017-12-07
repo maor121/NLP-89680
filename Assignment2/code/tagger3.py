@@ -14,13 +14,13 @@ if __name__ == '__main__':
     vocab_filename = "../data/pretrained/vocab.txt"                 #sys.argv[0]
     word_vectors_filename = "../data/pretrained/wordVectors.txt"    #sys.argv[1]
 
-    #vocab = np.loadtxt(vocab_filename, dtype=object, comments=None)
-    #embeds = np.loadtxt(word_vectors_filename, dtype=np.float32)
-    #assert len(vocab) == len(embeds)
+    vocab = np.loadtxt(vocab_filename, dtype=object, comments=None)
+    embeds = np.loadtxt(word_vectors_filename, dtype=np.float32)
+    assert len(vocab) == len(embeds)
 
     UNK_WORD = "UUUNKKK"
     START_WORD = END_WORD = "start/finish"
-    embed_depth = 50 #embeds.shape[1]
+    embed_depth = embeds.shape[1]
 
     train_filename = "../data/pos/train"
     test_filename = "../data/pos/dev"
@@ -32,9 +32,9 @@ if __name__ == '__main__':
     batch_size = 1000
     epoches = 4
 
-    #W2I = StringCounter(vocab, UNK_WORD)
+    W2I = StringCounter(vocab, UNK_WORD)
 
-    W2I, T2I, F2I, train_words, train_labels = load_dataset(train_filename, window_size, W2I=None,
+    __, T2I, F2I, train_words, train_labels = load_dataset(train_filename, window_size, W2I=W2I,
                                                 UNK_WORD=UNK_WORD,
                                                 START_WORD=START_WORD,
                                                 END_WORD=END_WORD,
@@ -65,8 +65,8 @@ if __name__ == '__main__':
     gc.collect()
 
     runner = ModelRunner(window_size, learning_rate, is_cuda)
-    #runner.initialize_pretrained(num_tags, num_features, embeds)
-    runner.initialize_random(num_words,num_tags,num_features,embed_depth)
+    runner.initialize_pretrained(num_tags, embeds, num_features)
+    #runner.initialize_random(num_words,num_tags,embed_depth,num_features)
     runner.train(trainloader, epoches)
 
     runner.eval(testloader, omit_tag_id)

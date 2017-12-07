@@ -137,19 +137,29 @@ class Model(nn.Module):
         self.fc1 = nn.Linear(embed_depth * (window_size * 2 + 1), num_tags * 4)
         self.fc2 = nn.Linear(num_tags * 4, num_tags)
 
-    def forward(self, x):
-        x = self.embed1(x)
+    def forward(self, a): #(batch, 5, 3)
+        words_depth = a.data.shape[2]
+        b = a.view(-1, words_depth*(self.window_size*2+1)) # Unroll to (batch, 5*3)
+        c = self.embed1(b) # To (batch, 5*3, embed_depth)
+        d = c.view(-1, self.window_size*2+1, words_depth, self.embed_depth) # Roll to (batch, 5, 3, 50)
+        x = d.sum(2) # Sum along 3rd axis -> (batch, 5, 50)
         x = x.view(-1, self.embed_depth * (self.window_size * 2 + 1))
         x = self.norm1(x)
         x = F.tanh(self.fc1(x))
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
+
+        # To verify all the reshaping works correctly
+        #assert b[0,5].data[0] == a[0,1,2].data[0]
+        #assert c[0,5,15].data[0] == d[0,1,2,15].data[0]
+        #assert x[0,0,1].data[0] == (d[0,0,0,1]+d[0,0,1,1]+d[0,0,2,1]).data[0]
+
         return x
 
     @classmethod
-    def pretrained(cls, num_tags, window_size, embeddings,sub_words, num_features):
+    def pretrained(cls, num_tags, window_size, embeddings, num_features=0):
         num_words = embeddings.shape[0]
         embed_depth = embeddings.shape[1]
-        model = cls(num_words, num_tags, embed_depth, window_size,sub_words, num_features)
+        model = cls(num_words, num_tags, embed_depth, window_size, num_features)
         model.embed1.weight = nn.Parameter(torch.from_numpy(embeddings))
         return model

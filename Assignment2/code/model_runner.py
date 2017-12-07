@@ -10,11 +10,11 @@ class ModelRunner:
         self.window_size = window_size
         self.learning_rate = learning_rate
         self.is_cuda = is_cuda
-    def initialize_random(self, num_words, num_tags, num_features, embed_depth):
-        net = Model(num_words, num_tags, num_features, embed_depth, self.window_size)
+    def initialize_random(self, num_words, num_tags, embed_depth, num_features=0):
+        net = Model(num_words, num_tags, embed_depth, self.window_size, num_features)
         self.__initialize(net)
-    def initialize_pretrained(self, num_tags, num_features, embeddings):
-        net = Model.pretrained(num_tags, num_features, self.window_size, embeddings)
+    def initialize_pretrained(self, num_tags, embeddings, num_features=0):
+        net = Model.pretrained(num_tags, self.window_size, embeddings, num_features=0)
         self.__initialize(net)
     def __initialize(self, net):
         if (self.is_cuda):
