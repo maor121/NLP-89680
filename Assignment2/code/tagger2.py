@@ -18,18 +18,17 @@ if __name__ == '__main__':
     embeds = np.loadtxt(word_vectors_filename, dtype=np.float32)
     assert len(vocab) == len(embeds)
 
-    UNK_WORD = "UUUNKKK"
-    START_WORD = END_WORD = "start/finish"
+    UNK_WORD = "UUUNKKK"; START_WORD = "<s>"; END_WORD = "</s>"
     embed_depth = embeds.shape[1]
 
-    train_filename = "../data/ner/train"
-    test_filename = "../data/ner/dev"
-    is_ner = True #Used for eval
+    train_filename = "../data/pos/train"
+    test_filename = "../data/pos/dev"
+    is_ner = False #Used for eval
 
-    is_cuda = False
+    is_cuda = True
     window_size = 2
     learning_rate = 0.001
-    batch_size = 1000
+    batch_size = 500
     epoches = 4
 
     W2I = StringCounter(vocab, UNK_WORD)

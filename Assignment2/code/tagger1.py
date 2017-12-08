@@ -6,16 +6,16 @@ from model import load_dataset
 if __name__ == '__main__':
     import torch.utils.data
 
-    train_filename = "../data/ner/train"
-    test_filename = "../data/ner/dev"
-    is_ner = True #Used for eval
+    train_filename = "../data/pos/train"
+    test_filename = "../data/pos/dev"
+    is_ner = False #Used for eval
 
     is_cuda = True
     window_size = 2
     embedding_depth = 50
     learning_rate = 0.001
-    batch_size = 1000
-    epoches = 50
+    batch_size = 500
+    epoches = 8
 
     W2I, T2I, train, train_labels = load_dataset(train_filename, window_size)
     __, __, test, test_labels = load_dataset(test_filename, window_size, W2I=W2I, T2I=T2I)
