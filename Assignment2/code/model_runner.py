@@ -72,10 +72,11 @@ class ModelRunner:
         total = 0
         for data in testloader:
             features, labels = data
-            input = Variable(features, volatile=True)
+            input = Variable(features)
             if self.is_cuda:
                 input, labels = input.cuda(), labels.cuda()
             outputs = self.net(input)
+            loss = self.criterion(outputs, Variable(labels))
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             if omit_tag_id is not None:
@@ -86,5 +87,7 @@ class ModelRunner:
                 total -= diff_O_tag
             else:
                 correct += (predicted == labels).sum()
-        print('Accuracy of the network on the %d test words: %d %%' % (
-            total, 100 * correct / total))
+        acc = 100.0 * correct / total
+        loss = loss.data[0]
+        print('Accuracy of the network on the %d test words: %.3f %%, loss: %.3f' % (
+            total, acc, loss))
