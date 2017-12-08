@@ -15,7 +15,7 @@ if __name__ == '__main__':
     embedding_depth = 50
     learning_rate = 0.001
     batch_size = 500
-    epoches = 8
+    epoches = 11
 
     W2I, T2I, train, train_labels = load_dataset(train_filename, window_size)
     __, __, test, test_labels = load_dataset(test_filename, window_size, W2I=W2I, T2I=T2I)
@@ -32,14 +32,13 @@ if __name__ == '__main__':
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                              shuffle=True, num_workers=4)
 
-
     del W2I, T2I, train, train_labels, test, test_labels, trainset, testset
     import gc
     gc.collect()
 
     runner = ModelRunner(window_size, learning_rate, is_cuda)
     runner.initialize_random(num_words, num_tags, embedding_depth)
-    runner.train_and_eval(trainloader, epoches, testloader, omit_tag_id, eval_every_epoch=True)
+    runner.train_and_eval(trainloader, epoches, testloader, omit_tag_id, eval_mode="plot")
 
     print('Finished Training')
 

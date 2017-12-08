@@ -1,4 +1,5 @@
 from model import Model
+from plot import PlotBatches
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.optim as optim
@@ -24,9 +25,19 @@ class ModelRunner:
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(net.parameters(), lr=self.learning_rate)
         self.net = net
-    def train_and_eval(self, trainloader, epoches, testloader, omit_tag_id=None, eval_every_epoch=False):
-        self.net.train(True)
+    def train_and_eval(self, trainloader, epoches, testloader, omit_tag_id=None, eval_mode="everyepoch"):
+        """Train model and print progress to console
+
+        Attributes:
+            eval_mode:
+                        'everyepoch' will eval acc&loss on test set after each epoch, print to console.
+                        'plot'       will eval acc&loss on test set after every 50 BATCHES, plot gui will show after train.
+        """
+        plotter = PlotBatches()
+        plot_every_batch = eval_mode=="plot"
+        updates_per_epoch = 0
         for epoch in range(epoches):  # loop over the dataset multiple times
+            self.net.train(True)
 
             start_e_t = time.time()
             running_loss = 0.0
@@ -58,15 +69,20 @@ class ModelRunner:
                 if i % 50 == 49:  # print every 2000 mini-batches
                     print('[%d, %5d] loss: %.3f timer_per_batch: %.3f' %
                           (epoch + 1, i + 1, running_loss / 50, (end_b_t - start_b_t)))
-                    running_loss = 0.0
+                    if plot_every_batch:
+                        test_acc, test_loss = self.eval(testloader, omit_tag_id, to_print=False)
+                        plotter.update(running_loss, test_loss, test_acc)
+                        updates_per_epoch += 1
+                        self.net.train(True)
+                running_loss = 0.0
             end_e_t = time.time()
             print('epoch time: %.3f' % (end_e_t - start_e_t))
-            if eval_every_epoch:
-                self.eval(testloader, omit_tag_id)
-        if not eval_every_epoch:
             self.eval(testloader, omit_tag_id)
+        if plot_every_batch:
+            updates_per_epoch /= epoches
+            plotter.show(updates_per_epoch)
 
-    def eval(self, testloader, omit_tag_id=None):
+    def eval(self, testloader, omit_tag_id=None, to_print=True):
         self.net.train(False)  # Disable dropout during eval mode
         correct = 0
         total = 0
@@ -87,7 +103,9 @@ class ModelRunner:
                 total -= diff_O_tag
             else:
                 correct += (predicted == labels).sum()
-        acc = 100.0 * correct / total
+        acc = 1.0 * correct / total
         loss = loss.data[0]
-        print('Accuracy of the network on the %d test words: %.3f %%, loss: %.3f' % (
-            total, acc, loss))
+        if to_print:
+            print('Accuracy of the network on the %d test words: %.5f %%, loss: %.3f' % (
+                total, acc, loss))
+        return acc, loss
