@@ -23,14 +23,15 @@ class DotWithCache:
         return self.dot[(uW,vW)]
 
 if __name__ == '__main__':
-    #sys.argv = sys.argv[1:]
-    #if len(sys.argv) != 3:
-    #    print("Wrong number of parameters, Usage:\n" + \
-    #          "python top_k.py vocab.txt wordVectors.txt fromWords.txt k-top-count")
-    vocab_filename = "../data/pretrained/vocab.txt"                 #sys.argv[0]
-    word_vectors_filename = "../data/pretrained/wordVectors.txt"    #sys.argv[1]
-    from_words_filename = "../data/pretrained/fromWords.txt"        #sys.argv[2]
-    k = 5                                                           #int(sys.argv[3])
+    sys.argv = sys.argv[1:]
+    if len(sys.argv) != 4:
+        print("Wrong number of parameters, Usage:\n" + \
+              "top_k.py vocab_file wordVectors_file fromWords_file k-top-count")
+        exit()
+    vocab_filename = sys.argv[0]
+    word_vectors_filename = sys.argv[1]
+    from_words_filename = sys.argv[2]
+    k = int(sys.argv[3])
 
     words = np.loadtxt(vocab_filename, dtype=object, comments=None)
     vecs = np.loadtxt(word_vectors_filename)
