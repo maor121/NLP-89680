@@ -26,7 +26,7 @@ if __name__ == '__main__':
         "tagger3.py is_pretrained(True\\False) is_cuda train_file test_file is_ner number_of_epoches eval_mode(blind\\everyepoch\\plot) [vocab_file] [wordVectors_file] [prediction_out_file]\n"+\
         "Note: vocab_file & wordVectors_file are needed only in pretrained mode."
 
-    if len(sys.argv) not in (6,7,8,9):
+    if len(sys.argv) not in (7,8,9,10):
         print wrongArgLenMsg
         exit()
     is_pretrained = parse_arg_bool(sys.argv[0])
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     is_ner = parse_arg_bool(sys.argv[4])  # Used for eval
     epoches = int(sys.argv[5])
     eval_mode = parse_arg_eval_mode(sys.argv[6], ["blind", "everyepoch", "plot"])
-    if (is_pretrained and len(sys.argv) == 7) or (not is_pretrained and len(sys.argv) == 9):
+    if (is_pretrained and len(sys.argv) == 10) or (not is_pretrained and len(sys.argv) == 8):
         prediction_out_filename = sys.argv[-1] #always last
     else:
         prediction_out_filename = None
