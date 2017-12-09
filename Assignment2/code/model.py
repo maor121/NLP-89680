@@ -23,7 +23,7 @@ def windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id):
 def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=None):
     if is_train:
         W2I = StringCounter([START_WORD, END_WORD, UNK_WORD], UNK_WORD)
-        T2I = StringCounter([], UNK_WORD)
+        T2I = StringCounter([], None)
 
     w_start_id = W2I.get_id(START_WORD)
     w_end_id = W2I.get_id(END_WORD)
@@ -37,6 +37,10 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=Non
             line = re.sub(DIGIT_PATTERN,'#', line.strip())
             if len(line) > 0:
                 if is_end_sentence:
+                    if is_train:
+                        for i in range(window_size): #Count appearences of START, END
+                            W2I.get_id_and_update(START_WORD)
+                            W2I.get_id_and_update(END_WORD)
                     words_ids.extend(windows_from_sentence(sentence_ids, window_size, w_start_id, w_end_id))
                     sentence_ids = []
                     is_end_sentence = False
@@ -63,6 +67,9 @@ def load_dataset(path, window_size=2, is_train=True, W2I=None, T2I=None, F2I=Non
             words_ids_2.append(tuple([W2I_2.S2I[I2W.get(w_id,UNK_WORD)] for w_id in window]))
         W2I = W2I_2
         words_ids = words_ids_2
+        assert START_WORD in W2I.S2I
+        assert END_WORD in W2I.S2I
+        assert UNK_WORD in W2I.S2I
 
     assert len(words_ids)==len(tags_ids)
     return W2I, T2I, words_ids, tags_ids
