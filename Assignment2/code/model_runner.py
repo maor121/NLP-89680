@@ -119,6 +119,7 @@ class ModelRunner:
 
         with open(test_org_file, 'rb') as source_file, \
                 open(prediction_out_filename, 'w+') as prediction_file:
+            print("Writing prediction to file {}".format(prediction_out_filename))
 
             src_file_iter = iter(source_file)
 
@@ -132,24 +133,17 @@ class ModelRunner:
                 _, predicted = torch.max(outputs.data, 1)
                 for t_id in predicted:
                     line = src_file_iter.next()
-                    is_empty_line = len(line.strip()) == 0
-                    if is_empty_line:
+                    while len(line.strip()) == 0:
                         prediction_file.write(line)
-                    else:
-                        t = I2T[t_id]
-                        if is_tagged_file:
-                            try:
-                                word, __ = line.strip().split()
-                            except Exception:
-                                is_tagged_file = False
-                                word = line.strip()
-                        else:
-                            word = line.strip()
-                        prediction_file.write(word+"\t"+t+"\n")
+                        line = src_file_iter.next()
+                    t = I2T[t_id]
+                    is_tagged_file, word, __ = utils.parse_word_tag(line.strip(), is_tagged_file)
+                    prediction_file.write(word+"\t"+t+"\n")
             while True:
                 try:
                     line = src_file_iter.next()
-                    prediction_file.write(line) # Should be only empty lines
+                    assert len(line.strip()) == 0 # Should be only empty lines
+                    prediction_file.write(line)
                 except StopIteration:
                     break
 

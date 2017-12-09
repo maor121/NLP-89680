@@ -1,5 +1,5 @@
 import re
-from utils import StringCounter, list_to_tuples, inverse_dict
+from utils import StringCounter, list_to_tuples, inverse_dict, parse_word_tag
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -30,6 +30,7 @@ def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
 
     num_words = 0
     saw_empty_line = True
+    is_tagged = True
     with open(path) as data_file:
         for line in data_file:
             line = line.strip()
@@ -38,10 +39,10 @@ def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
             if lower_case:
                 line = line.lower()
             if len(line) > 0: # Not end of sentence
-                w, t = line.split()
+                is_tagged, w, t = parse_word_tag(line, is_tagged)
                 if calc_W:
                     W2I.get_id_and_update(w)
-                if calc_T:
+                if calc_T and is_tagged:
                     T2I.get_id_and_update(t)
                 num_words += 1
                 saw_empty_line = False
@@ -110,6 +111,7 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
     sentence = []
     word_index = 0
     saw_empty_line = True
+    is_tagged = True
     with open(path) as data_file:
         for line in data_file:
             line = line.strip()
@@ -118,9 +120,10 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
             if lower_case:
                 line = line.lower()
             if len(line) > 0:
-                w, t = line.split()
+                is_tagged, w, t = parse_word_tag(line, is_tagged)
                 sentence.append(w)
-                labels_tensor[word_index] = T2I.get_id(t)
+                if is_tagged:
+                    labels_tensor[word_index] = T2I.get_id(t)
                 word_index += 1
                 saw_empty_line = False
             else:
@@ -137,6 +140,10 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
                         input_tensor[word_index-sentence_len:word_index,:,1:] = windows_from_sentence(features_ids, window_size)
                 saw_empty_line = True
                 sentence = []
+
+    if not is_tagged:
+        print "blind file detected!"
+        labels_tensor[:] = 0 # No real value
 
     if calc_sub_word:
         return W2I, T2I, F2I, input_tensor, labels_tensor
