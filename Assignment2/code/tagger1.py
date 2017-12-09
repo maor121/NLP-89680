@@ -22,15 +22,14 @@ if __name__ == '__main__':
         print "Wrong number of arguments, usage:\n" +\
             "tagger1.py is_cuda(True\\False) train_file test_file is_ner(True\\False) number_of_epoches eval_mode(blind\\everyepoch\\plot) [prediction_out_file]"
         exit()
-    else:
-        is_cuda = parse_arg_bool(sys.argv[0])
-        train_filename = sys.argv[1]
-        test_filename = sys.argv[2]
-        is_ner = parse_arg_bool(sys.argv[0])  # Used for eval
-        epoches = int(sys.argv[4])
-        eval_mode = parse_arg_eval_mode(sys.argv[5], ["blind", "everyepoch", "plot"])
-        if len(sys.argv) >= 7:
-            prediction_out_filename = sys.argv[6]
+    is_cuda = parse_arg_bool(sys.argv[0])
+    train_filename = sys.argv[1]
+    test_filename = sys.argv[2]
+    is_ner = parse_arg_bool(sys.argv[3])  # Used for eval
+    epoches = int(sys.argv[4])
+    eval_mode = parse_arg_eval_mode(sys.argv[5], ["blind", "everyepoch", "plot"])
+    if len(sys.argv) >= 7:
+        prediction_out_filename = sys.argv[6]
 
     window_size = 2
     embedding_depth = 50

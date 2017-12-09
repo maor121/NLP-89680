@@ -25,11 +25,12 @@ class ModelRunner:
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(net.parameters(), lr=self.learning_rate)
         self.net = net
-    def train_and_eval(self, trainloader, epoches, testloader, omit_tag_id=None, eval_mode="everyepoch"):
+    def train_and_eval(self, trainloader, epoches, testloader, omit_tag_id=None, eval_mode="blind"):
         """Train model and print progress to console
 
         Attributes:
             eval_mode:
+                        'blind'      will not eval
                         'everyepoch' will eval acc&loss on test set after each epoch, print to console.
                         'plot'       will eval acc&loss on test set after every 50 BATCHES, plot gui will show after train.
         """
@@ -74,10 +75,11 @@ class ModelRunner:
                         plotter.update(running_loss, test_loss, test_acc)
                         updates_per_epoch += 1
                         self.net.train(True)
-                running_loss = 0.0
+                    running_loss = 0.0
             end_e_t = time.time()
             print('epoch time: %.3f' % (end_e_t - start_e_t))
-            self.eval(testloader, omit_tag_id)
+            if eval_mode=="everyepoch":
+                self.eval(testloader, omit_tag_id)
         if plot_every_batch:
             updates_per_epoch /= epoches
             plotter.show(updates_per_epoch)
