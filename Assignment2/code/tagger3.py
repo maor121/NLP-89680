@@ -19,6 +19,7 @@ def parse_arg_eval_mode(val, allowed_values):
         exit()
     return val
 
+
 if __name__ == '__main__':
     sys.argv = sys.argv[1:]
     wrongArgLenMsg = "Wrong number of arguments, Usage:\n"+\
@@ -35,7 +36,10 @@ if __name__ == '__main__':
     is_ner = parse_arg_bool(sys.argv[4])  # Used for eval
     epoches = int(sys.argv[5])
     eval_mode = parse_arg_eval_mode(sys.argv[6], ["blind", "everyepoch", "plot"])
-    prediction_out_filename = sys.argv[-1] #always last
+    if (is_pretrained and len(sys.argv) == 7) or (not is_pretrained and len(sys.argv) == 9):
+        prediction_out_filename = sys.argv[-1] #always last
+    else:
+        prediction_out_filename = None
 
 
     UNK_WORD = "UUUNKKK"; START_WORD = "<s>"; END_WORD = "</s>"
@@ -83,9 +87,9 @@ if __name__ == '__main__':
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                               shuffle=True, num_workers=4)
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                             shuffle=True, num_workers=4)
+                                             shuffle=False, num_workers=4)
 
-    del W2I, T2I, train_words, train_labels, test_words, test_labels, trainset, testset
+    del W2I, train_words, train_labels, test_words, test_labels, trainset, testset
     import gc
     gc.collect()
 
@@ -95,5 +99,9 @@ if __name__ == '__main__':
     else:
         runner.initialize_random(num_words,num_tags,embed_depth,num_features)
     runner.train_and_eval(trainloader, epoches, testloader, omit_tag_id, eval_mode=eval_mode)
+
+    if prediction_out_filename:
+        # IMPORTANT: testloader must have shuffle false, to have same order as test_filename
+        runner.write_prediction(testloader, T2I, test_filename, prediction_out_filename)
 
     print('Finished Training')

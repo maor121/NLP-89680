@@ -1,5 +1,6 @@
 from model import Model
 from plot import PlotBatches
+import utils
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.optim as optim
@@ -111,3 +112,44 @@ class ModelRunner:
             print('Accuracy of the network on the %d test words: %.5f %%, loss: %.3f' % (
                 total, acc, loss))
         return acc, loss
+
+    def write_prediction(self, testloader, T2I, test_org_file, prediction_out_filename):
+        I2T = utils.inverse_dict(T2I.S2I)
+        is_tagged_file=True
+
+        with open(test_org_file, 'rb') as source_file, \
+                open(prediction_out_filename, 'w+') as prediction_file:
+
+            src_file_iter = iter(source_file)
+
+            self.net.train(False)  # Disable dropout during eval mode
+            for data in testloader:
+                features, __ = data
+                input = Variable(features, volatile=True)
+                if self.is_cuda:
+                    input = input.cuda()
+                outputs = self.net(input)
+                _, predicted = torch.max(outputs.data, 1)
+                for t_id in predicted:
+                    line = src_file_iter.next()
+                    is_empty_line = len(line.strip()) == 0
+                    if is_empty_line:
+                        prediction_file.write(line)
+                    else:
+                        t = I2T[t_id]
+                        if is_tagged_file:
+                            try:
+                                word, __ = line.strip().split()
+                            except Exception:
+                                is_tagged_file = False
+                                word = line.strip()
+                        else:
+                            word = line.strip()
+                        prediction_file.write(word+"\t"+t+"\n")
+            while True:
+                try:
+                    line = src_file_iter.next()
+                    prediction_file.write(line) # Should be only empty lines
+                except StopIteration:
+                    break
+

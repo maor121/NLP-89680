@@ -16,6 +16,7 @@ def parse_arg_eval_mode(val, allowed_values):
         exit()
     return val
 
+
 if __name__ == '__main__':
     sys.argv = sys.argv[1:]
     if len(sys.argv) not in (6,7):
@@ -30,6 +31,8 @@ if __name__ == '__main__':
     eval_mode = parse_arg_eval_mode(sys.argv[5], ["blind", "everyepoch", "plot"])
     if len(sys.argv) >= 7:
         prediction_out_filename = sys.argv[6]
+    else:
+        prediction_out_filename = None
 
     window_size = 2
     embedding_depth = 50
@@ -49,15 +52,19 @@ if __name__ == '__main__':
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                               shuffle=True, num_workers=4)
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                             shuffle=True, num_workers=4)
+                                             shuffle=False, num_workers=4)
 
-    del W2I, T2I, train, train_labels, test, test_labels, trainset, testset
+    del W2I, train, train_labels, test, test_labels, trainset, testset
     import gc
     gc.collect()
 
     runner = ModelRunner(window_size, learning_rate, is_cuda)
     runner.initialize_random(num_words, num_tags, embedding_depth)
     runner.train_and_eval(trainloader, epoches, testloader, omit_tag_id, eval_mode=eval_mode)
+
+    if prediction_out_filename:
+        # IMPORTANT: testloader must have shuffle false, to have same order as test_filename
+        runner.write_prediction(testloader, T2I, test_filename, prediction_out_filename)
 
     print('Finished Training')
 

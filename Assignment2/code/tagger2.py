@@ -18,6 +18,7 @@ def parse_arg_eval_mode(val, allowed_values):
         exit()
     return val
 
+
 if __name__ == '__main__':
     sys.argv = sys.argv[1:]
     if len(sys.argv) not in (8,9):
@@ -34,6 +35,8 @@ if __name__ == '__main__':
     word_vectors_filename = sys.argv[7]
     if len(sys.argv) >= 9:
         prediction_out_filename = sys.argv[8]
+    else:
+        prediction_out_filename = None
 
     vocab = np.loadtxt(vocab_filename, dtype=object, comments=None)
     embeds = np.loadtxt(word_vectors_filename, dtype=np.float32)
@@ -69,14 +72,18 @@ if __name__ == '__main__':
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                               shuffle=True, num_workers=4)
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                             shuffle=True, num_workers=4)
+                                             shuffle=False, num_workers=4)
 
-    del W2I, T2I, train, train_labels, test, test_labels, trainset, testset
+    del W2I, train, train_labels, test, test_labels, trainset, testset
     import gc
     gc.collect()
 
     runner = ModelRunner(window_size, learning_rate, is_cuda)
     runner.initialize_pretrained(num_tags, embeds)
     runner.train_and_eval(trainloader, epoches, testloader, omit_tag_id, eval_mode=eval_mode)
+
+    if prediction_out_filename:
+        # IMPORTANT: testloader must have shuffle false, to have same order as test_filename
+        runner.write_prediction(testloader, T2I, test_filename, prediction_out_filename)
 
     print('Finished Training')
