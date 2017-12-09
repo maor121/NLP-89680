@@ -49,4 +49,6 @@ if __name__ == '__main__':
         all_dist = {w:dwc.dist(from_w, w, from_vec, v) for w,v in vecByWord.iteritems()}
         all_dist_tup = sorted(all_dist.items(), key=lambda x: x[1], reverse=True)
 
+        # Round results
+        all_dist_tup = [(w, "%.3f" % d) for w,d in all_dist_tup]
         print from_w, all_dist_tup[1:k+1]
