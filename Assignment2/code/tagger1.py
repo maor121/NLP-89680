@@ -18,7 +18,7 @@ def parse_arg_eval_mode(val, allowed_values):
 
 if __name__ == '__main__':
     sys.argv = sys.argv[1:]
-    if len(sys.argv)  < 6:
+    if len(sys.argv) not in (6,7):
         print "Wrong number of arguments, usage:\n" +\
             "tagger1.py is_cuda(True\\False) train_file test_file is_ner(True\\False) number_of_epoches eval_mode(blind\\everyepoch\\plot) [prediction_out_file]"
         exit()
