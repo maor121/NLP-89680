@@ -49,6 +49,7 @@ def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
                 if not saw_empty_line:
                     if calc_W:
                         for i in range(window_size):
+                            # Count appearences of START, END
                             W2I.get_id_and_update(START_WORD)
                             W2I.get_id_and_update(END_WORD)
                 saw_empty_line = True
