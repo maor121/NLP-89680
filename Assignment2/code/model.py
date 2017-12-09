@@ -20,7 +20,7 @@ def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
     if calc_W:
         W2I = StringCounter([START_WORD, END_WORD, UNK_WORD], UNK_WORD)
     else:
-        # Pretrained
+        # Pretrained (probably not necessary)
         W2I.get_id_and_update(START_WORD)
         W2I.get_id_and_update(END_WORD)
     if calc_T:
