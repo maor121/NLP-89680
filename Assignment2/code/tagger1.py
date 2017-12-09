@@ -29,7 +29,7 @@ if __name__ == '__main__':
         is_ner = parse_arg_bool(sys.argv[0])  # Used for eval
         epoches = int(sys.argv[4])
         eval_mode = parse_arg_eval_mode(sys.argv[5], ["blind", "everyepoch", "plot"])
-        if len(sys.argv) >= 6:
+        if len(sys.argv) >= 7:
             prediction_out_filename = sys.argv[6]
 
     window_size = 2
