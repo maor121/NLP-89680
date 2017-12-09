@@ -1,0 +1,78 @@
+tagger1.py
+----------
+
+Command:
+tagger1.py is_cuda train_file test_file is_ner number_of_epoches eval_mode [prediction_out_file]
+
+- is_cuda : True\False (use if you have GPU)
+- train_file : path
+- test_file : path to dev \ test file
+- is_ner : True\False (used for measuring accuracy, NER is measured without O tag)
+- number of epoches
+- eval_mode : one of three:
+        * blind - do not evaluate (use if this is a blind file, without tags)
+        * everyepoch - print accuracy on test_file every epoch
+        * plot - do not print accuracy, but at the end of the run, plot results (very slow!)
+        WARNING: When predicting blind file (no tags), ALWAYS use eval_mode 'blind'. Otherwise wrong accuracy will be printed.
+- prediction_out_file : path to output prediction file (optional)
+
+For results as seen in part1.pdf (95.1% POS, 76.9% NER):
+POS:
+tagger1.py False ../data/pos/train ../data/pos/dev False 8 everyepoch
+NER:
+tagger1.py False ../data/ner/train ../data/ner/dev True 20 everyepoch
+
+(If you have gpu set first parameter to True)
+
+top_k.py
+---------
+
+top_k.py vocab_file wordVectors_file fromWords_file k-top-count
+
+- vocab_file : path
+- wordVector_file : path
+- fromWords_file : path to text file, containing words to evaluate. each in a line.
+    Example for this file:
+        dog
+        england
+        john
+        explode
+        office
+-k-top-count : number of top similar words to display per word
+
+tagger2.py
+----------
+
+Command:
+tagger2.py is_cuda train_file test_file is_ner number_of_epoches eval_mode vocab_file, wordVectors_file [prediction_out_file]
+
+
+- identical parameters: is_cuda, train_file, test_file, is_ner, number of epoches, eval_mode, prediction_out_file
+- vocab_file : path to vocabulary file
+    MUST BE LOWER CASE AND CONTAIN THE FOLLOWING WORDS: UUUNKKK, <s>, </s>
+- wordVectors_file : path to pretrained embeddings
+
+
+For results as seen in part3.pdf (94.9% POS, 73.8% NER):
+POS:
+tagger2.py False ../data/pos/train ../data/pos/dev False 6 everyepoch path_to_vocab.txt path_to_wordVectors.txt
+NER:
+tagger2.py False ../data/ner/train ../data/ner/dev True 12 everyepoch path_to_vocab.txt path_to_wordVectors.txt
+
+
+tagger3.py
+----------
+
+tagger3.py is_pretrained is_cuda train_file test_file is_ner number_of_epoches eval_mode [vocab_file] [wordVectors_file] [prediction_out_file]
+
+- identical parameters: is_cuda, train_file, test_file, is_ner, number of epoches, eval_mode, prediction_out_file
+- vocab_file, wordVectors_file : mandatory if is_pretrained = True
+
+
+For results as seen in part4.pdf (96.5% POS, 81.9% NER):
+POS:
+tagger1.py False False ../data/pos/train ../data/pos/dev False 7 everyepoch
+NER:
+tagger1.py False False ../data/ner/train ../data/ner/dev True 25 everyepoch
+
+(set 2nd parameter to True if you have gpu)
