@@ -65,22 +65,50 @@
 #Rules
 1 ROOT S .
 
-#nonterminals
-1 N NN
-#0.2 N NN N
-0.2 N JJ N
-#0.1 N N N
-1 NP DT N
-
-1 PP IN NP
-0.2 N N PP
-
-0.2 S NNP VP
+1 S NNP VP   # Sally [verb]
 1 S NP VP
-1 VP Vi
-1 VP Vt NP
+1 VP Vt NP  # ate []
+1 NP DT N   # ate a []
+1 N NN      # singular noun
+
+0.3 NNP NNP CC NP  # Sally and the president
+1 VP Vt CC Vt NP   # wanted and ate
+1 VP Vi            # sighed
 
 1 SBAR COMP S
+0.2 VP V5 SBAR     # thought that
 
-0.5 VP V5 SBAR
-0.5 VP V6 NP SBAR
+
+
+
+
+
+
+
+
+
+
+
+
+#nonterminals
+#1 N NN
+##0.2 N NN N
+#0.2 N JJ N
+##0.1 N N N
+#0.5 NP DT N
+
+#1 PP IN NP
+#0.2 N N PP
+
+#1 S NNP VP
+#0.5 S NP VP
+#1 VP Vi
+#0.5 VP Vt NP
+
+#1 SBAR COMP S
+
+#0.2 VP V5 SBAR
+#0.2 VP V6 NP SBAR
+
+#0.1 NP NP CC NP
+#1 VP VP CC VP

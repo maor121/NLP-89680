@@ -95,6 +95,9 @@ if __name__ == '__main__':
     sentence_count = int(arguments['-n'])
 
     test_sentence("Sally ate a sandwich .", pcfg)
-    test_sentence("the desk on a perplexed desk perplexed the sandwich that a president sighed .", pcfg)
+    test_sentence("Sally and the president wanted and ate a sandwich .", pcfg)
+    test_sentence("the president sighed .", pcfg)
+    test_sentence("the president thought that a sandwich sighed .", pcfg)
+    test_sentence("it perplexed the president that a sandwich ate Sally .", pcfg)
     for i in range(sentence_count):
         print pcfg.random_sent() + '\n'
