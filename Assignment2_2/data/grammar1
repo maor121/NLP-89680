@@ -35,9 +35,9 @@
 1	S	NP VP
 1	VP	Verb NP
 1	NP	Det Noun
-0.4	NP	NP PP
+0.4	NP	NP PP           # Making sentences shorter
 1	PP	Prep NP
-4	Noun	Adj Noun
+4	Noun	Adj Noun    # Making Adj Adj 4 times more frequent (4 in 36, or 2 in 18)
 
 # Vocabulary.  Your program can see that "ate" is a terminal
 # symbol because there exists no rule for rewriting it.
