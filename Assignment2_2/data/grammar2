@@ -83,6 +83,7 @@
 
 0.2 S NP              # the desk
 
+0.5 S NP VBZ NP
 0.5 S NP VBZ JJ        # Sally is lazy
 0.5 S NP VBZ Vt_present NP
 
