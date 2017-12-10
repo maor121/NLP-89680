@@ -58,7 +58,6 @@ if __name__ == '__main__':
         W2I = StringCounter(vocab, UNK_WORD)
     else:
         embed_depth = 50
-
         W2I = None
         lower_case = False
         replace_numbers = True
@@ -79,7 +78,8 @@ if __name__ == '__main__':
     num_words = W2I.len()
     num_tags = T2I.len()
     num_features = F2I.len()
-    omit_tag_id = T2I.get_id('O') if is_ner else None
+    O_tag = 'o' if lower_case else 'O'
+    omit_tag_id = T2I.get_id(O_tag) if is_ner else None
 
     trainset = TensorDataset(train_words, train_labels)
     testset = TensorDataset(test_words, test_labels)
