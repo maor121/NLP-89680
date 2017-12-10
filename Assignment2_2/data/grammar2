@@ -71,18 +71,24 @@
 1 NP DT N   # ate a []
 1 N NN      # singular noun
 
-0.3 NNP NNP CC NP  # Sally and the president
+0.4 NNP NNP CC NP  # Sally and the president
 1 VP Vt CC Vt NP   # wanted and ate
 1 VP Vi            # sighed
 
 1 SBAR COMP S
 0.2 VP V5 SBAR     # thought that
 
-0.3 S PRP V6 NP SBAR # it perplexted [NP] that [S]
-1 NP NNP           # [ate] Sally
+0.2 S PRP V6 NP SBAR # it perplexted [NP] that [S]
+0.2 NP NNP           # [ate] Sally
 
 0.5 N JJ NN        # perplexed [noun]
-1 JJ Adverb JJ     # very very very perplexed
+0.5 JJ Adverb JJ     # very very very perplexed
+
+0.5 VP V8 IN NP      # worked on []
+1 PP IN NP         # PP on [every proposal on the desk]
+0.3 VP VP PP
+
+0.2 S NP              # the desk
 
 
 
