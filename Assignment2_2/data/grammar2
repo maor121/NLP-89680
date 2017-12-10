@@ -78,8 +78,8 @@
 1 SBAR COMP S
 0.2 VP V5 SBAR     # thought that
 
-
-
+1 S PRP V6 NP SBAR # it perplexted [NP] that [S]
+1 NP NNP
 
 
 
