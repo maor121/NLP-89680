@@ -1,7 +1,8 @@
-"""Usage: generate.py [FILE] [-n number]
+"""Usage: generate.py [FILE] [-n number] [-t]
 
 -h --help    show this
 -n number    number of sentences to generate [default: 1]
+-t           print grammar tree for each generated sentence
 
 """
 from docopt import docopt
@@ -37,10 +38,15 @@ class PCFG(object):
     def is_terminal(self, symbol): return symbol not in self._rules
 
     def gen(self, symbol):
-        if self.is_terminal(symbol): return symbol
+        if self.is_terminal(symbol):
+            return symbol, symbol
         else:
             expansion = self.random_expansion(symbol)
-            return " ".join(self.gen(s) for s in expansion)
+            gen = [self.gen(s) for s in expansion]
+            structure = " ".join(["({} {})".format(symbol, g[0]) for g in gen])
+            result = " ".join([g[1] for g in gen])
+
+            return structure, result
 
     def random_sent(self):
         return self.gen("ROOT")
@@ -56,6 +62,7 @@ class PCFG(object):
         return r
 
     def is_legal(self, words):
+        """Given a sentence (words list), print whether it can be generated from loaded grammar or not"""
         words_tuple = tuple(words)
         if words_tuple in self._islegalcache:
             return self._islegalcache[words_tuple]
@@ -93,7 +100,9 @@ if __name__ == '__main__':
     arguments = docopt(__doc__, version='Naval Fate 2.0')
     pcfg = PCFG.from_file(arguments['FILE'])
     sentence_count = int(arguments['-n'])
+    show_tree = arguments['-t']
 
+    """
     # TEST : Should be true
     test_sentence("Sally ate a sandwich .", pcfg)
     test_sentence("Sally and the president wanted and ate a sandwich .", pcfg)
@@ -110,5 +119,10 @@ if __name__ == '__main__':
     test_sentence("a desk .", pcfg)
     # Test should be FALSE
     test_sentence("the president thought that a sandwich sighed a desk .", pcfg)
+    """
+
     for i in range(sentence_count):
-        print pcfg.random_sent() + '\n'
+        structure, sentence = pcfg.random_sent()
+        print(sentence)
+        if show_tree:
+            print(structure)
