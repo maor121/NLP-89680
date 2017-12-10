@@ -1,0 +1,22 @@
+# A grammar that generalize the following sentences:
+#
+#(a) Sally ate a sandwich .
+#(b) Sally and the president wanted and ate a sandwich .
+#(c) the president sighed .
+#(d) the president thought that a sandwich sighed .
+#(e) it perplexed the president that a sandwich ate Sally .
+#(f) the very very very perplexed president ate a sandwich .
+#(g) the president worked on every proposal on the desk .
+#(h) Sally is lazy .
+#(i) Sally is eating a sandwich.
+#(j) the president thought that sally is a sandwich .
+######################################################
+#Nouns: Sally, sandwich, president, proposal, desk
+#Det:   the, a, every
+#Prep:  on
+#Verb+: ate, wanted, though
+#Verb: sighed
+#Verb+Prep: worked
+#Adj: perplexed
+#Adverb: very
+#Conj:  and, that, is
