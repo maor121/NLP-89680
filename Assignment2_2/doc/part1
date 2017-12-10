@@ -1,0 +1,8 @@
+1. Why the grammar generate so many long sentences? Which rule is responsible?
+
+The rule [1	NP	NP PP] is responsible because it has two recursion points. It opens NP to NP again, and PP is opened
+later to Prep NP, so NP is opened again. Removing this rule give very short sentences.
+
+2. The grammar allow multiple Adj, why does this happen so rarely?
+
+Because we have only one nonterminal rules (Noun -> Adj Noun), but 5 terminal rules (Noun -> word)
