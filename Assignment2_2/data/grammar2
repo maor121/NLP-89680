@@ -20,3 +20,22 @@
 #Adj: perplexed
 #Adverb: very
 #Conj:  and, that, is
+
+### Analyze POS:
+#(a) Sally ate a sandwich .                                 # Noun Verb+ Det Noun
+#(b) Sally and the president wanted and ate a sandwich .    # Noun Conj Det Noun Verb+ Conj Verb+ Det Noun
+#(c) the president sighed .                                 #
+#(d) the president thought that a sandwich sighed .
+#(e) it perplexed the president that a sandwich ate Sally .
+#(f) the very very very perplexed president ate a sandwich .
+#(g) the president worked on every proposal on the desk .
+#(h) Sally is lazy .
+#(i) Sally is eating a sandwich.
+#(j) the president thought that sally is a sandwich .
+
+
+#Rules
+1 ROOT S .
+
+#nonterminals
+1 S Noun Conj
