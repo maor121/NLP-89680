@@ -100,5 +100,10 @@ if __name__ == '__main__':
     test_sentence("the president thought that a sandwich sighed .", pcfg)
     test_sentence("a sandwich ate Sally .", pcfg)
     test_sentence("it perplexed the president that a sandwich ate Sally .", pcfg)
+    test_sentence("the very very very perplexed president ate a sandwich .", pcfg)
+    test_sentence("the president worked on every proposal on the desk .", pcfg)
+    test_sentence("Sally is lazy .", pcfg)
+    test_sentence("Sally is eating a sandwich.", pcfg)
+    test_sentence("the president thought that sally is a sandwich .", pcfg)
     for i in range(sentence_count):
         print pcfg.random_sent() + '\n'

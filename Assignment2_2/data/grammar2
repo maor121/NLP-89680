@@ -78,8 +78,11 @@
 1 SBAR COMP S
 0.2 VP V5 SBAR     # thought that
 
-1 S PRP V6 NP SBAR # it perplexted [NP] that [S]
-1 NP NNP
+0.3 S PRP V6 NP SBAR # it perplexted [NP] that [S]
+1 NP NNP           # [ate] Sally
+
+0.5 N JJ NN        # perplexed [noun]
+1 JJ Adverb JJ     # very very very perplexed
 
 
 
