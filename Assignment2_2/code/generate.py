@@ -7,12 +7,13 @@
 from docopt import docopt
 from collections import defaultdict
 import random
-
+import numpy as np
 
 class PCFG(object):
     def __init__(self):
         self._rules = defaultdict(list)
         self._sums = defaultdict(float)
+        self._islegalcache = defaultdict(list)
 
     def add_rule(self, lhs, rhs, weight):
         assert(isinstance(lhs, str))
@@ -55,25 +56,34 @@ class PCFG(object):
         return r
 
     def is_legal(self, words):
+        words_tuple = tuple(words)
+        if words_tuple in self._islegalcache:
+            return self._islegalcache[words_tuple]
+
         if words == ['ROOT']:
             return True
         matching_rules = PCFG.get_matching_rules(words, self._rules)
         for i, ruleSymbol, ruleLen in matching_rules:
-            words_next = words[:i] + [ruleSymbol] + words[i+ruleLen:]
+            words_next = words[:i] + [ruleSymbol] + words[i + ruleLen:]
             if self.is_legal(words_next):
                 return True
+
+        self._islegalcache[words_tuple] = False
         return False
 
     @staticmethod
-    def get_matching_rules(words, rules):
+    def get_matching_rules(words, rules, startIndex=0, single=False):
         matched = []
-        for i in range(len(words)):
+        for i in range(startIndex, len(words)):
             for r, r_info in rules.iteritems():
                 for r_w, __ in r_info:
                     sub_words_list = words[i:i+len(r_w)]
                     if (sub_words_list == r_w):
                         matched.append((i, r, len(r_w)))
+            if single:
+                break
         return matched
+
 
 def test_sentence(sentence, pcfg):
     print("{}:{}".format(pcfg.is_legal(sentence.strip().split()), sentence))
@@ -85,6 +95,6 @@ if __name__ == '__main__':
     sentence_count = int(arguments['-n'])
 
     test_sentence("Sally ate a sandwich .", pcfg)
-    test_sentence("Sally and the president wanted and ate a sandwich .", pcfg)
+    test_sentence("the desk on a perplexed desk perplexed the sandwich that a president sighed .", pcfg)
     for i in range(sentence_count):
         print pcfg.random_sent() + '\n'
