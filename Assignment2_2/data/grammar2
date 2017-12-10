@@ -11,7 +11,7 @@
 #(i) Sally is eating a sandwich .
 #(j) the president thought that Sally is a sandwich .
 
-
+# Vocabulary part2
 1 NNP Sally
 1 NN sandwich
 1 NN president
@@ -36,10 +36,29 @@
 1 VBZ is
 1 IN on
 
+# Old Vocabulary
+1	Verb	kissed
+1	Verb	understood
+1	Verb	pickled
+1	NN	pickle
+1	NN	chief of staff
+1	NN	floor
+1	JJ	fine
+1	JJ	delicious
+1	JJ	pickled
+1	Prep	with
+1	Prep	on
+1	Prep	under
+1	Prep	in
+
 #Rules
 1 ROOT S .
+1 ROOT S !
+1 ROOT is it true that S ?
+1 S NP VP          # Sally [verb]
+#0.4	NP NP PP
+#1 PP Prep NP
 
-1 S NP VP   # Sally [verb]
 1 VP Vt NP  # ate []
 1 NP DT N   # ate a []
 1 N NN      # singular noun
@@ -58,7 +77,7 @@
 
 0.5 JJ Adverb JJ     # very very very perplexed
 
-0.6 VP V8 IN NP      # worked on []
+0.6 VP V8 Prep NP      # worked on []
 1 PP IN NP         # PP on [every proposal on the desk]
 0.3 VP VP PP
 
