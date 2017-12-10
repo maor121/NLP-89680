@@ -43,7 +43,7 @@
 1 VP Vt NP  # ate []
 1 NP DT N   # ate a []
 1 N NN      # singular noun
-1 N JJ N
+0.3 N JJ N
 
 0.1 NP NP CC NP  # Sally and the president
 1 VP Vt CC Vt NP   # wanted and ate
@@ -58,7 +58,7 @@
 
 0.5 JJ Adverb JJ     # very very very perplexed
 
-0.5 VP V8 IN NP      # worked on []
+0.6 VP V8 IN NP      # worked on []
 1 PP IN NP         # PP on [every proposal on the desk]
 0.3 VP VP PP
 

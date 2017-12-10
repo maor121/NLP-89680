@@ -94,6 +94,7 @@ if __name__ == '__main__':
     pcfg = PCFG.from_file(arguments['FILE'])
     sentence_count = int(arguments['-n'])
 
+    # TEST : Should be true
     test_sentence("Sally ate a sandwich .", pcfg)
     test_sentence("Sally and the president wanted and ate a sandwich .", pcfg)
     test_sentence("the president sighed .", pcfg)
@@ -107,5 +108,7 @@ if __name__ == '__main__':
     test_sentence("the president thought that Sally is a sandwich .", pcfg)
     test_sentence("Sally worked on a desk .", pcfg)
     test_sentence("a desk .", pcfg)
+    # Test should be FALSE
+    test_sentence("the president thought that a sandwich sighed a desk .", pcfg)
     for i in range(sentence_count):
         print pcfg.random_sent() + '\n'
