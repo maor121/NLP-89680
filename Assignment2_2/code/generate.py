@@ -54,11 +54,37 @@ class PCFG(object):
             if p < 0: return r
         return r
 
+    def is_legal(self, words):
+        if words == ['ROOT']:
+            return True
+        matching_rules = PCFG.get_matching_rules(words, self._rules)
+        for i, ruleSymbol, ruleLen in matching_rules:
+            words_next = words[:i] + [ruleSymbol] + words[i+ruleLen:]
+            if self.is_legal(words_next):
+                return True
+        return False
+
+    @staticmethod
+    def get_matching_rules(words, rules):
+        matched = []
+        for i in range(len(words)):
+            for r, r_info in rules.iteritems():
+                for r_w, __ in r_info:
+                    sub_words_list = words[i:i+len(r_w)]
+                    if (sub_words_list == r_w):
+                        matched.append((i, r, len(r_w)))
+        return matched
+
+def test_sentence(sentence, pcfg):
+    print("{}:{}".format(pcfg.is_legal(sentence.strip().split()), sentence))
 
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Naval Fate 2.0')
     pcfg = PCFG.from_file(arguments['FILE'])
     sentence_count = int(arguments['-n'])
+
+    test_sentence("Sally ate a sandwich .", pcfg)
+    test_sentence("Sally and the president wanted and ate a sandwich .", pcfg)
     for i in range(sentence_count):
         print pcfg.random_sent() + '\n'

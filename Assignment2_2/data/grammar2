@@ -75,10 +75,10 @@
 1 PP IN NP
 0.2 N N PP
 
+0.2 S NNP VP
 1 S NP VP
 1 VP Vi
 1 VP Vt NP
-1 VP Vd NP NP
 
 1 SBAR COMP S
 
