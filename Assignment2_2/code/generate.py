@@ -103,8 +103,8 @@ if __name__ == '__main__':
     test_sentence("the very very very perplexed president ate a sandwich .", pcfg)
     test_sentence("the president worked on every proposal on the desk .", pcfg)
     test_sentence("Sally is lazy .", pcfg)
-    test_sentence("Sally is eating a sandwich.", pcfg)
-    test_sentence("the president thought that sally is a sandwich .", pcfg)
+    test_sentence("Sally is eating a sandwich .", pcfg)
+    test_sentence("the president thought that Sally is a sandwich .", pcfg)
     test_sentence("Sally worked on a desk .", pcfg)
     test_sentence("a desk .", pcfg)
     for i in range(sentence_count):

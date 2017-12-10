@@ -8,25 +8,10 @@
 #(f) the very very very perplexed president ate a sandwich .
 #(g) the president worked on every proposal on the desk .
 #(h) Sally is lazy .
-#(i) Sally is eating a sandwich.
-#(j) the president thought that sally is a sandwich .
-######################################################
-#NNP: Sally
-#NN: sandwich, president, proposal, desk
-#DT:  the, a, every
-#PRP:  it
-#Vi: sighed
-#Vt: ate, wanted
-#Vd:
-#V5: thought
-#V6: perplexed
-#V8: worked
-#COMP: that
-#JJ: perplexed
-#Adverb: very
-#CC:  and
-#VBZ: is
-#IN: on
+#(i) Sally is eating a sandwich .
+#(j) the president thought that Sally is a sandwich .
+
+
 1 NNP Sally
 1 NN sandwich
 1 NN president
@@ -42,46 +27,35 @@
 1 V5 thought
 1 V6 perplexed
 1 V8 worked
+1 Vt_present eating         #present
 1 COMP that
 1 JJ perplexed
+1 JJ lazy
 1 Adverb very
 1 CC and
 1 VBZ is
 1 IN on
 
-### Analyze POS:
-#(a) Sally ate a sandwich .                                 # NNP Vt DT NN
-#(b) Sally and the president wanted and ate a sandwich .    # NP VP Det Noun
-#(c) the president sighed .                                 # NP Verb_Terminal
-#(d) the president thought that a sandwich sighed .         # NP [thought that] Det Noun Verb_Terminal
-#(e) it perplexed the president that a sandwich ate Sally . # Prep VBD DET Noun IN
-#(f) the very very very perplexed president ate a sandwich .
-#(g) the president worked on every proposal on the desk .
-#(h) Sally is lazy .
-#(i) Sally is eating a sandwich.
-#(j) the president thought that sally is a sandwich .
-
-
 #Rules
 1 ROOT S .
 
-1 S NNP VP   # Sally [verb]
-1 S NP VP
+1 S NP VP   # Sally [verb]
 1 VP Vt NP  # ate []
 1 NP DT N   # ate a []
 1 N NN      # singular noun
+1 N JJ N
 
-0.4 NNP NNP CC NP  # Sally and the president
+0.1 NP NP CC NP  # Sally and the president
 1 VP Vt CC Vt NP   # wanted and ate
 1 VP Vi            # sighed
 
 1 SBAR COMP S
 0.2 VP V5 SBAR     # thought that
 
-0.2 S PRP V6 NP SBAR # it perplexted [NP] that [S]
+0.2 S PRP V6 NP SBAR # it perplexted [N] that [S]
 0.2 NP NNP           # [ate] Sally
 
-0.5 N JJ NN        # perplexed [noun]
+
 0.5 JJ Adverb JJ     # very very very perplexed
 
 0.5 VP V8 IN NP      # worked on []
@@ -90,34 +64,7 @@
 
 0.2 S NP              # the desk
 
+0.5 S NP VBZ JJ        # Sally is lazy
+0.5 S NP VBZ Vt_present NP
 
 
-
-
-
-
-
-
-
-#nonterminals
-#1 N NN
-##0.2 N NN N
-#0.2 N JJ N
-##0.1 N N N
-#0.5 NP DT N
-
-#1 PP IN NP
-#0.2 N N PP
-
-#1 S NNP VP
-#0.5 S NP VP
-#1 VP Vi
-#0.5 VP Vt NP
-
-#1 SBAR COMP S
-
-#0.2 VP V5 SBAR
-#0.2 VP V6 NP SBAR
-
-#0.1 NP NP CC NP
-#1 VP VP CC VP
