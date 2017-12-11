@@ -30,6 +30,7 @@
 1   QS  Q  NP   VP_now          # will Sally eat the president ?
 1   QS  VBZ NP  JJ              # is Sally delicious ?
 1   QS  VBZ NP  VP_ing          # is Sally eating a sandwitch ?
+1   QS  VBZ NP  NP              # is Sally a sandwich ?
 1   QS  Q   PRP V6_now NP SBAR      # did it perplex the president that Sally ate the sandwitch ?
 
 1   Q1  does
@@ -82,7 +83,7 @@
 1   NN_A  proposal
 1   NN_A  desk
 1   DT  the
-1   DT  a
+#1   DT  a
 1   DT  every
 1   PRP it
 1   Vi  sighed
@@ -119,7 +120,7 @@
 #Rules
 0.5   ROOT    S .
 0.5   ROOT    S !
-0.5   ROOT    is it true that S ?
+0.2   ROOT    is it true that S ?
 1   S   NP VP               # Sally [verb]
 1   VP  Vt NP              # ate []
 1   NP  DT N               # ate a []
