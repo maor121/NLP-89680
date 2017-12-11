@@ -3,14 +3,24 @@
 
 #################################### START PART 4 GRAMMAR ####################################
 
+# A \ AN
+
+
+
 # YES \ NO
 1   Q  did
 1   Q  will
 1   ROOT    QS ?
-2   QS  Q  NP   VP_now          # will Sally eat the president ?
-3   QS  VBZ NP  JJ              # is Sally delicious ?
-4   QS  VBZ NP  VP_ing          # is Sally eating a sandwitch ?
-4   QS  Q   PRP V6_now NP SBAR      # did it perplex the president that Sally ate the sandwitch ?
+1   QS  Q  NP   VP_now          # will Sally eat the president ?
+1   QS  VBZ NP  JJ              # is Sally delicious ?
+1   QS  VBZ NP  VP_ing          # is Sally eating a sandwitch ?
+1   QS  Q   PRP V6_now NP SBAR      # did it perplex the president that Sally ate the sandwitch ?
+
+1   Q1  does
+6   QS  Q1  NP  VP_now
+
+
+# Tenses
 1   Vi_now  sigh
 1   Vt_now  eat
 1   Vt_now  want
