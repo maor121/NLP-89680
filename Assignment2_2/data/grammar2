@@ -57,7 +57,7 @@
 #Rules
 1 ROOT S .
 1 ROOT S !
-1 ROOT is it true that S ?
+0.5 ROOT is it true that S ?
 1 S NP VP          # Sally [verb]
 
 1 VP Vt NP  # ate []
