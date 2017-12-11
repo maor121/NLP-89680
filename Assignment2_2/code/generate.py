@@ -119,8 +119,12 @@ if __name__ == '__main__':
     test_sentence("Sally worked on a desk .", pcfg)
     test_sentence("a desk .", pcfg)
     test_sentence("a president understood a pickled president !",pcfg)
+    test_sentence("did a proposal work on the desk ?", pcfg)
     # Test should be FALSE
     test_sentence("the president thought that a sandwich sighed a desk .", pcfg)
+    test_sentence("did a proposal work on work on the desk ?", pcfg)
+    test_sentence("did a proposal work on sighed ?", pcfg)
+    test_sentence("did a proposal work on the desk on the desk ?", pcfg)
 
     #test_sentence("is it true that every sandwich pickled a chief of staff ?",pcfg)
     #test_sentence("a perplexed pickle with every fine perplexed chief of staff kissed every perplexed floor in the floor !",pcfg)

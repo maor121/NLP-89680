@@ -6,12 +6,26 @@
 # YES \ NO
 1   Q  did
 1   Q  will
-4   S   Q   NP  Vt_now  NP ?
-4   S   Q   NP  Vi_now ?
-1   Vt_now  eat
-1   Vt_now  kiss
-1   Vt_now  want
+6   ROOT    QS ?
+1   QS  Q  NP   VP_now          # will Sally eat the president ?
+1   QS  VBZ NP  JJ              # is Sally delicious ?
+1   QS  Q   PRP V6_now NP SBAR      # did it perplex the president that Sally ate the sandwitch ?
 1   Vi_now  sigh
+1   Vt_now  eat
+1   Vt_now  want
+1   Vt_now  kiss
+1   V5_now  think
+1   V6_now  perplex
+1   V8_now  work
+1   Vt_now  pickle
+1   Vt_now  understand
+1   V5_now  understand
+1   VP_now  Vt_now NP
+1   VP_now  Vt_now CC Vt_now NP        # want and eat
+1   VP_now  Vi_now                     # sigh
+0.2 VP_now  V5_now SBAR          # thought that
+0.6 VP_now  V8_now Prep NP       # worked on []
+0.3 VP_now  VP_now PP
 
 
 ####################################    END PART 4        ####################################
