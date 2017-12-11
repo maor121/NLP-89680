@@ -1,0 +1,80 @@
+# Build on Top of Part 2
+# Chosen Questions:
+
+#################################### START PART 4 GRAMMAR ####################################
+
+# YES \ NO
+
+
+####################################    END PART 4        ####################################
+
+#################################### START PART 2 GRAMMAR ####################################
+#Vocabulary
+1   NNP Sally
+1   NN  sandwich
+1   NN  president
+1   NN  proposal
+1   NN    desk
+1   DT  the
+1   DT  a
+1   DT  every
+1   PRP it
+1   Vi  sighed
+1   Vt  ate
+1   Vt  wanted
+1   V5  thought
+1   V6  perplexed
+1   V8  worked
+1   Vt_ing  eating
+1   COMP    that
+1   JJ  perplexed
+1   JJ  lazy
+1   Adverb  very
+1   CC  and
+1   VBZ is
+1   IN  on
+
+# Old Vocabulary
+1   Vt  kissed
+1   Vt  pickled
+1   Vt  understood
+1   V5  understood
+1   NN  pickle
+1   NN  chief of staff
+1   NN  floor
+1   JJ  fine
+1   JJ  delicious
+1   JJ  pickled
+1   Prep    with
+1   Prep    on
+1   Prep    under
+1   Prep  in
+
+#Rules
+1   ROOT    S .
+1   ROOT    S !
+1   ROOT    is it true that S ?
+1   S   NP VP               # Sally [verb]
+1   VP  Vt NP              # ate []
+1   NP  DT N               # ate a []
+1   N   NN                  # singular noun
+0.3 N   JJ N
+0.1 NP  NP CC NP         # Sally and the president
+1   VP  Vt CC Vt NP        # wanted and ate
+1   VP  Vi                 # sighed
+1   SBAR    COMP S
+0.2 VP  V5 SBAR          # thought that
+0.2 S   PRP V6 NP SBAR    # it perplexted [N] that [S]
+0.2 NP  NNP              # [ate] Sally
+0.5 JJ  Adverb JJ        # very very very perplexed
+0.6 VP  V8 Prep NP       # worked on []
+1   PP  IN NP              # PP on [every proposal on the desk]
+0.3 VP  VP PP
+0.2 S   NP                # the desk
+0.5 S   NP VBZ NP         # Sally is a sandwitch
+0.5 S   NP VBZ JJ         # Sally is lazy
+0.5 S   NP VBZ Vt_ing NP
+
+####################################    END PART 2  ####################################
+
+
