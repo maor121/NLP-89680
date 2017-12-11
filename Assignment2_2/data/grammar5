@@ -1,0 +1,156 @@
+#################################### START PART 5 GRAMMAR ###################################
+
+
+1   Vt_to   decided
+1   Vt_to   wanted
+1   Vt_to   wished
+
+1   VTP Vt_to to VP_now
+1   VP  VTP
+
+####################################    END PART 5        ####################################
+
+#################################### START PART 4 GRAMMAR ####################################
+
+# A \ AN
+
+
+1   NN_AN   apple
+1   JJ_AN   ambivalent
+1   DT_A    a
+1   DT_AN   an
+0.3   NP  DT_AN N_AN            # ate a []
+1   NP  DT_A  N_A
+0.3   N_AN  JJ_AN N             #
+1   N_A   JJ_A  N              # singular noun
+1   N_A   NN_A
+1   N_AN  NN_AN
+1   N   N_A
+0.3   N   N_AN
+1   JJ  JJ_A
+0.3   JJ  JJ_AN
+0.5 JJ_A  Adverb JJ        # very very very perplexed
+
+
+# YES \ NO
+1   Q  did
+1   Q  will
+1   ROOT    QS ?
+1   QS  Q  NP   VP_now          # will Sally eat the president ?
+1   QS  VBZ NP  JJ              # is Sally delicious ?
+1   QS  VBZ NP  VP_ing          # is Sally eating a sandwitch ?
+1   QS  VBZ NP  NP              # is Sally a sandwich ?
+1   QS  Q   PRP V6_now NP SBAR      # did it perplex the president that Sally ate the sandwitch ?
+
+1   Q1  does
+6   QS  Q1  NP  VP_now
+
+
+# Tenses
+1   Vi_now  sigh
+1   Vt_now  eat
+1   Vt_now  want
+1   Vt_now  kiss
+1   V5_now  think
+1   V6_now  perplex
+1   V8_now  work
+1   Vt_now  pickle
+1   Vt_now  understand
+1   V5_now  understand
+1   VP_now  Vt_now NP
+1   VP_now  Vt_now CC Vt_now NP        # want and eat
+1   VP_now  Vi_now                     # sigh
+0.2 VP_now  V5_now SBAR          # thought that
+0.6 VP_now  V8_now Prep NP       # worked on []
+0.3 VP_now  VP_now PP
+
+1   Vi_ing  sighing
+1   Vt_ing  eating
+1   Vt_ing  wants
+1   Vt_ing  kissing
+1   V5_ing  thinking
+1   V6_ing  perplexing
+1   V8_ing  working
+1   Vt_ing  pickling
+1   Vt_ing  understanding
+1   V5_ing  understanding
+1   VP_ing  Vt_ing NP
+1   VP_ing  Vt_ing CC Vt_ing NP        # want and eat
+1   VP_ing  Vi_ing                     # sigh
+0.2 VP_ing  V5_ing SBAR          # thinking that
+0.6 VP_ing  V8_ing Prep NP       # working on []
+0.3 VP_ing  VP_ing PP
+
+
+####################################    END PART 4        ####################################
+
+#################################### START PART 2 GRAMMAR ####################################
+#Vocabulary
+1   NNP Sally
+1   NN_A  sandwich
+1   NN_A  president
+1   NN_A  proposal
+1   NN_A  desk
+1   DT  the
+#1   DT  a
+1   DT  every
+1   PRP it
+1   Vi  sighed
+1   Vt  ate
+1   Vt  wanted
+1   V5  thought
+1   V6  perplexed
+1   V8  worked
+1   Vt_ing  eating
+1   COMP    that
+1   JJ_A  perplexed
+1   JJ_A  lazy
+1   Adverb  very
+1   CC  and
+1   VBZ is
+1   IN  on
+
+# Old Vocabulary
+1   Vt  kissed
+1   Vt  pickled
+1   Vt  understood
+1   V5  understood
+1   NN_A  pickle
+1   NN_A  chief of staff
+1   NN_A  floor
+1   JJ_A  fine
+1   JJ_A  delicious
+1   JJ_A  pickled
+1   Prep    with
+1   Prep    on
+1   Prep    under
+1   Prep  in
+
+#Rules
+0.5   ROOT    S .
+0.5   ROOT    S !
+0.2   ROOT    is it true that S ?
+1   S   NP VP               # Sally [verb]
+1   VP  Vt NP              # ate []
+1   NP  DT N               # ate a []
+#1   N   NN                  # singular noun
+#0.3 N   JJ N
+0.1 NP  NP CC NP         # Sally and the president
+1   VP  Vt CC Vt NP        # wanted and ate
+1   VP  Vi                 # sighed
+1   SBAR    COMP S
+0.2 VP  V5 SBAR          # thought that
+0.2 S   PRP V6 NP SBAR    # it perplexted [N] that [S]
+0.2 NP  NNP              # [ate] Sally
+#0.5 JJ  Adverb JJ        # very very very perplexed
+0.6 VP  V8 Prep NP       # worked on []
+1   PP  IN NP              # PP on [every proposal on the desk]
+0.3 VP  VP PP
+#0.2 S   NP                # the desk
+0.5 S   NP VBZ NP         # Sally is a sandwitch
+0.5 S   NP VBZ JJ         # Sally is lazy
+0.5 S   NP VBZ Vt_ing NP
+
+####################################    END PART 2  ####################################
+
+
