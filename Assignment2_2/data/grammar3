@@ -6,6 +6,22 @@
 # A \ AN
 
 
+1   NN_AN   apple
+1   JJ_AN   ambivalent
+1   DT_A    a
+1   DT_AN   an
+0.3   NP  DT_AN N_AN            # ate a []
+1   NP  DT_A  N_A
+0.3   N_AN  JJ_AN N             #
+1   N_A   JJ_A  N              # singular noun
+1   N_A   NN_A
+1   N_AN  NN_AN
+1   N   N_A
+0.3   N   N_AN
+1   JJ  JJ_A
+0.3   JJ  JJ_AN
+0.5 JJ_A  Adverb JJ        # very very very perplexed
+
 
 # YES \ NO
 1   Q  did
@@ -61,10 +77,10 @@
 #################################### START PART 2 GRAMMAR ####################################
 #Vocabulary
 1   NNP Sally
-1   NN  sandwich
-1   NN  president
-1   NN  proposal
-1   NN    desk
+1   NN_A  sandwich
+1   NN_A  president
+1   NN_A  proposal
+1   NN_A  desk
 1   DT  the
 1   DT  a
 1   DT  every
@@ -77,8 +93,8 @@
 1   V8  worked
 1   Vt_ing  eating
 1   COMP    that
-1   JJ  perplexed
-1   JJ  lazy
+1   JJ_A  perplexed
+1   JJ_A  lazy
 1   Adverb  very
 1   CC  and
 1   VBZ is
@@ -89,12 +105,12 @@
 1   Vt  pickled
 1   Vt  understood
 1   V5  understood
-1   NN  pickle
-1   NN  chief of staff
-1   NN  floor
-1   JJ  fine
-1   JJ  delicious
-1   JJ  pickled
+1   NN_A  pickle
+1   NN_A  chief of staff
+1   NN_A  floor
+1   JJ_A  fine
+1   JJ_A  delicious
+1   JJ_A  pickled
 1   Prep    with
 1   Prep    on
 1   Prep    under
@@ -107,8 +123,8 @@
 1   S   NP VP               # Sally [verb]
 1   VP  Vt NP              # ate []
 1   NP  DT N               # ate a []
-1   N   NN                  # singular noun
-0.3 N   JJ N
+#1   N   NN                  # singular noun
+#0.3 N   JJ N
 0.1 NP  NP CC NP         # Sally and the president
 1   VP  Vt CC Vt NP        # wanted and ate
 1   VP  Vi                 # sighed
@@ -116,7 +132,7 @@
 0.2 VP  V5 SBAR          # thought that
 0.2 S   PRP V6 NP SBAR    # it perplexted [N] that [S]
 0.2 NP  NNP              # [ate] Sally
-0.5 JJ  Adverb JJ        # very very very perplexed
+#0.5 JJ  Adverb JJ        # very very very perplexed
 0.6 VP  V8 Prep NP       # worked on []
 1   PP  IN NP              # PP on [every proposal on the desk]
 0.3 VP  VP PP
