@@ -118,6 +118,7 @@ if __name__ == '__main__':
     test_sentence("Sally is a sandwich .", pcfg)
     test_sentence("Sally worked on a desk .", pcfg)
     test_sentence("a desk .", pcfg)
+    test_sentence("a president understood a pickled president !",pcfg)
     # Test should be FALSE
     test_sentence("the president thought that a sandwich sighed a desk .", pcfg)
 
