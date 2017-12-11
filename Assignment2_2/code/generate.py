@@ -8,7 +8,6 @@
 from docopt import docopt
 from collections import defaultdict
 import random
-import numpy as np
 
 class PCFG(object):
     def __init__(self):
@@ -101,37 +100,6 @@ if __name__ == '__main__':
     pcfg = PCFG.from_file(arguments['FILE'])
     sentence_count = int(arguments['-n'])
     show_tree = arguments['-t']
-
-
-    # TEST : Should be true
-    test_sentence("Sally ate a sandwich .", pcfg)
-    test_sentence("Sally and the president wanted and ate a sandwich .", pcfg)
-    test_sentence("the president sighed .", pcfg)
-    test_sentence("the president thought that a sandwich sighed .", pcfg)
-    test_sentence("a sandwich ate Sally .", pcfg)
-    test_sentence("it perplexed the president that a sandwich ate Sally .", pcfg)
-    test_sentence("the very very very perplexed president ate a sandwich .", pcfg)
-    test_sentence("the president worked on every proposal on the desk .", pcfg)
-    test_sentence("Sally is lazy .", pcfg)
-    test_sentence("Sally is eating a sandwich .", pcfg)
-    test_sentence("the president thought that Sally is a sandwich .", pcfg)
-    test_sentence("Sally is a sandwich .", pcfg)
-    test_sentence("Sally worked on a desk .", pcfg)
-    test_sentence("a president understood a pickled president !",pcfg)
-    test_sentence("did a proposal work on the desk ?", pcfg)
-    test_sentence("a desk is president .",pcfg)
-    test_sentence("a desk is the president .",pcfg)
-    # Test should be FALSE
-    test_sentence("the president thought that a sandwich sighed a desk .", pcfg)
-    test_sentence("did a proposal work on work on the desk ?", pcfg)
-    test_sentence("did a proposal work on sighed ?", pcfg)
-    test_sentence("did a proposal work on the desk on the desk ?", pcfg)
-    test_sentence("a desk .", pcfg)
-    test_sentence("Sally is every chief of staff .", pcfg)
-
-    #test_sentence("is it true that every sandwich pickled a chief of staff ?",pcfg)
-    #test_sentence("a perplexed pickle with every fine perplexed chief of staff kissed every perplexed floor in the floor !",pcfg)
-    #test_sentence("is it true that a pickled pickle pickled every chief of staff ?", pcfg)
 
     for i in range(sentence_count):
         structure, sentence = pcfg.random_sent()
