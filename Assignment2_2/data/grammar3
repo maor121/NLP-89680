@@ -4,6 +4,14 @@
 #################################### START PART 4 GRAMMAR ####################################
 
 # YES \ NO
+1   Q  did
+1   Q  will
+4   S   Q   NP  Vt_now  NP ?
+4   S   Q   NP  Vi_now ?
+1   Vt_now  eat
+1   Vt_now  kiss
+1   Vt_now  want
+1   Vi_now  sigh
 
 
 ####################################    END PART 4        ####################################
