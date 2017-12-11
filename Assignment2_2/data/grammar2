@@ -80,7 +80,7 @@
 1 PP IN NP         # PP on [every proposal on the desk]
 0.3 VP VP PP
 
-0.2 S NP              # the desk
+#0.2 S NP              # the desk
 
 0.5 S NP VBZ NP        # Sally is a sandwitch
 0.5 S NP VBZ JJ        # Sally is lazy

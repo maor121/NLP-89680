@@ -6,10 +6,11 @@
 # YES \ NO
 1   Q  did
 1   Q  will
-6   ROOT    QS ?
-1   QS  Q  NP   VP_now          # will Sally eat the president ?
-1   QS  VBZ NP  JJ              # is Sally delicious ?
-1   QS  Q   PRP V6_now NP SBAR      # did it perplex the president that Sally ate the sandwitch ?
+1   ROOT    QS ?
+2   QS  Q  NP   VP_now          # will Sally eat the president ?
+3   QS  VBZ NP  JJ              # is Sally delicious ?
+4   QS  VBZ NP  VP_ing          # is Sally eating a sandwitch ?
+4   QS  Q   PRP V6_now NP SBAR      # did it perplex the president that Sally ate the sandwitch ?
 1   Vi_now  sigh
 1   Vt_now  eat
 1   Vt_now  want
@@ -26,6 +27,23 @@
 0.2 VP_now  V5_now SBAR          # thought that
 0.6 VP_now  V8_now Prep NP       # worked on []
 0.3 VP_now  VP_now PP
+
+1   Vi_ing  sighing
+1   Vt_ing  eating
+1   Vt_ing  wants
+1   Vt_ing  kissing
+1   V5_ing  thinking
+1   V6_ing  perplexing
+1   V8_ing  working
+1   Vt_ing  pickling
+1   Vt_ing  understanding
+1   V5_ing  understanding
+1   VP_ing  Vt_ing NP
+1   VP_ing  Vt_ing CC Vt_ing NP        # want and eat
+1   VP_ing  Vi_ing                     # sigh
+0.2 VP_ing  V5_ing SBAR          # thinking that
+0.6 VP_ing  V8_ing Prep NP       # working on []
+0.3 VP_ing  VP_ing PP
 
 
 ####################################    END PART 4        ####################################
@@ -73,9 +91,9 @@
 1   Prep  in
 
 #Rules
-1   ROOT    S .
-1   ROOT    S !
-1   ROOT    is it true that S ?
+0.5   ROOT    S .
+0.5   ROOT    S !
+0.5   ROOT    is it true that S ?
 1   S   NP VP               # Sally [verb]
 1   VP  Vt NP              # ate []
 1   NP  DT N               # ate a []
@@ -92,7 +110,7 @@
 0.6 VP  V8 Prep NP       # worked on []
 1   PP  IN NP              # PP on [every proposal on the desk]
 0.3 VP  VP PP
-0.2 S   NP                # the desk
+#0.2 S   NP                # the desk
 0.5 S   NP VBZ NP         # Sally is a sandwitch
 0.5 S   NP VBZ JJ         # Sally is lazy
 0.5 S   NP VBZ Vt_ing NP
