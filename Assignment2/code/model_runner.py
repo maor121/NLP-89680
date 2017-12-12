@@ -1,4 +1,4 @@
-from model import Model
+from model import Model, parse_word_tag
 from plot import PlotBatches
 import utils
 from torch.autograd import Variable
@@ -137,7 +137,7 @@ class ModelRunner:
                         prediction_file.write(line)
                         line = src_file_iter.next()
                     t = I2T[t_id]
-                    is_tagged_file, word, __ = utils.parse_word_tag(line.strip(), is_tagged_file)
+                    is_tagged_file, word, __ = parse_word_tag(line.strip(), is_tagged_file, False, False)
                     prediction_file.write(word+"\t"+t+"\n")
             while True:
                 try:

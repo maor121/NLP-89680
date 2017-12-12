@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     num_words = W2I.len()
     num_tags = T2I.len()
-    omit_tag_id = T2I.get_id('o') if is_ner else None
+    omit_tag_id = T2I.get_id('O') if is_ner else None
 
     trainset = TensorDataset(torch.LongTensor(train), torch.LongTensor(train_labels))
     testset = TensorDataset(torch.LongTensor(test), torch.LongTensor(test_labels))

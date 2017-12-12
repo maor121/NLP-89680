@@ -1,5 +1,5 @@
 import re
-from utils import StringCounter, list_to_tuples, inverse_dict, parse_word_tag
+from utils import StringCounter, list_to_tuples, inverse_dict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -10,6 +10,24 @@ RARE_FEATURE_MAX_COUNT = 3
 FEATURES_PER_WORD = 2
 
 DIGIT_PATTERN = re.compile('\d')
+
+
+def parse_word_tag(line, is_tagged, replace_numbers, lower_case):
+    tag = None
+    if is_tagged:
+        try:
+            word, tag = line.split()
+            if replace_numbers:
+                word = re.sub(DIGIT_PATTERN, '#', word)
+            if lower_case:
+                word = word.lower()
+        except Exception:
+            is_tagged = False
+            word = line
+    else:
+        word = line
+    return is_tagged, word, tag
+
 
 def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
                     UNK_WORD="*UNK*", START_WORD="*START*", END_WORD="*END*",
@@ -34,12 +52,8 @@ def scan_input_file(path, window_size, W2I=None, T2I=None, F2I=None,
     with open(path) as data_file:
         for line in data_file:
             line = line.strip()
-            if replace_numbers:
-                line = re.sub(DIGIT_PATTERN, '#', line)
-            if lower_case:
-                line = line.lower()
             if len(line) > 0: # Not end of sentence
-                is_tagged, w, t = parse_word_tag(line, is_tagged)
+                is_tagged, w, t = parse_word_tag(line, is_tagged, replace_numbers, lower_case)
                 if calc_W:
                     W2I.get_id_and_update(w)
                 if calc_T and is_tagged:
@@ -115,12 +129,8 @@ def load_dataset(path, window_size=2, W2I=None, T2I=None, F2I=None,
     with open(path) as data_file:
         for line in data_file:
             line = line.strip()
-            if replace_numbers:
-                line = re.sub(DIGIT_PATTERN, '#', line)
-            if lower_case:
-                line = line.lower()
             if len(line) > 0:
-                is_tagged, w, t = parse_word_tag(line, is_tagged)
+                is_tagged, w, t = parse_word_tag(line, is_tagged, replace_numbers, lower_case)
                 sentence.append(w)
                 if is_tagged:
                     labels_tensor[word_index] = T2I.get_id(t)

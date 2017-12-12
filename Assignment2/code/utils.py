@@ -12,19 +12,6 @@ def inverse_dict(dict):
     return {v: k for k, v in dict.iteritems()}
 
 
-def parse_word_tag(line, is_tagged):
-    tag = None
-    if is_tagged:
-        try:
-            word, tag = line.split()
-        except Exception:
-            is_tagged = False
-            word = line
-    else:
-        word = line
-    return is_tagged, word, tag
-
-
 class StringCounter:
     def __init__(self, initialStrList=[], UNK_WORD=None):
         from collections import Counter
