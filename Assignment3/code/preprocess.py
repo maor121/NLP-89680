@@ -130,4 +130,12 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, drop_pos_set, UNK_WORD, min
             to_filter = [w_id_context for w_id_context,count in w_context.items() if count < min_count]
             for w_id_context in to_filter:
                 w_context.pop(w_id_context)
+        # Filter words that have no pairs left
+        to_filter = []
+        for w_id, w_context in contexts.items():
+            if len(w_context) == 0:
+                to_filter.append(w_id)
+        for w_id in to_filter:
+            contexts.pop(w_id)
+
     return contexts
