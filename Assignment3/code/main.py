@@ -18,4 +18,15 @@ if __name__ == '__main__':
 
     preprocess = Preprocess.load_from_file("../out/preprocess.pickle")
 
+    words_without_context = []
+    words_with_context = []
+    for w, w_id in preprocess.W2I.S2I.items():
+        if w_id not in preprocess.contexts:
+            words_without_context.append(w)
+        else:
+            words_with_context.append(w)
+
+    print("Words without context:%d\n%s" % (len(words_without_context), words_without_context))
+    print("Words with context:%d\n%s" % (len(words_with_context), words_with_context))
+
     print(0)

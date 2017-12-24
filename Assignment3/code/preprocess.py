@@ -11,12 +11,12 @@ class Preprocess:
 
     @staticmethod
     def from_input(filename):
-        drop_pos_set = set(
+        keep_pos_set = set(
             ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP',
              'VBZ', 'WRB'])
 
         W2I = corpus_lemmas_to_ids(filename, UNK_WORD="*UNK*")
-        contexts = corpus_lemmas_ids_to_context_freq(filename, W2I, drop_pos_set, UNK_WORD="*UNK*", min_count=3)
+        contexts = corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, UNK_WORD="*UNK*", min_count=2)
 
         return Preprocess(W2I, contexts)
 
@@ -91,7 +91,7 @@ def corpus_lemmas_to_ids(filename, UNK_WORD):
     return W2I
 
 
-def corpus_lemmas_ids_to_context_freq(filename, W2I, drop_pos_set, UNK_WORD, min_count=None):
+def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, UNK_WORD, min_count=None):
     def update_contexts(contexts, sentence):
         for lemma_id in sentence:
             for lemma_id_context in sentence:
@@ -103,6 +103,7 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, drop_pos_set, UNK_WORD, min
     unk_id = W2I.get_id(UNK_WORD)
     contexts = {}
 
+    in_id = W2I.get_id("in")
     with open("../data/" + filename, 'r') as input_file:
         sentence = []
         saw_empty_line = True
@@ -115,7 +116,7 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, drop_pos_set, UNK_WORD, min
                 lemma = w_arr[2]
                 pos = w_arr[3]
                 lemma_id = W2I.get_id(lemma)
-                if lemma_id != unk_id and pos not in drop_pos_set: # Don't count unknown words
+                if lemma_id != unk_id and pos in keep_pos_set: # Don't count unknown words
                     sentence.append(lemma_id)
             else:
                 if not saw_empty_line:
