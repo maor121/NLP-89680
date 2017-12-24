@@ -1,3 +1,6 @@
+import pickle
+
+
 class StringCounter:
     def __init__(self, initialStrList=[], UNK_WORD=None):
         from collections import Counter
@@ -36,10 +39,38 @@ class StringCounter:
             S2I[k] = v + n
         self.S2I = S2I
 
-    def add_pad_loc_0(self):
-        self.shift_ids_by(1)
-        self.S2I["*PAD*"] = 0
-        self.S2C["*PAD*"] = 100
+    def save_to_file(self, filename):
+        with open(filename, 'w+') as out_file:
+            out_file.write("UNK_WORD={}\n".format(self.UNK_WORD))
+            for w, w_id in self.S2I:
+                out_file.write("{}\t{}\n".format(w,w_id))
+    @staticmethod
+    def load_from_file(filename):
+        with open(filename, 'r') as inp_file:
+            line_iter = iter(inp_file)
+            UNK_WORD = line_iter.next().strip().split(sep='=')[1]
+            words_ids_tuples = []
+            while True:
+                try:
+                    line = line_iter.next()
+                    w, w_id = line.split()
+                    words_ids_tuples.append((w,w_id))
+                except StopIteration:
+                    break
+            words_ids_tuples = sorted(words_ids_tuples, key=lambda (w,w_id) : w_id)
+            words_sorted = [w_id for w, w_id in words_ids_tuples]
+            result = StringCounter(words_sorted, UNK_WORD=UNK_WORD)
+            return result
+
+
+def save_obj(obj, filename):
+    with open(filename, 'w+') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+
+def load_obj(filename):
+    with open(filename, 'r') as f:
+        return pickle.load(f)
 
 
 def corpus_lemmas_to_ids(filename, UNK_WORD):
@@ -60,23 +91,37 @@ def corpus_lemmas_to_ids(filename, UNK_WORD):
 
     return W2I
 
-def corpus_lemmas_ids_to_context(filename, W2I, UNK_WORD):
+
+def corpus_lemmas_ids_to_context_freq(filename, W2I, UNK_WORD):
+    def update_contexts(contexts, sentence):
+        for lemma_id in sentence:
+            for lemma_id_context in sentence:
+                if lemma_id != lemma_id_context:
+                    contexts[lemma_id] = contexts.get(lemma_id, 0) + 1
     unk_id = W2I.get_id(UNK_WORD)
     contexts = {}
 
     with open("../data/" + filename, 'r') as input_file:
+        sentence = []
+        saw_empty_line = True
         for line in input_file:
             line = line.strip()
             if len(line) > 0:
                 w_arr = line.split()  # ID, FORM, LEMMA, CPOSTAG, POSTAG, FEATS, HEAD, DEPREL, PHEAD, PDEPREL
                 # we need lemma
                 lemma = w_arr[2]
-                W2I.get_id_and_update(lemma)
+                lemma_id = W2I.get_id(unk_id)
+                if lemma_id != unk_id: # Don't count unknown words
+                    sentence.append(lemma_id)
+            else:
+                if not saw_empty_line:
+                    update_contexts(contexts, sentence)
+                    sentence = []
+                saw_empty_line = True
+        update_contexts(contexts, sentence)
 
-    print(W2I.len())
-    W2I.filter_rare_words(100)
-    W2I = StringCounter(W2I.S2I.keys(), W2I.UNK_WORD)
-    print(W2I.len())
+    return contexts
+
 
 # DROP: 'JJ','JJR','JJS','NN','NNS','NNP','NNPS','RB','RBR','RBS','VB','VBD','VBG','VBN','VBP','VBZ','WRB'
 if __name__ == '__main__':
@@ -88,9 +133,8 @@ if __name__ == '__main__':
         filename = "wikipedia.sample.trees.lemmatized"
 
     time_s = time.time()
-    W2I = corpus_lemmas_to_ids(filename)
+    W2I = corpus_lemmas_to_ids(filename, UNK_WORD="*UNK*")
+    contexts = corpus_lemmas_ids_to_context_freq(filename, W2I, UNK_WORD="*UNK*")
     time_e = time.time()
-
-
 
     print("Done. time: %.2f secs" % (time_e-time_s))
