@@ -16,10 +16,12 @@ def calc_cosine_distance(contexts):
     # 2) Calculate DT
     print("Part 2")
     DT = {}
+    cache = set()
     for u, u_context in contexts.items():
         for att, u_att_count in u_context.items():
             for v, v_att_count in contexts[att].items():
-                DT[(u,v)] = DT.get((u,v), 0.0) + np.log(u_att_count) * np.log(v_att_count)
+                k = np.log(u_att_count) * np.log(v_att_count)
+                DT[(u,v)] = DT.get((u,v), 0.0) + k
 
     # 3) Calculate cosine similarity
     print("Part 3")
