@@ -2,7 +2,6 @@ def calc_cosine_distance(preprocess, target_words_ids):
     from itertools import tee
     import numpy as np
 
-    sim = {}
     contexts = preprocess.contexts
     I2W = inverse_dict(preprocess.W2I.S2I)
 
@@ -27,11 +26,13 @@ def calc_cosine_distance(preprocess, target_words_ids):
 
     # 3) Calculate cosine similarity
     print("Part 3")
+    sim = {}
     for u in target_words_ids:
         u_context = contexts[u]
+        sim[u] = {}
         for v in u_context:
             if u != v:
-                sim[(u,v)] = DT[(u,v)] / np.sqrt(lengths[u] * lengths[v])
+                sim[u][v] = DT[(u,v)] / np.sqrt(lengths[u] * lengths[v])
 
     return sim
 
@@ -41,7 +42,7 @@ def inverse_dict(dict):
 
 
 if __name__ == '__main__':
-    import time
+    import utils
     from preprocess import Preprocess
 
     is_tiny = False
@@ -63,26 +64,15 @@ if __name__ == '__main__':
 
     target_words = ["car" ,"bus" ,"hospital" ,"hotel" ,"gun" ,"bomb" ,"horse" ,"fox" ,"table", "bowl", "guitar" ,"piano"]
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
-    sim = calc_cosine_distance(preprocess, target_words_ids)
-    sortedSim = sorted([(I2W[u],I2W[v],score) for (u,v),score in sim.items()],key=lambda (u,v,score) : score, reverse=True)
-    limit = 50
-    for i, tup in enumerate(sortedSim):
-        if i == limit:
-            break
-        print(tup)
+
+    #sim = calc_cosine_distance(preprocess, target_words_ids)
+    #utils.save_obj(sim, "../out/sim_cosine.pickle")
+    sim = utils.load_obj("../out/sim_cosine.pickle")
 
 
-    """
-    words_without_context = []
-    words_with_context = []
-    for w, w_id in preprocess.W2I.S2I.items():
-        if w_id not in preprocess.contexts:
-            words_without_context.append(w)
-        else:
-            words_with_context.append(w)
-
-    print("Words without context:%d\n%s" % (len(words_without_context), words_without_context))
-    print("Words with context:%d\n%s" % (len(words_with_context), words_with_context))
-    """
+    for u in target_words_ids:
+        u_sim = sorted(list(sim[u].items()), key=lambda (v,score): score, reverse=True)
+        u_sim_top_20 = [(I2W[v],"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
+        print(I2W[u], u_sim_top_20)
 
     print(0)

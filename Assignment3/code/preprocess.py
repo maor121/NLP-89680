@@ -1,5 +1,4 @@
-import pickle
-
+import utils
 
 class Preprocess:
     def __init__(self, W2I, contexts):
@@ -7,7 +6,7 @@ class Preprocess:
         self.contexts = contexts
 
     def save_to_file(self, pickle_filename):
-        save_obj((self.W2I, self.contexts), pickle_filename)
+        utils.save_obj((self.W2I, self.contexts), pickle_filename)
 
     @staticmethod
     def from_input(filename):
@@ -22,7 +21,7 @@ class Preprocess:
 
     @staticmethod
     def load_from_file(pickle_filename):
-        W2I, contexts = load_obj(pickle_filename)
+        W2I, contexts = utils.load_obj(pickle_filename)
         return Preprocess(W2I, contexts)
 
 class StringCounter:
@@ -62,16 +61,6 @@ class StringCounter:
         for k, v in self.S2I.iteritems():
             S2I[k] = v + n
         self.S2I = S2I
-
-
-def save_obj(obj, filename):
-    with open(filename, 'wb+') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-
-
-def load_obj(filename):
-    with open(filename, 'rb') as f:
-        return pickle.load(f)
 
 
 def corpus_lemmas_to_ids(filename, UNK_WORD):
