@@ -1,8 +1,10 @@
-def calc_cosine_distance(contexts):
+def calc_cosine_distance(preprocess, target_words_ids):
     from itertools import tee
     import numpy as np
 
     sim = {}
+    contexts = preprocess.contexts
+    I2W = inverse_dict(preprocess.W2I.S2I)
 
     # 1) Calculate length of every vector u
     print("Part 1")
@@ -16,8 +18,8 @@ def calc_cosine_distance(contexts):
     # 2) Calculate DT
     print("Part 2")
     DT = {}
-    cache = set()
-    for u, u_context in contexts.items():
+    for u in target_words_ids:
+        u_context = contexts[u]
         for att, u_att_count in u_context.items():
             for v, v_att_count in contexts[att].items():
                 k = np.log(u_att_count) * np.log(v_att_count)
@@ -25,19 +27,11 @@ def calc_cosine_distance(contexts):
 
     # 3) Calculate cosine similarity
     print("Part 3")
-    u_iter = iter(contexts)
-    while True:
-        try:
-            u = u_iter.next()
-            v_iter = tee(u_iter)
-            while True:
-                try:
-                    v = v_iter.next()
-                    sim[(u,v)] = sim[(v,u)] = DT[(u,v)] / np.sqrt(lengths[u] + lengths[v])
-                except StopIteration:
-                    break
-        except StopIteration:
-            break
+    for u in target_words_ids:
+        u_context = contexts[u]
+        for v in u_context:
+            if u != v:
+                sim[(u,v)] = DT[(u,v)] / np.sqrt(lengths[u] * lengths[v])
 
     return sim
 
@@ -63,13 +57,20 @@ if __name__ == '__main__':
     time_e = time.time()
     print("Done. time: %.2f secs" % (time_e - time_s))
     """
-
     preprocess = Preprocess.load_from_file("../out/preprocess.pickle")
 
     I2W = inverse_dict(preprocess.W2I.S2I)
 
-    sim = calc_cosine_distance(preprocess.contexts)
-    print(sorted([(I2W[u],I2W[v],score) for (u,v),score in sim.items()],key=lambda (u,v,score) : score))
+    target_words = ["car" ,"bus" ,"hospital" ,"hotel" ,"gun" ,"bomb" ,"horse" ,"fox" ,"table", "bowl", "guitar" ,"piano"]
+    target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
+    sim = calc_cosine_distance(preprocess, target_words_ids)
+    sortedSim = sorted([(I2W[u],I2W[v],score) for (u,v),score in sim.items()],key=lambda (u,v,score) : score, reverse=True)
+    limit = 50
+    for i, tup in enumerate(sortedSim):
+        if i == limit:
+            break
+        print(tup)
+
 
     """
     words_without_context = []
