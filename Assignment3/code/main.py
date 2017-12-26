@@ -51,7 +51,10 @@ def contexts_to_pmi_contexts(contexts):
         for v, u_v_freq in u_context.items():
             p_v = float(u_freqs[v]) / freq_total
             p_u_v = float(u_v_freq) / freq_total
-            u_context[v] = np.log(p_u_v) - (np.log(p_u) + np.log(p_v))
+            u_v_pmi = np.log(p_u_v) - (np.log(p_u) + np.log(p_v))
+            if u_v_pmi < 0:
+                u_v_pmi = 0
+            u_context[v] = u_v_pmi
 
     return contexts
 
@@ -65,7 +68,7 @@ if __name__ == '__main__':
     from preprocess import Preprocess
 
     is_tiny = False
-
+    """
     if is_tiny:
         filename = "wikipedia.tinysample.trees.lemmatized"
     else:
@@ -75,7 +78,7 @@ if __name__ == '__main__':
     preprocess.save_to_file("../out/window_context/preprocess.pickle")
     time_e = time.time()
     print("Done. time: %.2f secs" % (time_e - time_s))
-
+    """
     preprocess = Preprocess.load_from_file("../out/window_context/preprocess.pickle")
 
     I2W = inverse_dict(preprocess.W2I.S2I)
