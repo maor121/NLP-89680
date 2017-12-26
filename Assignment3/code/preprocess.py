@@ -96,13 +96,15 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, UNK_WORD, min
 
     def update_contexts_window(contexts, sentence, window_size):
         sentence = [None] * window_size + sentence + [None] * window_size
-        for window in windows_from_sentence(sentence, window_size):
+        all_windows = windows_from_sentence(sentence, window_size)
+        for window in all_windows:
             lemma_id = window[window_size]
             for lemma_id_context in window:
-                context_dict = contexts.get(lemma_id)
-                if not context_dict:
-                    context_dict = contexts[lemma_id] = {}
-                context_dict[lemma_id_context] = context_dict.get(lemma_id_context, 0) + 1
+                if lemma_id_context is not None:
+                    context_dict = contexts.get(lemma_id)
+                    if not context_dict:
+                        context_dict = contexts[lemma_id] = {}
+                    context_dict[lemma_id_context] = context_dict.get(lemma_id_context, 0) + 1
 
     unk_id = W2I.get_id(UNK_WORD)
     contexts = {}

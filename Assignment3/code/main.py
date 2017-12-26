@@ -66,7 +66,6 @@ if __name__ == '__main__':
 
     is_tiny = False
 
-
     if is_tiny:
         filename = "wikipedia.tinysample.trees.lemmatized"
     else:
