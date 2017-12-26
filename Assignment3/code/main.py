@@ -61,22 +61,23 @@ def inverse_dict(dict):
 
 if __name__ == '__main__':
     import utils
+    import time
     from preprocess import Preprocess
 
     is_tiny = False
 
-    """
+
     if is_tiny:
         filename = "wikipedia.tinysample.trees.lemmatized"
     else:
         filename = "wikipedia.sample.trees.lemmatized"
     time_s = time.time()
-    preprocess = Preprocess.from_input(filename)
-    preprocess.save_to_file("../out/preprocess.pickle")
+    preprocess = Preprocess.from_input(filename, context_mode="window")
+    preprocess.save_to_file("../out/window_context/preprocess.pickle")
     time_e = time.time()
     print("Done. time: %.2f secs" % (time_e - time_s))
-    """
-    preprocess = Preprocess.load_from_file("../out/preprocess.pickle")
+
+    preprocess = Preprocess.load_from_file("../out/window_context/preprocess.pickle")
 
     I2W = inverse_dict(preprocess.W2I.S2I)
 
@@ -85,8 +86,8 @@ if __name__ == '__main__':
 
     contexts = contexts_to_pmi_contexts(preprocess.contexts)
     sim = calc_cosine_distance(preprocess.contexts, target_words_ids)
-    utils.save_obj(sim, "../out/sim_pmi.pickle")
-    #sim = utils.load_obj("../out/sim_pmi.pickle")
+    utils.save_obj(sim, "../out/window_context/sim_pmi.pickle")
+    #sim = utils.load_obj("../out/window_context/sim_pmi.pickle")
 
 
     for u in target_words_ids:
