@@ -52,7 +52,7 @@ def contexts_to_pmi_contexts(contexts):
             p_v = float(u_freqs[v]) / freq_total
             p_u_v = float(u_v_freq) / freq_total
             u_v_pmi = np.log(p_u_v) - (np.log(p_u) + np.log(p_v))
-            if u_v_pmi < 0:
+            if u_v_pmi < 0: # Not enough information
                 u_v_pmi = 0
             u_context[v] = u_v_pmi
 
