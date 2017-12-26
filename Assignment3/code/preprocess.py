@@ -83,28 +83,32 @@ def corpus_lemmas_to_ids(filename, UNK_WORD):
 
 
 def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, UNK_WORD, min_count=None, context_mode="sentence"):
-    """Context mode: one of three: 1. sentence, 2. window, 3. TODO"""
+    """Context mode: one of three: 1. sentence, 2. window, 3. tree"""
+
+    def update_contexts_pair(contexts, (u, v)):
+        context_dict = contexts.get(u)
+        if not context_dict:
+            context_dict = contexts[u] = {}
+        context_dict[v] = context_dict.get(v, 0) + 1
 
     def update_contexts_sentence(contexts, sentence):
-        for lemma_id in sentence:
-            for lemma_id_context in sentence:
-                if lemma_id != lemma_id_context:
-                    context_dict = contexts.get(lemma_id)
-                    if not context_dict:
-                        context_dict = contexts[lemma_id] = {}
-                    context_dict[lemma_id_context] = context_dict.get(lemma_id_context, 0) + 1
+        for id in range(1, len(sentence)+1):
+            for context_id in range(1, len(sentence) + 1):
+                if id != context_id:
+                    lemma_id = sentence[id][0]
+                    lemma_id_context = sentence[context_id][0]
+                    update_contexts_pair(contexts, (lemma_id, lemma_id_context))
 
     def update_contexts_window(contexts, sentence, window_size):
-        sentence = [None] * window_size + sentence + [None] * window_size
-        all_windows = windows_from_sentence(sentence, window_size)
+        sentence_lemmas = [sentence[id+1][0] for id in enumerate(len(sentence))]
+        sentence_lemmas = [None] * window_size + sentence_lemmas + [None] * window_size
+        all_windows = windows_from_sentence(sentence_lemmas, window_size)
         for window in all_windows:
             lemma_id = window[window_size]
             for lemma_id_context in window:
                 if lemma_id_context is not None:
-                    context_dict = contexts.get(lemma_id)
-                    if not context_dict:
-                        context_dict = contexts[lemma_id] = {}
-                    context_dict[lemma_id_context] = context_dict.get(lemma_id_context, 0) + 1
+                    update_contexts_pair(contexts, (lemma_id, lemma_id_context))
+
 
     unk_id = W2I.get_id(UNK_WORD)
     contexts = {}
@@ -117,9 +121,8 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, UNK_WORD, min
         else:
             raise Exception("Unknown context mode")
 
-    in_id = W2I.get_id("in")
     with open("../data/" + filename, 'r') as input_file:
-        sentence = []
+        sentence = {} # key: id, value: (lemma_id, pos, parent_id)
         saw_empty_line = True
         for line in input_file:
             line = line.strip()
@@ -127,15 +130,17 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, UNK_WORD, min
                 saw_empty_line = False
                 w_arr = line.split()  # ID, FORM, LEMMA, CPOSTAG, POSTAG, FEATS, HEAD, DEPREL, PHEAD, PDEPREL
                 # we need lemma
+                id = w_arr[0]
                 lemma = w_arr[2]
                 pos = w_arr[3]
                 lemma_id = W2I.get_id(lemma)
+                head_id = w_arr[6]
                 if lemma_id != unk_id and pos in keep_pos_set:  # Don't count unknown words
-                    sentence.append(lemma_id)
+                    sentence[id] = (lemma_id, pos, head_id)
             else:
                 if not saw_empty_line:
                     update_contexts(contexts, sentence)
-                    sentence = []
+                    sentence = {}
                 saw_empty_line = True
         update_contexts(contexts, sentence)
 
