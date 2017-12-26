@@ -1,9 +1,6 @@
-def calc_cosine_distance(preprocess, target_words_ids):
-    from itertools import tee
-    import numpy as np
+import numpy as np
 
-    contexts = preprocess.contexts
-    I2W = inverse_dict(preprocess.W2I.S2I)
+def calc_cosine_distance(contexts, target_words_ids):
 
     # 1) Calculate length of every vector u
     print("Part 1")
@@ -36,6 +33,27 @@ def calc_cosine_distance(preprocess, target_words_ids):
 
     return sim
 
+def contexts_to_pmi_contexts(contexts):
+    import copy
+    u_freqs = {}
+    contexts = copy.deepcopy(contexts)
+
+    freq_total = 0
+    for u,u_context in contexts.items():
+        u_freq_total = 0
+        for __, u_v_freq in u_context.items():
+            u_freq_total += u_v_freq
+        u_freqs[u] = u_freq_total
+        freq_total += u_freq_total
+
+    for u, u_context in contexts.items():
+        p_u = float(u_freqs[u]) / freq_total
+        for v, u_v_freq in u_context.items():
+            p_v = float(u_freqs[v]) / freq_total
+            p_u_v = float(u_v_freq) / freq_total
+            u_context[v] = np.log(p_u_v) - (np.log(p_u) + np.log(p_v))
+
+    return contexts
 
 def inverse_dict(dict):
     return {v: k for k, v in dict.iteritems()}
@@ -65,9 +83,10 @@ if __name__ == '__main__':
     target_words = ["car" ,"bus" ,"hospital" ,"hotel" ,"gun" ,"bomb" ,"horse" ,"fox" ,"table", "bowl", "guitar" ,"piano"]
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
 
-    #sim = calc_cosine_distance(preprocess, target_words_ids)
-    #utils.save_obj(sim, "../out/sim_cosine.pickle")
-    sim = utils.load_obj("../out/sim_cosine.pickle")
+    contexts = contexts_to_pmi_contexts(preprocess.contexts)
+    sim = calc_cosine_distance(preprocess.contexts, target_words_ids)
+    utils.save_obj(sim, "../out/sim_pmi.pickle")
+    #sim = utils.load_obj("../out/sim_pmi.pickle")
 
 
     for u in target_words_ids:
