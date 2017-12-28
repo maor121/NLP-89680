@@ -68,25 +68,30 @@ if __name__ == '__main__':
     from preprocess import Preprocess
 
     is_tiny = False
+    calc_preprocess = False
 
-    if is_tiny:
-        filename = "wikipedia.tinysample.trees.lemmatized"
-    else:
-        filename = "wikipedia.sample.trees.lemmatized"
-    time_s = time.time()
-    preprocess = Preprocess.from_input(filename, context_mode="tree")
-    preprocess.save_to_file("../out/tree_context/preprocess.pickle")
-    time_e = time.time()
-    print("Done. time: %.2f secs" % (time_e - time_s))
+    if calc_preprocess:
+        if is_tiny:
+            filename = "wikipedia.tinysample.trees.lemmatized"
+        else:
+            filename = "wikipedia.sample.trees.lemmatized"
+        time_s = time.time()
+        preprocess = Preprocess.from_input(filename, context_mode="tree")
+        preprocess.save_to_file("../out/tree_context/preprocess.pickle")
+        time_e = time.time()
+        print("Done. time: %.2f secs" % (time_e - time_s))
 
     preprocess = Preprocess.load_from_file("../out/tree_context/preprocess.pickle")
 
     I2W = inverse_dict(preprocess.W2I.S2I)
 
+    for w in preprocess.contexts:
+        print(I2W[w])
+
     target_words = ["car" ,"bus" ,"hospital" ,"hotel" ,"gun" ,"bomb" ,"horse" ,"fox" ,"table", "bowl", "guitar" ,"piano"]
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
 
-    contexts = contexts_to_pmi_contexts(preprocess.contexts)
+    #contexts = contexts_to_pmi_contexts(preprocess.contexts)
     sim = calc_cosine_distance(preprocess.contexts, target_words_ids)
     utils.save_obj(sim, "../out/tree_context/sim_pmi.pickle")
     #sim = utils.load_obj("../out/tree_context/sim_pmi.pickle")

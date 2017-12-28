@@ -119,9 +119,10 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
             while True:
                 head_id = sentence[id][2]
                 if head_id == 0: # ROOT
+                    parent_ids.append(W2I_TREE.get_id_and_update("ROOT"))
                     break
                 head = sentence[head_id]
-                if head[0] == unk_id or (head[1] not in keep_pos_set and head[1] == prep_pos): # unknown word, or not in keep, but not prep
+                if head[0] == unk_id or (head[1] not in keep_pos_set and head[1] != prep_pos): # unknown word, or not in keep, but not prep
                     id = head_id
                     continue
                 if head[1] in keep_pos_set: # content word
@@ -175,12 +176,12 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
             for w_id_context in to_filter:
                 w_context.pop(w_id_context)
         # Filter words that have no pairs left
-        to_filter = []
-        for w_id, w_context in contexts.items():
-            if len(w_context) == 0:
-                to_filter.append(w_id)
-        for w_id in to_filter:
-            contexts.pop(w_id)
+        #to_filter = []
+        #for w_id, w_context in contexts.items():
+        #    if len(w_context) == 0:
+        #        to_filter.append(w_id)
+        #for w_id in to_filter:
+        #    contexts.pop(w_id)
 
     return contexts
 
