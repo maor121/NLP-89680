@@ -93,7 +93,7 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
         context_dict[v] = context_dict.get(v, 0) + 1
 
     def update_contexts_sentence(contexts, sentence):
-        sentence_lemmas = [sentence[id+1][0] for id in enumerate(len(sentence))
+        sentence_lemmas = [sentence[id+1][0] for id in range(len(sentence))
                            if sentence[id+1][1] in keep_pos_set and sentence[id+1][0] != unk_id]
         for lemma_id in sentence_lemmas:
             for lemma_id_context in sentence_lemmas:
@@ -101,7 +101,7 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                     update_contexts_pair(contexts, (lemma_id, lemma_id_context))
 
     def update_contexts_window(contexts, sentence, window_size):
-        sentence_lemmas = [sentence[id+1][0] for id in enumerate(len(sentence))
+        sentence_lemmas = [sentence[id+1][0] for id in range(len(sentence))
                            if sentence[id+1][1] in keep_pos_set and sentence[id+1][0] != unk_id]
         sentence_lemmas = [None] * window_size + sentence_lemmas + [None] * window_size
         all_windows = windows_from_sentence(sentence_lemmas, window_size)

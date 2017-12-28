@@ -68,7 +68,10 @@ if __name__ == '__main__':
     from preprocess import Preprocess
 
     is_tiny = False
-    calc_preprocess = False
+    calc_preprocess = True
+
+    mod = "window"
+    out_dir = "../out/{}_context".format(mod)
 
     if calc_preprocess:
         if is_tiny:
@@ -76,12 +79,12 @@ if __name__ == '__main__':
         else:
             filename = "wikipedia.sample.trees.lemmatized"
         time_s = time.time()
-        preprocess = Preprocess.from_input(filename, context_mode="tree")
-        preprocess.save_to_file("../out/tree_context/preprocess.pickle")
+        preprocess = Preprocess.from_input(filename, context_mode=mod)
+        preprocess.save_to_file(out_dir+"/preprocess.pickle")
         time_e = time.time()
         print("Done. time: %.2f secs" % (time_e - time_s))
 
-    preprocess = Preprocess.load_from_file("../out/tree_context/preprocess.pickle")
+    preprocess = Preprocess.load_from_file(out_dir+"/preprocess.pickle")
 
     I2W = inverse_dict(preprocess.W2I.S2I)
 
@@ -93,7 +96,7 @@ if __name__ == '__main__':
 
     #contexts = contexts_to_pmi_contexts(preprocess.contexts)
     sim = calc_cosine_distance(preprocess.contexts, target_words_ids)
-    utils.save_obj(sim, "../out/tree_context/sim_pmi.pickle")
+    utils.save_obj(sim, out_dir+"/sim_cosine.pickle")
     #sim = utils.load_obj("../out/tree_context/sim_pmi.pickle")
 
 
