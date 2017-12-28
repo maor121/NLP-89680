@@ -17,10 +17,10 @@ def calc_cosine_distance(contexts, target_words_ids):
     for u in target_words_ids:
         u_context = contexts[u]
         for u_att, u_att_count in u_context.items():
-            DT[(u,u_att)] = 0.0
+            DT[(u, u_att)] = 0.0
             for u_att_2, u_att_count_2 in u_context.items():
                 if u_att_2 in contexts[u_att]:
-                    DT[(u,u_att)] += np.log(u_att_count_2) * np.log(contexts[u_att][u_att_2])
+                    DT[(u, u_att)] += np.log(u_att_count_2) * np.log(contexts[u_att][u_att_2])
 
     # 3) Calculate cosine similarity
     print("Part 3")
@@ -68,6 +68,7 @@ if __name__ == '__main__':
     import time
     from preprocess import Preprocess
 
+
     is_tiny = False
     calc_preprocess = False
 
@@ -87,7 +88,6 @@ if __name__ == '__main__':
 
     preprocess = Preprocess.load_from_file(out_dir+"/preprocess.pickle")
 
-    I2W = inverse_dict(preprocess.W2I.S2I)
 
     target_words = ["car" ,"bus" ,"hospital" ,"hotel" ,"gun" ,"bomb" ,"horse" ,"fox" ,"table", "bowl", "guitar" ,"piano"]
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
@@ -95,15 +95,17 @@ if __name__ == '__main__':
     W2I_TREE, contexts = preprocess.contexts
     target_words_ids = [W2I_TREE.get_id("c_w "+str(id)) for id in target_words_ids]
 
-    #contexts = contexts_to_pmi_contexts(contexts)
+    #contexts = contexts_to_pmi_contexts(preprocess.contexts[1])
     sim = calc_cosine_distance(contexts, target_words_ids)
-    utils.save_obj(sim, out_dir+"/sim_cosine.pickle")
-    #sim = utils.load_obj("../out/tree_context/sim_pmi.pickle")
+    utils.save_obj(sim, out_dir+"/sim_pmi.pickle")
+    #sim = utils.load_obj("../out/window_context/sim_pmi.pickle")
 
-
+    I2W = inverse_dict(preprocess.W2I.S2I)
+    I2W_TREE = inverse_dict(W2I_TREE.S2I)
+    inv_func = lambda u : " ".join([I2W[int(w_id)] for w_id in I2W_TREE[u].replace("c_w ","").split('_')])
     for u in target_words_ids:
         u_sim = sorted(list(sim[u].items()), key=lambda (v,score): score, reverse=True)
-        u_sim_top_20 = [(I2W[v],"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
-        print(I2W[u], u_sim_top_20)
+        u_sim_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
+        print(inv_func(u), u_sim_top_20)
 
     print(0)
