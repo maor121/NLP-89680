@@ -70,7 +70,7 @@ if __name__ == '__main__':
     is_tiny = False
     calc_preprocess = True
 
-    mod = "window"
+    mod = "tree"
     out_dir = "../out/{}_context".format(mod)
 
     if calc_preprocess:
@@ -88,14 +88,14 @@ if __name__ == '__main__':
 
     I2W = inverse_dict(preprocess.W2I.S2I)
 
-    for w in preprocess.contexts:
-        print(I2W[w])
-
     target_words = ["car" ,"bus" ,"hospital" ,"hotel" ,"gun" ,"bomb" ,"horse" ,"fox" ,"table", "bowl", "guitar" ,"piano"]
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
 
-    #contexts = contexts_to_pmi_contexts(preprocess.contexts)
-    sim = calc_cosine_distance(preprocess.contexts, target_words_ids)
+    W2I_TREE, contexts = preprocess.contexts
+    target_words_ids = [W2I_TREE.get_id("c_w "+str(id)) for id in target_words_ids]
+
+    #contexts = contexts_to_pmi_contexts(contexts)
+    sim = calc_cosine_distance(contexts, target_words_ids)
     utils.save_obj(sim, out_dir+"/sim_cosine.pickle")
     #sim = utils.load_obj("../out/tree_context/sim_pmi.pickle")
 

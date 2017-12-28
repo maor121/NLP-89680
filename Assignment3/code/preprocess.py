@@ -114,26 +114,29 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
     W2I_TREE = StringCounter()
     def update_contexts_tree(contexts, sentence):
         for id in range(1, len(sentence) + 1):
-            parent_ids = [] # parent ids until not proposition, or None
-            content_id = id
-            while True:
-                head_id = sentence[id][2]
-                if head_id == 0: # ROOT
-                    parent_ids.append(W2I_TREE.get_id_and_update("ROOT"))
-                    break
-                head = sentence[head_id]
-                if head[0] == unk_id or (head[1] not in keep_pos_set and head[1] != prep_pos): # unknown word, or not in keep, but not prep
-                    id = head_id
-                    continue
-                if head[1] in keep_pos_set: # content word
-                    parent_ids.append(head[0])
-                    break
-                else:
-                    # preposition, known word
-                    parent_ids.append(head[0])
-                    id = head_id
-            target_id = W2I_TREE.get_id_and_update('_'.join(str(parent_ids)))
-            update_contexts_pair(contexts, (content_id, target_id))
+            current = sentence[id]
+            if (current[0] != unk_id and current[1] in keep_pos_set): # Content word, known
+                parent_ids = [] # parent ids until not proposition, or None
+                content_id = W2I_TREE.get_id_and_update("c_w "+str(sentence[id][0])) # To keep track of direction
+                while True:
+                    head_id = sentence[id][2]
+                    if head_id == 0: # ROOT
+                        parent_ids.append(str(W2I_TREE.get_id_and_update("ROOT")))
+                        break
+                    head = sentence[head_id]
+                    if head[0] == unk_id or (head[1] not in keep_pos_set and head[1] != prep_pos): # unknown word, or not in keep, but not prep
+                        id = head_id
+                        continue
+                    if head[1] in keep_pos_set: # content word
+                        parent_ids.append(str(head[0]))
+                        break
+                    else:
+                        # preposition, known word
+                        parent_ids.append(str(head[0]))
+                        id = head_id
+                target_id = W2I_TREE.get_id_and_update('_'.join(parent_ids))
+                update_contexts_pair(contexts, (content_id, target_id))
+                update_contexts_pair(contexts, (target_id, content_id))
     contexts = {}
 
     if context_mode == "sentence":
@@ -176,14 +179,14 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
             for w_id_context in to_filter:
                 w_context.pop(w_id_context)
         # Filter words that have no pairs left
-        #to_filter = []
-        #for w_id, w_context in contexts.items():
-        #    if len(w_context) == 0:
-        #        to_filter.append(w_id)
-        #for w_id in to_filter:
-        #    contexts.pop(w_id)
+        to_filter = []
+        for w_id, w_context in contexts.items():
+            if len(w_context) == 0:
+                to_filter.append(w_id)
+        for w_id in to_filter:
+            contexts.pop(w_id)
 
-    return contexts
+    return W2I_TREE, contexts
 
 
 def list_to_tuples(L, tup_size):
