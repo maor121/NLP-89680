@@ -16,7 +16,7 @@ class Preprocess:
              'VBZ', 'WRB'])
 
         W2I = corpus_lemmas_to_ids(filename, UNK_WORD="*UNK*")
-        contexts = corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, UNK_WORD="*UNK*", min_count=2, context_mode=context_mode)
+        contexts = corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, "IN", UNK_WORD="*UNK*", min_count=2, context_mode=context_mode)
 
         return Preprocess(W2I, contexts)
 
@@ -112,13 +112,13 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                     update_contexts_pair(contexts, (lemma_id, lemma_id_context))
 
     W2I_TREE = StringCounter()
-    def update_contexts_tree(contexts, tree):
+    def update_contexts_tree(contexts, sentence):
         for id in range(1, len(sentence) + 1):
             parent_ids = [] # parent ids until not proposition, or None
-            content_id = W2I_TREE.get_id_and_update(str(id))
+            content_id = id
             while True:
                 head_id = sentence[id][2]
-                if head_id is None:
+                if head_id == 0: # ROOT
                     break
                 head = sentence[head_id]
                 if head[0] == unk_id or (head[1] not in keep_pos_set and head[1] == prep_pos): # unknown word, or not in keep, but not prep
@@ -131,7 +131,8 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                     # preposition, known word
                     parent_ids.append(head[0])
                     id = head_id
-            target_id = W2I_TREE.get_id_and_update('_'.join(parent_ids))
+            target_id = W2I_TREE.get_id_and_update('_'.join(str(parent_ids)))
+            update_contexts_pair(contexts, (content_id, target_id))
     contexts = {}
 
     if context_mode == "sentence":
@@ -140,7 +141,10 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
         if context_mode == "window":
             update_contexts = lambda contexts, sentence: update_contexts_window(contexts, sentence, window_size=2)
         else:
-            raise Exception("Unknown context mode")
+            if context_mode == "tree":
+                update_contexts = lambda contexts, sentence: update_contexts_tree(contexts, sentence)
+            else:
+                raise Exception("Unknown context mode")
 
     with open("../data/" + filename, 'r') as input_file:
         sentence = {} # key: id, value: (lemma_id, pos, parent_id)
@@ -151,12 +155,12 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                 saw_empty_line = False
                 w_arr = line.split()  # ID, FORM, LEMMA, CPOSTAG, POSTAG, FEATS, HEAD, DEPREL, PHEAD, PDEPREL
                 # we need lemma
-                id = w_arr[0]
+                id = int(w_arr[0])
                 lemma = w_arr[2]
                 pos = w_arr[3]
                 lemma_id = W2I.get_id(lemma)
                 head_id = w_arr[6]
-                sentence[id] = (lemma_id, pos, int(head_id) if head_id.isalnum() else None)
+                sentence[id] = (lemma_id, pos, int(head_id))
             else:
                 if not saw_empty_line:
                     update_contexts(contexts, sentence)
