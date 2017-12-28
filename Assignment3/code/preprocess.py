@@ -108,7 +108,7 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
         for window in all_windows:
             lemma_id = window[window_size]
             for lemma_id_context in window:
-                if lemma_id_context is not None:
+                if lemma_id != lemma_id_context and lemma_id_context is not None:
                     update_contexts_pair(contexts, (lemma_id, lemma_id_context))
 
     W2I_TREE = StringCounter()

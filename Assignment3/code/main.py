@@ -16,10 +16,11 @@ def calc_cosine_distance(contexts, target_words_ids):
     DT = {}
     for u in target_words_ids:
         u_context = contexts[u]
-        for att, u_att_count in u_context.items():
-            for v, v_att_count in contexts[att].items():
-                k = np.log(u_att_count) * np.log(v_att_count)
-                DT[(u,v)] = DT.get((u,v), 0.0) + k
+        for u_att, u_att_count in u_context.items():
+            DT[(u,u_att)] = 0.0
+            for u_att_2, u_att_count_2 in u_context.items():
+                if u_att_2 in contexts[u_att]:
+                    DT[(u,u_att)] += np.log(u_att_count_2) * np.log(contexts[u_att][u_att_2])
 
     # 3) Calculate cosine similarity
     print("Part 3")
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     from preprocess import Preprocess
 
     is_tiny = False
-    calc_preprocess = True
+    calc_preprocess = False
 
     mod = "tree"
     out_dir = "../out/{}_context".format(mod)
