@@ -128,7 +128,10 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                     addition = ""
                     if parent_node[1]==prep_pos: #parent IN
                         addition = "{}_{}".format(parent_node[2], str(parent_node[0])) #IN_deprel, IN_lemma_id
-                        grandparent_id = sentence[parent_node[3]]
+                        grandparent_id = parent_node[3]
+                        if grandparent_id == 0: # Edge case, skip this pair for now
+                            print(sentence)
+                            continue
                         grandparent_node = sentence[grandparent_id]
                         parent_node = grandparent_node
                     parent_id = str(parent_node[0])

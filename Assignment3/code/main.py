@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = True
+    calc_preprocess = False
 
     mod = "tree"
     out_dir = "../out/{}_context".format(mod)
@@ -90,16 +90,16 @@ if __name__ == '__main__':
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
 
     W2I_TREE, contexts = preprocess.contexts
-    target_words_ids = [W2I_TREE.get_id("c_w "+str(id)) for id in target_words_ids]
+    target_words_ids = [W2I_TREE.get_id(str(id)) for id in target_words_ids]
 
     #contexts = contexts_to_pmi_contexts(preprocess.contexts[1])
     sim = calc_cosine_distance(contexts, target_words_ids)
-    utils.save_obj(sim, out_dir+"/sim_pmi.pickle")
+    utils.save_obj(sim, out_dir+"/sim_cosine.pickle")
     #sim = utils.load_obj("../out/window_context/sim_pmi.pickle")
 
-    I2W = inverse_dict(preprocess.W2I.S2I)
-    I2W_TREE = inverse_dict(W2I_TREE.S2I)
-    inv_func = lambda u : " ".join([I2W[int(w_id)] for w_id in I2W_TREE[u].replace("c_w ","").split('_')])
+    I2W = utils.inverse_dict(preprocess.W2I.S2I)
+    I2W_TREE = utils.inverse_dict(W2I_TREE.S2I)
+    inv_func = lambda u : [I2W[int(s)] for s in I2W_TREE[u].split() if s.isdigit()]
     for u in target_words_ids:
         u_sim = sorted(list(sim[u].items()), key=lambda (v,score): score, reverse=True)
         u_sim_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
