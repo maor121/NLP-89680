@@ -1,0 +1,8 @@
+Dear future self,
+
+The following exercise possibly has two bugs:
+
+1) PMI: window + pmi gives weird results. Less so then none PMIs. Need to investigate this if you have the time
+(which you probably don't)
+
+2) Treebank similarity: not even one IN word passes into the filtered contexts of the target words. Need to investigate.

@@ -108,8 +108,8 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = True
-    is_pmi = True
+    calc_preprocess = False
+    calc_sim = True
 
     mod = "tree"
     out_dir = "../out/{}_context".format(mod)
@@ -132,7 +132,12 @@ if __name__ == '__main__':
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
 
     W2I_TREE, contexts = preprocess.contexts
-
+    print(len(contexts))
+    s = 0.0
+    for u in contexts:
+        s += len(contexts[u])
+    s /= len(contexts)
+    print(s)
 
     I2W = utils.inverse_dict(preprocess.W2I.S2I)
     if mod == "tree":
@@ -142,16 +147,12 @@ if __name__ == '__main__':
     else:
         inv_func = lambda u : I2W[u]
 
-    if is_pmi:
+    if calc_sim:
         pmi_contexts = contexts_to_pmi_contexts(contexts)
-        #sim = weighted_jacard_matrix(pmi_contexts, target_words_ids)
         sim = calc_cosine_distance(pmi_contexts, target_words_ids)
-        sim_file_suffix = "pmi"
+        utils.save_obj(sim, out_dir+"/sim_pmi.pickle")
     else:
-        sim = calc_cosine_distance(contexts, target_words_ids)
-        sim_file_suffix = "cosine"
-    utils.save_obj(sim, out_dir+"/sim_{}.pickle".format(sim_file_suffix))
-    #sim = utils.load_obj(out_dir+"/sim_cosine.pickle")
+        sim = utils.load_obj(out_dir+"/sim_pmi.pickle")
 
     for u in target_words_ids:
         u_sim = sorted(list(sim[u].items()), key=lambda (v,score): score, reverse=True)
