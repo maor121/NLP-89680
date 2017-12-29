@@ -119,7 +119,7 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                 # 1) go to parent
                 current_id = str(word[0]) # lemma_id
                 direct_parent_id = word[3]
-                while (direct_parent_id != 0 and sentence[direct_parent_id][0] != unk_id):
+                while (direct_parent_id != 0 and sentence[direct_parent_id][0] == unk_id):
                     direct_parent_id = sentence[direct_parent_id][3] # skip unknown words
                 if direct_parent_id == 0: # Root, skip
                     do = "nothing"
@@ -130,7 +130,7 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                         addition = "{}_{}".format(parent_node[2], str(parent_node[0])) #IN_deprel, IN_lemma_id
                         grandparent_id = parent_node[3]
                         if grandparent_id == 0: # Edge case, skip this pair for now
-                            print(sentence)
+                            print(parent_node)
                             continue
                         grandparent_node = sentence[grandparent_id]
                         parent_node = grandparent_node

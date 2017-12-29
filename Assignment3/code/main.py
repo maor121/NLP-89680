@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = False
+    calc_preprocess = True
 
     mod = "tree"
     out_dir = "../out/{}_context".format(mod)
