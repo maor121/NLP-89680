@@ -1,6 +1,6 @@
 import numpy as np
 
-def calc_cosine_distance(contexts, target_words_ids):
+def calc_cosine_distance(contexts, target_words_ids,inv_func):
 
     # 1) Calculate length of every vector u
     print("Part 1")
@@ -16,11 +16,10 @@ def calc_cosine_distance(contexts, target_words_ids):
     DT = {}
     for u in target_words_ids:
         u_context = contexts[u]
-        for u_att, u_att_count in u_context.items():
-            DT[(u, u_att)] = 0.0
-            for u_att_2, u_att_count_2 in u_context.items():
-                if u_att_2 in contexts[u_att]:
-                    DT[(u, u_att)] += np.log(u_att_count_2) * np.log(contexts[u_att][u_att_2])
+        for att, u_att_count in u_context.items():
+            for v, v_att_count in contexts[att].items():
+                k = np.log(u_att_count) * np.log(v_att_count)
+                DT[(u,v)] = DT.get((u,v), 0.0) + k
 
     # 3) Calculate cosine similarity
     print("Part 3")
@@ -28,9 +27,10 @@ def calc_cosine_distance(contexts, target_words_ids):
     for u in target_words_ids:
         u_context = contexts[u]
         sim[u] = {}
-        for v in u_context:
-            if u != v:
-                sim[u][v] = DT[(u,v)] / np.sqrt(lengths[u] * lengths[v])
+        for att in u_context:
+            for v in contexts[att]:
+                if u != v:
+                    sim[u][v] = DT[(u,v)] / np.sqrt(lengths[u] * lengths[v])
 
     return sim
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = True
+    calc_preprocess = False
 
     mod = "tree"
     out_dir = "../out/{}_context".format(mod)
@@ -92,14 +92,18 @@ if __name__ == '__main__':
     W2I_TREE, contexts = preprocess.contexts
     target_words_ids = [W2I_TREE.get_id(str(id)) for id in target_words_ids]
 
-    #contexts = contexts_to_pmi_contexts(preprocess.contexts[1])
-    sim = calc_cosine_distance(contexts, target_words_ids)
-    utils.save_obj(sim, out_dir+"/sim_cosine.pickle")
-    #sim = utils.load_obj("../out/window_context/sim_pmi.pickle")
+
 
     I2W = utils.inverse_dict(preprocess.W2I.S2I)
     I2W_TREE = utils.inverse_dict(W2I_TREE.S2I)
     inv_func = lambda u : [I2W[int(s)] for s in I2W_TREE[u].split() if s.isdigit()]
+
+
+    #contexts = contexts_to_pmi_contexts(preprocess.contexts[1])
+    sim = calc_cosine_distance(contexts, target_words_ids,inv_func)
+    utils.save_obj(sim, out_dir+"/sim_cosine.pickle")
+    #sim = utils.load_obj("../out/window_context/sim_pmi.pickle")
+
     for u in target_words_ids:
         u_sim = sorted(list(sim[u].items()), key=lambda (v,score): score, reverse=True)
         u_sim_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
