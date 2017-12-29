@@ -12,7 +12,7 @@ class Preprocess:
     @staticmethod
     def from_input(filename, context_mode):
         keep_pos_set = set(
-            ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'RB', 'RBR', 'RBS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP',
+            ['JJ', 'JJR', 'JJS', 'NN', 'NNS', 'NNP', 'NNPS', 'VB', 'VBD', 'VBG', 'VBN', 'VBP',
              'VBZ', 'WRB'])
 
         W2I = corpus_lemmas_to_ids(filename, UNK_WORD="*UNK*")

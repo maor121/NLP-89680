@@ -56,16 +56,16 @@ def contexts_to_pmi_contexts(contexts):
         sum_all_p_u += p_u
         for v, u_v_freq in u_context.items():
             p_v = float(u_freqs[v]) / freq_total
-            sum_all_p += p_v
             p_u_v = float(u_v_freq) / freq_total
+            sum_all_p += p_u_v
             u_v_pmi = np.log(p_u_v) - (np.log(p_u) + np.log(p_v))
             if u_v_pmi < 0: # pmi<0, Not enough information
                 # u_v_pmi = 0 # Can give exception later. Remove negative pmis instead
                 to_filter.append((u,v))
             u_context[v] = u_v_pmi
 
-    #print(sum_all_p_u)
-    #assert abs(sum_all_p - 1) < 0.001 # sanity
+    assert abs(sum_all_p_u -1) < 0.001 # sanity
+    assert abs(sum_all_p - 1) < 0.001 # sanity
 
     # Filter negative pmis
     for (u,v) in to_filter:
@@ -108,10 +108,10 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = False
+    calc_preprocess = True
     is_pmi = True
 
-    mod = "window"
+    mod = "tree"
     out_dir = "../out/{}_context".format(mod)
 
     if calc_preprocess:
