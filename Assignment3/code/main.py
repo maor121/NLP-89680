@@ -1,6 +1,6 @@
 import numpy as np
 
-def calc_cosine_distance(contexts, target_words_ids,inv_func):
+def calc_cosine_distance(contexts, target_words_ids):
 
     # 1) Calculate length of every vector u
     print("Part 1")
@@ -60,6 +60,24 @@ def contexts_to_pmi_contexts(contexts):
     return contexts
 
 
+def weighted_jacard_matrix(pmi_contexts, target_words_ids):
+    sim = {}
+    for u in target_words_ids:
+        u_context = pmi_contexts[u]
+        sim[u] = {}
+        sum_min = {} # mone, by v
+        sum_max = {} # mechane, by v
+        for att, u_att_pmi in u_context.items():
+            for v, v_att_pmi in pmi_contexts[att].items():
+                if u != v:
+                    sum_min[v] = sum_min.get(v, 0.0) + min(u_att_pmi, v_att_pmi)
+                    sum_max[v] = sum_max.get(v, 0.0) + max(u_att_pmi, v_att_pmi)
+        for v in sum_min:
+            sim[u][v] = sum_min[v] / sum_max[v]
+
+    return sim
+
+
 if __name__ == '__main__':
     import utils
     import time
@@ -68,6 +86,7 @@ if __name__ == '__main__':
 
     is_tiny = False
     calc_preprocess = False
+    is_pmi = True
 
     mod = "window"
     out_dir = "../out/{}_context".format(mod)
@@ -92,7 +111,6 @@ if __name__ == '__main__':
     W2I_TREE, contexts = preprocess.contexts
 
 
-
     I2W = utils.inverse_dict(preprocess.W2I.S2I)
     if mod == "tree":
         target_words_ids = [W2I_TREE.get_id(str(id)) for id in target_words_ids]
@@ -101,9 +119,14 @@ if __name__ == '__main__':
     else:
         inv_func = lambda u : I2W[u]
 
-    #contexts = contexts_to_pmi_contexts(preprocess.contexts[1])
-    sim = calc_cosine_distance(contexts, target_words_ids,inv_func)
-    utils.save_obj(sim, out_dir+"/sim_cosine.pickle")
+    if is_pmi:
+        pmi_contexts = contexts_to_pmi_contexts(contexts)
+        sim = weighted_jacard_matrix(pmi_contexts, target_words_ids)
+        sim_file_suffix = "pmi"
+    else:
+        sim = calc_cosine_distance(contexts, target_words_ids)
+        sim_file_suffix = "cosine"
+    utils.save_obj(sim, out_dir+"/sim_{}.pickle".format(sim_file_suffix))
     #sim = utils.load_obj(out_dir+"/sim_cosine.pickle")
 
     for u in target_words_ids:
