@@ -119,33 +119,34 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                 # 1) go to parent
                 current_id = str(word[0]) # lemma_id
                 direct_parent_id = word[3]
+                addition = ""
                 while (direct_parent_id != 0 and sentence[direct_parent_id][0] == unk_id):
                     direct_parent_id = sentence[direct_parent_id][3] # skip unknown words
-                if direct_parent_id == 0: # Root, skip
-                    do = "nothing"
+                if direct_parent_id == 0: # Root
+                    parent_id = "*ROOT*"
                 else:
                     parent_node = sentence[direct_parent_id]
-                    addition = ""
                     if parent_node[1]==prep_pos: #parent IN
                         addition = "{}_{}".format(parent_node[2], str(parent_node[0])) #IN_deprel, IN_lemma_id
                         grandparent_id = parent_node[3]
-                        if grandparent_id == 0: # Edge case, skip this pair for now
-                            print(parent_node)
-                            continue
-                        grandparent_node = sentence[grandparent_id]
-                        parent_node = grandparent_node
-                    parent_id = str(parent_node[0])
-                    current_deprel = word[2]
+                        if grandparent_id == 0: # Parent on IN is Root here
+                            parent_id = "*ROOT*"
+                        else:
+                            grandparent_node = sentence[grandparent_id]
+                            parent_id = str(grandparent_node[0])
+                    else:
+                        parent_id = str(parent_node[0])
+                current_deprel = word[2]
 
-                    up_content_id = W2I_TREE.get_id_and_update(current_id)
-                    up_feature_id = W2I_TREE.get_id_and_update(" ".join([addition,parent_id,current_deprel, "up"]))
-                    down_content_id = W2I_TREE.get_id_and_update(parent_id)
-                    down_feature_id = W2I_TREE.get_id_and_update(" ".join([addition, current_id, current_deprel, "down"]))
+                up_content_id = W2I_TREE.get_id_and_update(current_id)
+                up_feature_id = W2I_TREE.get_id_and_update(" ".join([addition,parent_id,current_deprel, "up"]))
+                down_content_id = W2I_TREE.get_id_and_update(parent_id)
+                down_feature_id = W2I_TREE.get_id_and_update(" ".join([addition, current_id, current_deprel, "down"]))
 
-                    update_contexts_pair(contexts, (up_content_id, up_feature_id))
-                    update_contexts_pair(contexts, (up_feature_id, up_content_id))
-                    update_contexts_pair(contexts, (down_content_id, down_feature_id))
-                    update_contexts_pair(contexts, (down_feature_id, down_content_id))
+                update_contexts_pair(contexts, (up_content_id, up_feature_id))
+                update_contexts_pair(contexts, (up_feature_id, up_content_id))
+                update_contexts_pair(contexts, (down_content_id, down_feature_id))
+                update_contexts_pair(contexts, (down_feature_id, down_content_id))
 
     contexts = {}
 
