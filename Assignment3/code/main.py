@@ -47,15 +47,38 @@ def contexts_to_pmi_contexts(contexts):
         u_freqs[u] = u_freq_total
         freq_total += u_freq_total
 
+    sum_all_p = np.float64(0.0) # PMI sanity check
+    sum_all_p_u = np.float64(0.0)
+
+    to_filter = []
     for u, u_context in contexts.items():
         p_u = float(u_freqs[u]) / freq_total
+        sum_all_p_u += p_u
         for v, u_v_freq in u_context.items():
             p_v = float(u_freqs[v]) / freq_total
+            sum_all_p += p_v
             p_u_v = float(u_v_freq) / freq_total
             u_v_pmi = np.log(p_u_v) - (np.log(p_u) + np.log(p_v))
-            if u_v_pmi < 0: # Not enough information
-                u_v_pmi = 0
+            if u_v_pmi < 0: # pmi<0, Not enough information
+                # u_v_pmi = 0 # Can give exception later. Remove negative pmis instead
+                to_filter.append((u,v))
             u_context[v] = u_v_pmi
+
+    #print(sum_all_p_u)
+    #assert abs(sum_all_p - 1) < 0.001 # sanity
+
+    # Filter negative pmis
+    for (u,v) in to_filter:
+        contexts[u].pop(v, None)
+        contexts[v].pop(v, None)
+    # Filter words that remained with no features
+    to_filter = []
+    for w_id, w_context in contexts.items():
+        if len(w_context) == 0:
+            to_filter.append(w_id)
+    for w_id in to_filter:
+        contexts.pop(w_id)
+
 
     return contexts
 
@@ -85,10 +108,10 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = False
+    calc_preprocess = True
     is_pmi = True
 
-    mod = "window"
+    mod = "tree"
     out_dir = "../out/{}_context".format(mod)
 
     if calc_preprocess:
@@ -121,7 +144,8 @@ if __name__ == '__main__':
 
     if is_pmi:
         pmi_contexts = contexts_to_pmi_contexts(contexts)
-        sim = weighted_jacard_matrix(pmi_contexts, target_words_ids)
+        #sim = weighted_jacard_matrix(pmi_contexts, target_words_ids)
+        sim = calc_cosine_distance(contexts, target_words_ids)
         sim_file_suffix = "pmi"
     else:
         sim = calc_cosine_distance(contexts, target_words_ids)
