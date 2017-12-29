@@ -59,9 +59,6 @@ def contexts_to_pmi_contexts(contexts):
 
     return contexts
 
-def inverse_dict(dict):
-    return {v: k for k, v in dict.iteritems()}
-
 
 if __name__ == '__main__':
     import utils
@@ -70,7 +67,7 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = False
+    calc_preprocess = True
 
     mod = "tree"
     out_dir = "../out/{}_context".format(mod)

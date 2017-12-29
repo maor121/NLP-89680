@@ -8,3 +8,7 @@ def save_obj(obj, filename):
 def load_obj(filename):
     with open(filename, 'rb') as f:
         return pickle.load(f)
+
+
+def inverse_dict(dict):
+    return {v: k for k, v in dict.iteritems()}

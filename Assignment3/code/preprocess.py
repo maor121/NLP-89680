@@ -113,30 +113,37 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
 
     W2I_TREE = StringCounter()
     def update_contexts_tree(contexts, sentence):
-        for id in range(1, len(sentence) + 1):
-            current = sentence[id]
-            if (current[0] != unk_id and current[1] in keep_pos_set): # Content word, known
-                parent_ids = [] # parent ids until not proposition, or None
-                content_id = W2I_TREE.get_id_and_update("c_w "+str(sentence[id][0])) # To keep track of direction
-                while True:
-                    head_id = sentence[id][2]
-                    if head_id == 0: # ROOT
-                        parent_ids.append(str(W2I_TREE.get_id_and_update("ROOT")))
-                        break
-                    head = sentence[head_id]
-                    if head[0] == unk_id or (head[1] not in keep_pos_set and head[1] != prep_pos): # unknown word, or not in keep, but not prep
-                        id = head_id
-                        continue
-                    if head[1] in keep_pos_set: # content word
-                        parent_ids.append(str(head[0]))
-                        break
-                    else:
-                        # preposition, known word
-                        parent_ids.append(str(head[0]))
-                        id = head_id
-                target_id = W2I_TREE.get_id_and_update('_'.join(parent_ids))
-                update_contexts_pair(contexts, (content_id, target_id))
-                update_contexts_pair(contexts, (target_id, content_id))
+        for word_id, word in sentence.items():
+            # Apply both directions:
+            if word[0] != unk_id and (word[1] in keep_pos_set):  # Content word, known
+                # 1) go to parent
+                current_id = str(word[0]) # lemma_id
+                direct_parent_id = word[3]
+                while (direct_parent_id != 0 and sentence[direct_parent_id][0] != unk_id):
+                    direct_parent_id = sentence[direct_parent_id][3] # skip unknown words
+                if direct_parent_id == 0: # Root, skip
+                    do = "nothing"
+                else:
+                    parent_node = sentence[direct_parent_id]
+                    addition = ""
+                    if parent_node[1]==prep_pos: #parent IN
+                        addition = "{}_{}".format(parent_node[2], str(parent_node[0])) #IN_deprel, IN_lemma_id
+                        grandparent_id = sentence[parent_node[3]]
+                        grandparent_node = sentence[grandparent_id]
+                        parent_node = grandparent_node
+                    parent_id = str(parent_node[0])
+                    current_deprel = word[2]
+
+                    up_content_id = W2I_TREE.get_id_and_update(current_id)
+                    up_feature_id = W2I_TREE.get_id_and_update(" ".join([addition,parent_id,current_deprel, "up"]))
+                    down_content_id = W2I_TREE.get_id_and_update(parent_id)
+                    down_feature_id = W2I_TREE.get_id_and_update(" ".join([addition, current_id, current_deprel, "down"]))
+
+                    update_contexts_pair(contexts, (up_content_id, up_feature_id))
+                    update_contexts_pair(contexts, (up_feature_id, up_content_id))
+                    update_contexts_pair(contexts, (down_content_id, down_feature_id))
+                    update_contexts_pair(contexts, (down_feature_id, down_content_id))
+
     contexts = {}
 
     if context_mode == "sentence":
@@ -164,7 +171,8 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                 pos = w_arr[3]
                 lemma_id = W2I.get_id(lemma)
                 head_id = w_arr[6]
-                sentence[id] = (lemma_id, pos, int(head_id))
+                deprel = w_arr[7]
+                sentence[id] = (lemma_id, pos, deprel, int(head_id))
             else:
                 if not saw_empty_line:
                     update_contexts(contexts, sentence)
