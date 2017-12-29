@@ -132,12 +132,6 @@ if __name__ == '__main__':
     target_words_ids = [preprocess.W2I.get_id(w) for w in target_words]
 
     W2I_TREE, contexts = preprocess.contexts
-    print(len(contexts))
-    s = 0.0
-    for u in contexts:
-        s += len(contexts[u])
-    s /= len(contexts)
-    print(s)
 
     I2W = utils.inverse_dict(preprocess.W2I.S2I)
     if mod == "tree":
