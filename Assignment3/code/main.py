@@ -109,9 +109,9 @@ if __name__ == '__main__':
 
     is_tiny = False
     calc_preprocess = False
-    calc_sim = True
+    calc_sim = False
 
-    mod = "tree"
+    mod = "sentence"
     out_dir = "../out/{}_context".format(mod)
 
     if calc_preprocess:
@@ -150,7 +150,8 @@ if __name__ == '__main__':
 
     for u in target_words_ids:
         u_sim = sorted(list(sim[u].items()), key=lambda (v,score): score, reverse=True)
-        u_sim_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
-        print(inv_func(u), u_sim_top_20)
+        #u_sim_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
+        u_sim_top_20_no_score=[inv_func(v) for i, (v,score) in enumerate(u_sim) if i < 20]
+        print(inv_func(u), u_sim_top_20_no_score)
 
     print(0)

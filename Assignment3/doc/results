@@ -1,0 +1,49 @@
+Tree:
+--------
+
+('car', 'vehicle', 'truck', 'boat', 'aircraft', 'engine', 'automobile', 'train', 'locomotive', 'bus', 'ship', 'product', 'model', 'motorcycle', 'machine', 'unit', 'driver', 'weapon', 'track', 'item', 'vessel')
+('bus', 'rail', 'tram', 'train', 'taxi', 'ferry', 'automobile', 'car', 'vehicle', 'subway', 'transit', 'truck', 'freight', 'railway', 'boat', 'locomotive', 'commuter', 'traffic', 'passenger', 'plane', 'route')
+('hospital', 'clinic', 'prison', 'center', 'college', 'school', 'museum', 'library', 'facility', 'campus', 'hotel', 'airport', 'stadium', 'hall', 'institution', 'centre', 'monastery', 'camp', 'park', 'headquarters', 'office')
+('hotel', 'restaurant', 'shop', 'apartment', 'theater', 'house', 'mill', 'inn', 'estate', 'building', 'store', 'hall', 'castle', 'pub', 'resort', 'synagogue', 'mansion', 'library', 'tower', 'temple', 'mosque')
+('gun', 'cannon', 'pistol', 'weapon', 'rifle', 'tank', 'battery', 'aircraft', 'sword', 'artillery', 'engine', 'camera', 'bullet', 'device', 'machine', 'vessel', 'warship', 'equipment', 'rocket', 'boat', 'ship')
+('bomb', 'torpedo', 'bombing', 'missile', 'rocket', 'weapon', 'explosion', 'reactor', 'earthquake', 'bomber', 'shell', 'raid', 'grenade', 'eruption', 'attack', 'fire', 'aircraft', 'ball', 'storm', 'bullet', 'bombardment')
+('horse', 'dog', 'cattle', 'cat', 'bike', 'bull', 'sheep', 'bird', 'motorcycle', 'car', 'elf', 'bicycle', 'specimen', 'boy', 'animal', 'monster', 'motor', 'bulb', 'beer', 'athlete', 'goat')
+('fox', 'cbs', 'nbc', 'cbc', 'abc', 'shaw', 'anderson', 'patterson', 'baker', 'itv', 'parker', 'hart', 'pb', 'hudson', 'kennedy', 'johnson', 'smith', 'carter', 'bbc', 'espn', 'mcdonald')
+('table', 'section', 'paragraph', 'text', 'diffs', 'page', 'diagram', 'encyclopedia', 'summary', 'template', 'entry', 'image', 'column', 'ranking', 'box', 'picture', 'poll', 'module', 'map', 'category', 'database')
+('bowl', 'super', 'sec', 'ncaa', 'tournament', 'nba', 'cup', 'playoff', 'mlb', 'boxing', 'wrestling', 'alfonso', 'nhl', 'rugby', 'polo', 'afl', 'gt', 'championship', 'tennis', 'leo', 'league')
+('guitar', 'drum', 'bass', 'keyboard', 'piano', 'saxophone', 'violin', 'vocal', 'flute', 'cello', 'trumpet', 'instrument', 'horn', 'viola', 'percussion', 'organ', 'solo', 'dance', 'cd', 'string', 'guitarist')
+('piano', 'violin', 'viola', 'guitar', 'bass', 'cello', 'keyboard', 'flute', 'horn', 'saxophone', 'trumpet', 'drum', 'instrument', 'organ', 'percussion', 'dance', 'vocal', 'composition', 'mathematics', 'music', 'choir')
+
+
+Window:
+--------
+
+('car', 'one', 'truck', 'vehicle', 'boat', 'engine', 'train', 'body', 'aircraft', 'drive', 'fact', 'choose', 'race', 'player', 'store', 'hand', 'light', 'special', 'addition', 'story', 'mission')
+('bus', 'passenger', 'rail', 'boat', 'airport', 'hotel', 'mine', 'truck', 'pacific', 'achieve', 'fly', 'affair', 'success', 'transit', 'metro', 'express', 'engine', 'port', 'golden', 'factory', 'genus')
+('hospital', 'camp', 'effort', 'conduct', 'attend', 'mission', 'medical', 'status', 'care', 'category', 'institution', 'press', 'green', 'health', 'store', 'honor', 'job', 'merge', 'entire', 'daily', 'picture')
+('hotel', 'beach', 'worker', 'garden', 'estate', 'i', 'shop', 'reserve', 'bus', 'avenue', 'restaurant', 'sense', 'pakistan', 'temple', 'sing', 'floor', 'administration', 'responsible', 'square', 'britain', 'bill')
+('gun', 'rifle', 'weapon', 'aircraft', 'tank', 'missile', 'battery', 'box', 'target', 'machine', 'engine', 'artillery', 'rocket', 'bomb', 'mortar', 'whole', 'plane', 'pull', 'bar', 'brigade', 'step')
+('bomb', 'bomber', 'rescue', 'storm', 'bombing', 'tank', 'crash', 'squadron', 'pilot', 'flight', 'rocket', 'gun', 'latter', 'enemy', 'fighter', 'everything', 'aircraft', 'torpedo', 'chain', 'patrol', 'push')
+('horse', 'catch', 'incident', 'following', 'assistant', 'animal', 'poland', 'couple', 'drop', 'factory', 'empire', 'reserve', 'bar', 'hear', 'fish', 'gun', 'administrator', 'back', 'whole', 'earth', 'square')
+('fox', 'nbc', 'abc', 'interested', 'cbs', 'israeli', 'saturday', 'global', 't', 'programming', 'giant', 'gay', 'wave', 'morning', 'expansion', 'struggle', 'j', 'distribution', 'bell', 'documentary', 'colour')
+('table', 'box', 'poor', 'easy', 'task', 'double', 'ball', 'web', 'wood', 'exchange', 'map', 'document', 'file', 'minor', 'piece', 'fine', 'background', 'element', 'bill', 'spot', 'code')
+('bowl', 'exhibition', 'nfl', 'felt', 'gay', 'harbor', 'spot', 'commonwealth', 'qualify', 'thousand', 'playoff', 'shore', 'bell', 'indie', 'fc', 'shopping', 'organ', 'weather', 'golden', 'stock', 'portugal')
+('guitar', 'vocal', 'bass', 'piano', 'drum', 'guitarist', 'trumpet', 'solo', 'keyboard', 'vocalist', 'voice', 'musician', 'tune', 'bob', 'drummer', 'violin', 'taylor', 'saxophone', 'steve', 'folk', 'flute')
+('piano', 'violin', 'flute', 'cello', 'concerto', 'trumpet', 'viola', 'guitar', 'string', 'saxophone', 'soloist', 'bass', 'ensemble', 'sonata', 'solo', 'orchestra', 'op', 'vocal', 'percussion', 'keyboard', 'drum')
+
+
+Sentence:
+---------
+
+('car', 'drive', 'race', 'men', 'train', 'aircraft', 'driver', 'put', 'choose', 'truck', 'pass', 'long', 'performance', 'total', 'replace', 'track', 'board', 'draw', 'stop', 'hand', 'medium')
+('bus', 'passenger', 'traffic', 'rail', 'transit', 'transportation', 'jack', 'metro', 'arm', 'double', 'vessel', 'web', 'direction', 'citizen', 'airport', 'bit', 'locomotive', 'plot', 'southeast', 'train', 'connection')
+('hospital', 'medical', 'chinese', 'latter', 'learn', 'step', 'store', 'stand', 'grant', 'transfer', 'separate', 'successful', 'associate', 'entire', 'condition', 'worker', 'big', 'seek', 'double', 'manage', 'intend')
+('hotel', 'restaurant', 'wood', 'room', 'abandon', 'fill', 'brand', 'slow', 'memorial', 'dr', 'contact', 'double', 'horse', 'walk', 'palace', 'garden', 'buy', 'rich', 'occupy', 'difficult', 'grant')
+('gun', 'rifle', 'fit', 'machine', 'enemy', 'demand', 'weapon', 'bar', 'intend', 'initial', 'battery', 'entire', 'pick', 'tank', 'wound', 'eye', 'hear', 'crew', 'shot', 'advance', 'piece')
+('bomb', 'raid', 'commit', 'enemy', 'fell', 'weapon', 'civilian', 'dozen', 'bomber', 'opponent', 'pilot', 'shot', 'mine', 'abandon', 'injure', 'daniel', 'reading', 'crash', 'sydney', 'defence', 'attract')
+('horse', 'poor', 'farm', 'fast', 'dog', 'existence', 'male', 'hunt', 'eye', 'farmer', 'owner', 'guide', 'combination', 'felt', 'wood', 'thousand', 'bar', 'citizen', 'latter', 'attract', 'zone')
+('fox', 'nbc', 'jackson', 'desire', 'adam', 'andrew', 'cbs', 'struggle', 'bbc', 'chris', 'abc', 'johnson', 'bob', 'latter', 'fame', 'cable', 'comedy', 'hire', 'nomination', 'drop', 'roll')
+('table', 'step', 'piece', 'couple', 'simple', 'opportunity', 'entry', 'hear', 'handle', 'plot', 'horse', 'internet', 'concept', 'i', 'entire', 'latter', 'basic', 'response', 'lay', 'mass', 'anything')
+('bowl', 'nfl', 'improvement', 'ncaa', 'super', 'pitch', 'quarterback', 'deliver', 'j', 'cricket', 'planet', 'defensive', 'pas', 'writing', 'victory', 'defend', 'limited', 'touchdown', 'trophy', 'chris', 'celebrate')
+('guitar', 'bass', 'drum', 'vocal', 'guitarist', 'piano', 'keyboard', 'bassist', 'solo', 'singer', 'musician', 'steve', 'chris', 'drummer', 'mike', 'tony', 'vocalist', 'percussion', 'brian', 'jim', 'dave')
+('piano', 'trumpet', 'bass', 'string', 'flute', 'composer', 'violin', 'solo', 'guitar', 'composition', 'recording', 'don', 'drum', 'chorus', 'orchestra', 'cello', 'trio', 'ensemble', '1970s', 'saxophone', 'concerto')
