@@ -108,10 +108,10 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = True
+    calc_preprocess = False
     is_pmi = True
 
-    mod = "tree"
+    mod = "window"
     out_dir = "../out/{}_context".format(mod)
 
     if calc_preprocess:
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     if is_pmi:
         pmi_contexts = contexts_to_pmi_contexts(contexts)
         #sim = weighted_jacard_matrix(pmi_contexts, target_words_ids)
-        sim = calc_cosine_distance(contexts, target_words_ids)
+        sim = calc_cosine_distance(pmi_contexts, target_words_ids)
         sim_file_suffix = "pmi"
     else:
         sim = calc_cosine_distance(contexts, target_words_ids)
