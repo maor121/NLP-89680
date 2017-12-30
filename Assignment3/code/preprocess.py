@@ -129,6 +129,8 @@ def corpus_lemmas_ids_to_context_freq(filename, W2I, keep_pos_set, prep_pos, UNK
                     if parent_node[1]==prep_pos: #parent IN
                         addition = "{}_{}".format(parent_node[2], str(parent_node[0])) #IN_deprel, IN_lemma_id
                         grandparent_id = parent_node[3]
+                        while (grandparent_id != 0 and sentence[grandparent_id][0] == unk_id):
+                            grandparent_id = sentence[grandparent_id][3]  # skip unknown words
                         if grandparent_id == 0: # Parent on IN is Root here
                             parent_id = "*ROOT*"
                         else:

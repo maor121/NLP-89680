@@ -24,10 +24,10 @@ def calc_cosine_distance(contexts, target_words_ids):
     # 3) Calculate cosine similarity
     print("Part 3")
     sim = {}
-    for u in target_words_ids:
+    for u in target_words_ids: #4541
         u_context = contexts[u]
         sim[u] = {}
-        for att in u_context:
+        for att in u_context: #18432
             for v in contexts[att]:
                 if u != v:
                     sim[u][v] = DT[(u,v)] / np.sqrt(lengths[u] * lengths[v])
@@ -146,11 +146,26 @@ if __name__ == '__main__':
         sim = calc_cosine_distance(pmi_contexts, target_words_ids)
         utils.save_obj(sim, out_dir+"/sim_pmi.pickle")
     else:
+        pmi_contexts = contexts_to_pmi_contexts(contexts)
         sim = utils.load_obj(out_dir+"/sim_pmi.pickle")
 
+    # Print 1st order similarity
+    print ("1st order:")
     for u in target_words_ids:
-        u_sim = sorted(list(sim[u].items()), key=lambda (v,score): score, reverse=True)
-        #u_sim_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
+        u_sorted_pmi = sorted(list(pmi_contexts[u].items()), key=lambda (v, score): score, reverse=True)
+        # u_pmi_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
+        u_pmi_top_20_no_score=[inv_func(v) for i, (v,score) in enumerate(u_sorted_pmi) if i < 20]
+        print(inv_func(u), u_pmi_top_20_no_score)
+
+    # Print 2nd order similarity
+    print ("2nd order:")
+    for u in target_words_ids:
+        u_sim = set([])
+        for u_att in pmi_contexts[u]:
+            for v in pmi_contexts[u_att]:
+                if u != v:
+                    u_sim.add((v, sim[u][v]))
+        u_sim = sorted(list(u_sim), key=lambda (v,score): score, reverse=True)
         u_sim_top_20_no_score=[inv_func(v) for i, (v,score) in enumerate(u_sim) if i < 20]
         print(inv_func(u), u_sim_top_20_no_score)
 
