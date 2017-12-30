@@ -108,10 +108,10 @@ if __name__ == '__main__':
 
 
     is_tiny = False
-    calc_preprocess = False
-    calc_sim = False
+    calc_preprocess = True
+    calc_sim = True
 
-    mod = "sentence"
+    mod = "tree"
     out_dir = "../out/{}_context".format(mod)
 
     if calc_preprocess:
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     if mod == "tree":
         target_words_ids = [W2I_TREE.get_id(str(id)) for id in target_words_ids]
         I2W_TREE = utils.inverse_dict(W2I_TREE.S2I)
-        inv_func = lambda u : [I2W[int(s)] for s in I2W_TREE[u].split() if s.isdigit()]
+        inv_func = lambda u : " ".join([I2W[int(s)] if s.isdigit() else s for s in I2W_TREE[u].split()])
     else:
         inv_func = lambda u : I2W[u]
 
