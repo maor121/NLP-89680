@@ -1,3 +1,11 @@
+"""Usage: main.py [INPUT_FILE] [-m mod_number]
+
+-h --help    show this
+-m mod_number    mod: 1=sentence, 2=window, 3=tree [default: 1]
+
+"""
+from docopt import docopt
+
 import numpy as np
 
 def calc_cosine_distance(contexts, target_words_ids):
@@ -106,23 +114,25 @@ if __name__ == '__main__':
     import time
     from preprocess import Preprocess
 
+    arguments = docopt(__doc__, version='Naval Fate 2.0')
+    filename = arguments['INPUT_FILE']
+    mod_num = int(arguments['-m'])
+    legal_modes = {1:"sentence", 2:"window", 3:"tree"}
+    if mod_num not in legal_modes:
+        print "Unknown mod number"
+        exit()
 
-    is_tiny = False
     calc_preprocess = True
     calc_sim = True
     save_to_file = False
 
-    mod = "tree"
+    mod = legal_modes[mod_num]
     out_dir = "../out/{}_context".format(mod)
 
     print("Mod: '"+mod+"'")
 
     print("Reading input file, preprocess stage...")
     if calc_preprocess:
-        if is_tiny:
-            filename = "wikipedia.tinysample.trees.lemmatized"
-        else:
-            filename = "wikipedia.sample.trees.lemmatized"
         time_s = time.time()
         preprocess = Preprocess.from_input("../data/" + filename, context_mode=mod)
         if save_to_file:

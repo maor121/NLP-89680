@@ -1,3 +1,10 @@
+"""Usage: word2vec.py [WORDS_FILE] [CONTEXTS_FILE]
+
+-h --help    show this
+
+"""
+from docopt import docopt
+
 import preprocess
 import numpy as np
 import utils
@@ -59,7 +66,13 @@ class DotWithCache:
         return self.dot[(uW,vW)]
 
 if __name__ == '__main__':
-    W2I, C2I, words, contexts = load_from_files("../data/word2vec/bow5/bow5.words","../data/word2vec/bow5/bow5.contexts")
+    arguments = docopt(__doc__, version='Naval Fate 2.0')
+    words_filename = arguments['WORDS_FILE']
+    contexts_filename = arguments['CONTEXTS_FILE']
+
+    W2I, C2I, words, contexts = load_from_files(words_filename, contexts_filename)
+
+    #W2I, C2I, words, contexts = load_from_files("../data/word2vec/bow5/bow5.words","../data/word2vec/bow5/bow5.contexts")
     #W2I, C2I, words, contexts = load_from_files("../data/word2vec/deps/deps.words","../data/word2vec/deps/deps.contexts")
 
 
