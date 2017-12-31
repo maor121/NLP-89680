@@ -58,7 +58,9 @@ class DotWithCache:
         return self.dot[(uW,vW)]
 
 if __name__ == '__main__':
-    W2I, words, contexts = load_from_files("../data/word2vec/bow5/bow5.contexts","../data/word2vec/bow5/bow5.contexts")
+    W2I, words, contexts = load_from_files("../data/word2vec/bow5/bow5.words","../data/word2vec/bow5/bow5.contexts")
+    #W2I, words, contexts = load_from_files("../data/word2vec/deps/deps.words","../data/word2vec/deps/deps.contexts")
+
 
     k = 20
 
@@ -66,12 +68,28 @@ if __name__ == '__main__':
 
     target_words = ["car", "bus", "hospital", "hotel", "gun", "bomb", "horse", "fox", "table", "bowl", "guitar", "piano"]
 
-
+    # First order
+    # Find top k context features for each target word
+    # top features is highest dot product (word, context_word)
+    print("1st order")
     dwc = DotWithCache()
     for from_w in target_words:
         from_w_id = W2I.get_id(from_w)
         from_vec = words[from_w_id,:]
-        all_dist = {I2W[i]:dwc.dist(from_w, I2W[i], from_vec, contexts[i,:]) for i in range(contexts.shape[0])}
+        all_dist = {I2W[i]:dwc.dotWithCache(from_w, I2W[i], from_vec, contexts[i,:]) for i in range(contexts.shape[0])}
+        all_dist_tup = sorted(all_dist.items(), key=lambda x: x[1], reverse=True)
+
+        #all_dist_tup = [(w, "%.3f" % d) for w,d in all_dist_tup] # Round results
+        all_dist_tup = [w for w,d in all_dist_tup]                # Remove score
+        print from_w, all_dist_tup[1:k+1]
+
+    print("2nd order")
+    del dwc
+    dwc = DotWithCache()
+    for from_w in target_words:
+        from_w_id = W2I.get_id(from_w)
+        from_vec = words[from_w_id,:]
+        all_dist = {I2W[i]:dwc.dist(from_w, I2W[i], from_vec, words[i,:]) for i in range(words.shape[0])}
         all_dist_tup = sorted(all_dist.items(), key=lambda x: x[1], reverse=True)
 
         #all_dist_tup = [(w, "%.3f" % d) for w,d in all_dist_tup] # Round results
