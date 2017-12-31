@@ -66,7 +66,7 @@ class StringCounter:
 
 
 def corpus_lemmas_to_ids(filename, UNK_WORD):
-    with open("../data/" + filename, 'r') as input_file:
+    with open(filename, 'r') as input_file:
         W2I = StringCounter(UNK_WORD=UNK_WORD)
         for line in input_file:
             line = line.strip()

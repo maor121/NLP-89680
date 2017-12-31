@@ -3,7 +3,7 @@ import numpy as np
 def calc_cosine_distance(contexts, target_words_ids):
 
     # 1) Calculate length of every vector u
-    print("Part 1")
+    print("Cosine distance: length of vectors...")
     lengths = {}
     for u, u_context in contexts.items():
         sum = 0.0
@@ -12,7 +12,7 @@ def calc_cosine_distance(contexts, target_words_ids):
         lengths[u] = sum
 
     # 2) Calculate DT
-    print("Part 2")
+    print("Cosine distance: dot product...")
     DT = {}
     for u in target_words_ids:
         u_context = contexts[u]
@@ -22,7 +22,7 @@ def calc_cosine_distance(contexts, target_words_ids):
                 DT[(u,v)] = DT.get((u,v), 0.0) + k
 
     # 3) Calculate cosine similarity
-    print("Part 3")
+    print("Cosine distance: similarity...")
     sim = {}
     for u in target_words_ids: #4541
         u_context = contexts[u]
@@ -110,22 +110,27 @@ if __name__ == '__main__':
     is_tiny = False
     calc_preprocess = True
     calc_sim = True
+    save_to_file = False
 
     mod = "tree"
     out_dir = "../out/{}_context".format(mod)
 
+    print("Mod: '"+mod+"'")
+
+    print("Reading input file, preprocess stage...")
     if calc_preprocess:
         if is_tiny:
             filename = "wikipedia.tinysample.trees.lemmatized"
         else:
             filename = "wikipedia.sample.trees.lemmatized"
         time_s = time.time()
-        preprocess = Preprocess.from_input(filename, context_mode=mod)
-        preprocess.save_to_file(out_dir+"/preprocess.pickle")
+        preprocess = Preprocess.from_input("../data/" + filename, context_mode=mod)
+        if save_to_file:
+            preprocess.save_to_file(out_dir+"/preprocess.pickle")
         time_e = time.time()
         print("Done. time: %.2f secs" % (time_e - time_s))
-
-    preprocess = Preprocess.load_from_file(out_dir+"/preprocess.pickle")
+    else:
+        preprocess = Preprocess.load_from_file(out_dir+"/preprocess.pickle")
 
 
     target_words = ["car" ,"bus" ,"hospital" ,"hotel" ,"gun" ,"bomb" ,"horse" ,"fox" ,"table", "bowl", "guitar" ,"piano"]
@@ -141,10 +146,12 @@ if __name__ == '__main__':
     else:
         inv_func = lambda u : I2W[u]
 
+    print("Converting frequencies to pmis, calculating cosine distances for target words")
     if calc_sim:
         pmi_contexts = contexts_to_pmi_contexts(contexts)
         sim = calc_cosine_distance(pmi_contexts, target_words_ids)
-        utils.save_obj(sim, out_dir+"/sim_pmi.pickle")
+        if save_to_file:
+            utils.save_obj(sim, out_dir+"/sim_pmi.pickle")
     else:
         pmi_contexts = contexts_to_pmi_contexts(contexts)
         sim = utils.load_obj(out_dir+"/sim_pmi.pickle")
