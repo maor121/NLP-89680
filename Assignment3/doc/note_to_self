@@ -2,7 +2,6 @@ Dear future self,
 
 The following exercise possibly has two bugs:
 
-1) PMI: window + pmi gives weird results. Less so then none PMIs. Need to investigate this if you have the time
-(which you probably don't)
+1) I used PMIs, not smoothed PMIs. If I have time I will add smoothing, as it makes big difference.
 
 2) Weighted jaccard matrix does not seem to give good results. It's good it is not part of the assignment
