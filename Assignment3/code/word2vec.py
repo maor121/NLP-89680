@@ -4,11 +4,12 @@ import utils
 
 def load_from_files(words_filename, contexts_filename):
     W2I = preprocess.StringCounter()
+    C2I = preprocess.StringCounter()
     words = load_arr_from_file(W2I, words_filename)
 
-    contexts = load_arr_from_file(W2I, contexts_filename)
+    contexts = load_arr_from_file(C2I, contexts_filename)
 
-    return W2I, words, contexts
+    return W2I, C2I, words, contexts
 
 
 def load_arr_from_file(W2I, filename):
@@ -58,13 +59,14 @@ class DotWithCache:
         return self.dot[(uW,vW)]
 
 if __name__ == '__main__':
-    W2I, words, contexts = load_from_files("../data/word2vec/bow5/bow5.words","../data/word2vec/bow5/bow5.contexts")
-    #W2I, words, contexts = load_from_files("../data/word2vec/deps/deps.words","../data/word2vec/deps/deps.contexts")
+    W2I, C2I, words, contexts = load_from_files("../data/word2vec/bow5/bow5.words","../data/word2vec/bow5/bow5.contexts")
+    #W2I, C2I, words, contexts = load_from_files("../data/word2vec/deps/deps.words","../data/word2vec/deps/deps.contexts")
 
 
     k = 20
 
     I2W = utils.inverse_dict(W2I.S2I)
+    I2C = utils.inverse_dict(C2I.S2I)
 
     target_words = ["car", "bus", "hospital", "hotel", "gun", "bomb", "horse", "fox", "table", "bowl", "guitar", "piano"]
 
@@ -76,7 +78,7 @@ if __name__ == '__main__':
     for from_w in target_words:
         from_w_id = W2I.get_id(from_w)
         from_vec = words[from_w_id,:]
-        all_dist = {I2W[i]:dwc.dotWithCache(from_w, I2W[i], from_vec, contexts[i,:]) for i in range(contexts.shape[0])}
+        all_dist = {I2C[i]:dwc.dotWithCache(from_w, I2C[i], from_vec, contexts[i,:]) for i in range(contexts.shape[0])}
         all_dist_tup = sorted(all_dist.items(), key=lambda x: x[1], reverse=True)
 
         #all_dist_tup = [(w, "%.3f" % d) for w,d in all_dist_tup] # Round results
