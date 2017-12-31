@@ -92,3 +92,24 @@ Sentence:
 ('bowl', 'nfl', 'improvement', 'ncaa', 'super', 'pitch', 'quarterback', 'deliver', 'j', 'cricket', 'planet', 'defensive', 'pas', 'writing', 'victory', 'defend', 'limited', 'touchdown', 'trophy', 'chris', 'celebrate')
 ('guitar', 'bass', 'drum', 'vocal', 'guitarist', 'piano', 'keyboard', 'bassist', 'solo', 'singer', 'musician', 'steve', 'chris', 'drummer', 'mike', 'tony', 'vocalist', 'percussion', 'brian', 'jim', 'dave')
 ('piano', 'trumpet', 'bass', 'string', 'flute', 'composer', 'violin', 'solo', 'guitar', 'composition', 'recording', 'don', 'drum', 'chorus', 'orchestra', 'cello', 'trio', 'ensemble', '1970s', 'saxophone', 'concerto')
+
+
+word2vec
+--------
+
+Window=5:
+
+car ['cars', 'vehicle', 'truck', 'motorcar', 'mid-engined', 'suv', 'motorbike', 'automobile', 'minivan', 'pierce-arrow', 'moped', 'front-engined', 'motorcycle', 'racecars', '2-seater', 'three-wheeler', 'minicab', 'three-wheel', 'broken-down', 'mopar']
+bus ['buses', 'metrobus', 'tram', 'fixed-route', 'minibus', 'busses', 'msrtc', 'apsrtc', 'ksrtc', 'intercity', 'tramlink', 'inter-urban', 'commuter', 'mini-bus', 'dial-a-ride', 'yrt', 'buslines', 'busways', 'countrylink', 'minibuses']
+hospital ['lying-in', 'hospitals', 'infirmary', 'clinic', 'hospice', 'siriraj', 'addenbrooke', 'polyclinic', 'dispensary', 'acute-care', 'bethlem', 'convalescent', 'mulago', 'sanatorium', 'in-patient', 'westmead', 'maudsley', 'multi-specialty', 'incurables', 'out-patient']
+hotel ['motel', 'sofitel', 'sheraton', 'doubletree', 'kempinski', 'westin', 'hotels', 'ramada', 'restaurant', 'travelodge', 'novotel', 'ritz-carlton', 'radisson', 'crowne', 'nightclub', 'casino', 'bed-and-breakfast', 'marriott', 'waldorf-astoria', 'hostelry']
+gun ['sub-machine', 'guns', '76mm', '37mm', '88mm', 'large-caliber', 'quick-firing', 'forward-firing', 'gatling', 'shkas', '3-inch', '57mm', 'smoothbore', '105mm', 'cannon', '3-pounder', 'belt-fed', 'autocannons', 'sawed-off', '5-inch']
+bomb ['bombs', 'detonated', 'booby-trap', 'firebomb', 'car-bomb', 'detonating', '500-pound', 'detonate', 'detonates', 'tallboy', 'firebombs', 'detonation', 'laser-guided', 'b61', 'air-dropped', 'aimer', 'a-bomb', 'remote-controlled', 'exploded', 'incendiaries']
+horse ['horses', 'riderless', 'gaited', 'bronc', 'saddlebred', 'standardbred', 'prancing', 'gelding', 'bareback', 'sleipnir', 'dog', 'przewalski', 'galloped', 'appaloosa', 'horseman', 'harness', 'gallops', 'galloping', 'trotting', 'crabbet']
+fox ['nine-tailed', 'wsvn', 'wofl', 'wjbk', 'cbs', 'wtic', 'wkbd', 'kmsp', 'nbc', 'witi', 'whdh-tv', 'wtvw', 'ktvi', 'vulpes', 'wkyc', 'arledge', 'wbrc', 'kwtv', 'cstv', 'familynet']
+table ['tables', 'look-up', 'foosball', 'sortable', 'left-most', 'wikitables', 'pgn', 'textbox', 'wikitable', 'footers', 'divs', 'rowspan', 'ping-pong', 'lookup', 'tabulations', 'tray', 'carom', 'shuffleboard', 'footer', 'chembox']
+bowl ['tostitos', 'xliii', 'bcs', 'xliv', 'bowls', 'post-season', 'xlvi', 'gator', 'xlii', 'bluebonnet', 'poinsettia', 'wnit', 'arenabowl', 'postseason', 'non-bcs', 'xxxix', 'xxxviii', 'chick-fil-a', 'xlv', 'xxxvi']
+guitar ['saxophone', 'guitars', 'harmonica', 'drums', 'bass', 'mandolin', 'accordion', 'keyboards', '12-string', 'melodica', 'ukulele', 'banjo', 'sax', 'vibraphone', 'trombone', 'fretless', 'congas', 'autoharp', 'twelve-string', 'vocals']
+piano ['violin', 'cello', 'clarinet', 'harpsichord', 'saxophone', 'flute', 'viola', 'trombone', 'pianoforte', 'accordion', 'oboe', 'guitar', 'bassoon', 'violoncello', 'vibraphone', 'trumpet', 'mandolin', 'harmonica', 'concerto', 'concertos']
+
+
