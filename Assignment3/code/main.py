@@ -1,4 +1,4 @@
-"""Usage: main.py [INPUT_FILE] [-m mod_number]
+"""Usage: main.py <INPUT_FILE> [-m mod_number]
 
 -h --help    show this
 -m mod_number    mod: 1=sentence, 2=window, 3=tree [default: 1]
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     from preprocess import Preprocess
 
     arguments = docopt(__doc__, version='Naval Fate 2.0')
-    filename = arguments['INPUT_FILE']
+    filename = arguments['<INPUT_FILE>']
     mod_num = int(arguments['-m'])
     legal_modes = {1:"sentence", 2:"window", 3:"tree"}
     if mod_num not in legal_modes:
@@ -167,7 +167,7 @@ if __name__ == '__main__':
         sim = utils.load_obj(out_dir+"/sim_pmi.pickle")
 
     # Print 1st order similarity
-    print ("1st order:")
+    print ("\n1st order:")
     for u in target_words_ids:
         u_sorted_pmi = sorted(list(pmi_contexts[u].items()), key=lambda (v, score): score, reverse=True)
         # u_pmi_top_20 = [(inv_func(v),"%.3f" % score) for i, (v,score) in enumerate(u_sim) if i < 20]
@@ -175,7 +175,7 @@ if __name__ == '__main__':
         print(inv_func(u), u_pmi_top_20_no_score)
 
     # Print 2nd order similarity
-    print ("2nd order:")
+    print ("\n2nd order:")
     for u in target_words_ids:
         u_sim = set([])
         for u_att in pmi_contexts[u]:
@@ -186,4 +186,4 @@ if __name__ == '__main__':
         u_sim_top_20_no_score=[inv_func(v) for i, (v,score) in enumerate(u_sim) if i < 20]
         print(inv_func(u), u_sim_top_20_no_score)
 
-    print(0)
+    print("\nDone")

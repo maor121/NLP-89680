@@ -1,4 +1,4 @@
-"""Usage: word2vec.py [WORDS_FILE] [CONTEXTS_FILE]
+"""Usage: word2vec.py <WORDS_FILE> <CONTEXTS_FILE>
 
 -h --help    show this
 
@@ -67,9 +67,10 @@ class DotWithCache:
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Naval Fate 2.0')
-    words_filename = arguments['WORDS_FILE']
-    contexts_filename = arguments['CONTEXTS_FILE']
+    words_filename = arguments['<WORDS_FILE>']
+    contexts_filename = arguments['<CONTEXTS_FILE>']
 
+    print("Reading input files...")
     W2I, C2I, words, contexts = load_from_files(words_filename, contexts_filename)
 
     #W2I, C2I, words, contexts = load_from_files("../data/word2vec/bow5/bow5.words","../data/word2vec/bow5/bow5.contexts")
@@ -86,7 +87,7 @@ if __name__ == '__main__':
     # First order
     # Find top k context features for each target word
     # top features is highest dot product (word, context_word)
-    print("1st order")
+    print("\n1st order")
     dwc = DotWithCache()
     for from_w in target_words:
         from_w_id = W2I.get_id(from_w)
@@ -98,7 +99,7 @@ if __name__ == '__main__':
         all_dist_tup = [w for w,d in all_dist_tup]                # Remove score
         print from_w, all_dist_tup[1:k+1]
 
-    print("2nd order")
+    print("\n2nd order")
     del dwc
     dwc = DotWithCache()
     for from_w in target_words:
@@ -110,3 +111,5 @@ if __name__ == '__main__':
         #all_dist_tup = [(w, "%.3f" % d) for w,d in all_dist_tup] # Round results
         all_dist_tup = [w for w,d in all_dist_tup]                # Remove score
         print from_w, all_dist_tup[1:k+1]
+
+    print("\nDone")
