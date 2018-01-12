@@ -1,0 +1,161 @@
+Tree:
+--------
+
+1st order:
+('car', 'adpmod to design adpobj up', 'trend poss down', 'adpmod in engine adpobj up', 'adpmod of driver adpobj up', 'plymouth poss down', 'wreck dobj up', 'price amod down', 'race nsubjpass up', 'locomotive conj down', 'dome amod down', 'exit nsubj up', 'ford poss down', 'adpmod per driver adpobj up', 'adpmod of plate adpobj up', 'chase amod down', 'parking compmod up', 'adpmod by minute adpobj up', 'wash compmod up', 'hire compmod down', 'adpmod with race adpobj up')
+('bus', 'taxi conj up', 'route nsubj up', 'tram conj up', 'depot poss up', 'tram conj down', 'subway conj up', 'adpmod from competition adpobj up', 'rout nsubj up', 'terminus compmod up', 'taxi conj down', 'automobile conj up', 'stop compmod up', 'serial compmod down', 'interchange compmod up', 'bus conj up', 'adpmod by provide compmod up', 'adpmod by accessible adpobj up', 'paint nsubjpass up', 'rail conj down', 'bus conj down')
+('hospital', 'bed amod down', 'sailor poss down', 'adpmod at physician adpobj up', 'vincent poss down', 'adpmod a facility adpobj up', 'hospital dep up', 'priory conj up', 'undergo rcmod down', 'breach compmod down', 'adpmod at pronounce adpobj up', 'recover partmod down', 'guy poss down', 'adpmod at nurse adpobj up', 'adpmod at doctor adpobj up', 'adpmod to rush adpobj up', 'accommodate nsubj up', 'adpmod with bed adpobj down', 'teaching amod down', 'adpmod at resident adpobj up', 'anthony poss down')
+('hotel', 'inn appos up', 'inn conj down', 'adjacent appos down', 'cottage conj down', 'adpmod a purchase adpobj up', 'casino conj up', 'existence compmod up', 'adpmod at restaurant adpobj up', 'hotel appos down', 'casino conj down', 'adpmod of lobby adpobj up', 'hotel appos up', 'lobby compmod up', 'adpmod into check adpobj up', 'adpmod of restaurant adpobj up', 'adpmod at dinner adpobj up', 'rename rcmod down', 'bar poss up', 'plaza compmod down', 'resort conj down')
+('gun', 'adpmod with fire adpobj up', 'rifle amod down', 'adpmod from shot adpobj up', 'prisoner conj up', 'rifle appos down', 'cm amod down', 'barrel dobj up', 'jam nsubj up', 'adpmod with merit adpobj up', 'adpmod with damage adpobj up', 'knife conj down', 'velocity poss up', 'aim dobj up', 'barrel compmod up', 'machine compmod down', 'armament compmod up', 'store rcmod down', 'bullet conj down', 'ready nsubj up', 'adpmod by engage adpobj up')
+('bomb', 'adpmod by luftwaffe adpobj down', 'explode compmod up', 'pipe amod down', 'torpedo conj down', 'suicide partmod up', 'explode rcmod down', 'explosive conj up', 'explode partmod down', 'explode nsubj up', 'adpmod by destroy adpcomp up', 'luftwaffe nsubj down', 'adpmod of explosion adpobj up', 'explosive conj down', 'adpmod by ally adpobj down', 'explode dobj up', 'plant partmod down', 'blast compmod up', 'explosion compmod up', 'hide partmod down', 'aim nsubjpass up')
+('horse', 'adpmod from fell adpobj up', 'fool conj up', 'hobby compmod down', 'jockey conj down', 'shoe dobj up', 'bull conj up', 'bay amod down', 'cart conj down', 'adpmod for line adpobj up', 'crazy compmod down', 'rid partmod down', 'thoroughbred amod down', 'adpmod a breed adpobj up', 'ride dobj up', 'wagon conj down', 'breeding compmod up', 'adpmod by earn adpobj up', 'rid dobj up', 'adpmod by pull adpobj up', 'rider conj down')
+('fox', 'hare conj up', 'beaver conj up', 'adpmod on morning adpobj up', 'adpmod of subspecies adpobj up', 'adpmod on televise adpobj up', 'gardner compmod down', 'abc conj up', 'hunting compmod up', 'ohio compmod up', 'kit compmod down', 'cat conj down', 'affiliation compmod up', 'twentieth compmod down', 'gray amod down', 'net compmod up', 'mask compmod up', 'kid compmod up', 'sport compmod up', 'affiliate compmod up', 'news compmod up')
+('table', 'adpmod at eat adpobj up', 'contain appos up', 'adpmod below show adpobj down', 'adpmod below list adpobj down', 'periodic compmod down', 'following compmod down', 'align dobj up', 'adpmod in row adpobj up', 'tennis compmod up', 'table conj up', 'picnic amod down', 'adpmod of column adpobj up', 'format amod down', 'column compmod down', 'below compmod up', 'picnic compmod down', 'salt compmod up', 'adpmod in column adpobj up', 'aggregate compmod down', 'periodic amod down')
+('bowl', 'over dobj down', 'hand nsubjpass up', 'over rcmod up', 'concede partmod down', 'fast dobj down', 'batsman rcmod up', 'alley amod up', 'adpmod of coverage compmod up', 'adpmod in giant compmod up', 'alley dobj down', 'insight compmod down', 'adpmod in victory compmod up', 'bowl conj down', 'bowl conj up', 'adpmod without take adpcomp down', 'adpmod to select adpobj up', 'bermuda compmod down', 'adpmod in rush adpobj up', 'ball rcmod up', 'pace dobj down')
+('guitar', 'vocal appos down', 'adpmod on line-up adpobj up', 'adpmod on lineup adpobj up', 'backing conj down', 'bass dep down', 'intro compmod up', 'flourish compmod up', 'adpmod from black compmod down', 'vocal appos up', 'adpmod on ; adpobj up', 'keyboard conj down', 'saxophone conj up', 'adpmod of basic adpobj up', 'vocal conj up', 'vocal conj down', 'tune dobj up', 'bass conj down', 'rag compmod up', 'bass appos down', 'rhythm compmod down')
+('piano', 'adpmod for piece conj up', 'bass appos up', 'viola conj up', 'op conj down', 'organ conj up', 'cello conj up', 'flute conj down', 'adpmod for trio adpobj up', 'saxophone conj up', 'adpmod for concerto adpobj up', 'voice conj up', 'adpmod for composition adpobj up', 'concerto compmod up', 'violin conj up', 'sonata compmod up', 'ph compmod down', 'horn conj up', 'violin conj down', 'string conj down', 'trumpet conj up')
+
+2nd order:
+('car', 'vehicle', 'truck', 'boat', 'engine', 'aircraft', 'automobile', 'train', 'locomotive', 'bus', 'ship', 'model', 'product', 'driver', 'motorcycle', 'machine', 'unit', 'weapon', 'track', 'item', 'vessel')
+('bus', 'rail', 'tram', 'train', 'taxi', 'ferry', 'automobile', 'car', 'vehicle', 'subway', 'transit', 'freight', 'truck', 'railway', 'locomotive', 'boat', 'traffic', 'passenger', 'commuter', 'bike', 'plane')
+('hospital', 'clinic', 'center', 'prison', 'college', 'museum', 'school', 'library', 'facility', 'campus', 'hotel', 'airport', 'stadium', 'hall', 'centre', 'institution', 'monastery', 'park', 'theatre', 'office', 'camp')
+('hotel', 'restaurant', 'shop', 'apartment', 'theater', 'house', 'building', 'mill', 'estate', 'inn', 'pub', 'resort', 'store', 'synagogue', 'hall', 'castle', 'library', 'mosque', 'temple', 'tower', 'theatre')
+('gun', 'cannon', 'pistol', 'weapon', 'rifle', 'tank', 'battery', 'aircraft', 'sword', 'artillery', 'engine', 'camera', 'bullet', 'device', 'machine', 'vessel', 'equipment', 'ship', 'boat', 'rocket', 'shot')
+('bomb', 'torpedo', 'bombing', 'missile', 'rocket', 'weapon', 'explosion', 'reactor', 'bomber', 'earthquake', 'shell', 'raid', 'attack', 'grenade', 'eruption', 'fire', 'aircraft', 'ball', 'strike', 'storm', 'bombardment')
+('horse', 'dog', 'cattle', 'cat', 'sheep', 'bike', 'bull', 'motorcycle', 'bird', 'bicycle', 'elf', 'car', 'boy', 'animal', 'specimen', 'motor', 'athlete', 'men', 'monster', 'boat', 'bulb')
+('fox', 'cbs', 'cbc', 'nbc', 'abc', 'shaw', 'anderson', 'baker', 'patterson', 'itv', 'parker', 'hudson', 'hart', 'pb', 'kennedy', 'johnson', 'smith', 'carter', 'bbc', 'espn', 'mcdonald')
+('table', 'section', 'paragraph', 'text', 'diffs', 'encyclopedia', 'entry', 'diagram', 'page', 'summary', 'column', 'template', 'ranking', 'image', 'category', 'map', 'module', 'box', 'picture', 'diff', 'poll')
+('bowl', 'super', 'sec', 'ncaa', 'tournament', 'nba', 'cup', 'mlb', 'boxing', 'alfonso', 'nhl', 'wrestling', 'rugby', 'polo', 'playoff', 'afl', 'gt', 'leo', 'championship', 'tennis', 'league')
+('guitar', 'drum', 'bass', 'keyboard', 'piano', 'vocal', 'violin', 'saxophone', 'cello', 'flute', 'trumpet', 'instrument', 'horn', 'viola', 'percussion', 'solo', 'organ', 'dance', 'string', 'cd', 'music')
+('piano', 'violin', 'viola', 'guitar', 'bass', 'cello', 'flute', 'keyboard', 'horn', 'saxophone', 'trumpet', 'drum', 'instrument', 'percussion', 'organ', 'dance', 'vocal', 'composition', 'music', 'choir', 'mathematics')
+
+
+Window:
+--------
+
+1st order:
+('car', 'touring', 'chevrolet', 'rental', 'vintage', 'armored', 'accident', 'luxury', 'jaguar', 'parking', 'toyota', 'honda', 'lotus', 'collide', 'gt', 'wash', 'ferrari', 'bmw', 'compartment', 'toss', 'dining')
+('bus', 'rout', 'taxi', 'interchange', 'transit', 'subway', 'tram', 'shuttle', 'depot', 'intel', 'terminal', 'commuter', 'barton', 'trevor', 'livery', 'parking', 'fare', 'toss', 'route', 'tramway', 'gasoline')
+('hospital', 'psychiatric', 'clinic', 'acute', 'nh', 'insane', 'bed', 'mercy', 'middlesex', 'ruby', 'hopkins', 'alexandra', 'sick', 'mayo', 'davidson', 'overnight', 'nursing', 'andrea', 'rush', 'teaching', 'stabilize')
+('hotel', 'casino', 'luxury', 'sol', 'plaza', 'lobby', 'nightclub', 'resort', 'restaurant', 'dining', 'havana', 'inn', 'accommodation', 'cater', 'famed', 'paramount', 'riverside', 'suite', 'laptop', 'northumberland', 'windsor')
+('gun', 'turret', 'mm', 'machine', 'ammunition', 'mortar', 'firing', 'armament', 'barrel', 'mk', 'bolt', 'augment', 'sniper', 'battery', 'rifle', 'frigate', 'deck', 'bunker', 'rose', 'annie', 'silence')
+('bomb', 'explode', 'atomic', 'disposal', 'ira', 'luftwaffe', 'hydrogen', 'explosive', 'blast', 'fuse', 'baghdad', 'explosion', 'bounce', 'rig', 'libyan', 'raid', 'mortar', 'tanker', 'rip', 'crude', 'dismantle')
+('horse', 'thoroughbred', 'drawn', 'rid', 'cart', 'crazy', 'jockey', 'cattle', 'riding', 'racing', 'breeder', 'arabian', 'cow', 'rider', 'goat', "'the", 'carriage', 'ride', 'sheep', 'stud', 'hobby')
+('fox', 'hare', 'cnn', 'dana', 'pb', 'affiliation', 'rabbit', 'holly', 'hunting', 'affiliate', 'twentieth', '20th', 'gardner', 'abundance', 'newscast', 'reservation', 'ruby', 'sioux', 'news', 'abc', 'beaver')
+('table', 'periodic', 'picnic', 'tennis', 'below', 'summarize', 'rotary', 'html', 'excel', 'canon', 'header', 'heading', 'coffee', 'pdf', 'following', 'dining', 'gaming', 'rout', 'aggregate', 'overview', 'astronomer')
+('bowl', 'batsman', 'super', 'quiz', 'over', 'alley', 'pro', 'rose', 'pace', 'bermuda', 'lawn', 'bowler', 'sugar', 'mvp', 'cotton', 'orange', 'subdivision', 'dust', 'snap', 'soup', 'xiii')
+('guitar', 'acoustic', 'bass', 'keyboard', 'percussion', 'vocal', 'rhythm', 'saxophone', 'drum', 'gibson', 'vintage', 'electric', 'intro', 'backing', 'tenor', 'barrett', 'flute', 'mick', 'trumpet', 'chord', 'violin')
+('piano', 'sonata', 'viola', 'concerto', 'cello', 'op', 'violin', 'saxophone', 'lesson', 'trumpet', 'soprano', 'hammond', 'flute', 'trio', 'salon', 'organ', 'quartet', 'percussion', 'duet', 'solo', 'suite')
+
+2nd order:
+('car', 'one', 'truck', 'vehicle', 'boat', 'engine', 'train', 'body', 'aircraft', 'drive', 'fact', 'choose', 'race', 'player', 'store', 'hand', 'light', 'special', 'addition', 'story', 'mission')
+('bus', 'passenger', 'rail', 'boat', 'airport', 'hotel', 'mine', 'truck', 'pacific', 'achieve', 'fly', 'affair', 'success', 'transit', 'metro', 'express', 'engine', 'port', 'golden', 'factory', 'genus')
+('hospital', 'camp', 'effort', 'conduct', 'attend', 'mission', 'medical', 'status', 'care', 'category', 'institution', 'press', 'green', 'health', 'store', 'honor', 'job', 'merge', 'entire', 'daily', 'picture')
+('hotel', 'beach', 'worker', 'garden', 'estate', 'i', 'shop', 'reserve', 'bus', 'avenue', 'restaurant', 'sense', 'pakistan', 'temple', 'sing', 'floor', 'administration', 'responsible', 'square', 'britain', 'bill')
+('gun', 'rifle', 'weapon', 'aircraft', 'tank', 'missile', 'battery', 'box', 'target', 'machine', 'engine', 'artillery', 'rocket', 'bomb', 'mortar', 'whole', 'plane', 'pull', 'bar', 'brigade', 'step')
+('bomb', 'bomber', 'rescue', 'storm', 'bombing', 'tank', 'crash', 'squadron', 'pilot', 'flight', 'rocket', 'gun', 'latter', 'enemy', 'fighter', 'everything', 'aircraft', 'torpedo', 'chain', 'patrol', 'push')
+('horse', 'catch', 'incident', 'following', 'assistant', 'animal', 'poland', 'couple', 'drop', 'factory', 'empire', 'reserve', 'bar', 'hear', 'fish', 'gun', 'administrator', 'back', 'whole', 'earth', 'square')
+('fox', 'nbc', 'abc', 'interested', 'cbs', 'israeli', 'saturday', 'global', 't', 'programming', 'giant', 'gay', 'wave', 'morning', 'expansion', 'struggle', 'j', 'distribution', 'bell', 'documentary', 'colour')
+('table', 'box', 'poor', 'easy', 'task', 'double', 'ball', 'web', 'wood', 'exchange', 'map', 'document', 'file', 'minor', 'piece', 'fine', 'background', 'element', 'bill', 'spot', 'code')
+('bowl', 'exhibition', 'nfl', 'felt', 'gay', 'harbor', 'spot', 'commonwealth', 'qualify', 'thousand', 'playoff', 'shore', 'bell', 'indie', 'fc', 'shopping', 'organ', 'weather', 'golden', 'stock', 'portugal')
+('guitar', 'vocal', 'bass', 'piano', 'drum', 'guitarist', 'trumpet', 'solo', 'keyboard', 'vocalist', 'voice', 'musician', 'tune', 'bob', 'drummer', 'violin', 'taylor', 'saxophone', 'steve', 'folk', 'flute')
+('piano', 'violin', 'flute', 'cello', 'concerto', 'trumpet', 'viola', 'guitar', 'string', 'saxophone', 'soloist', 'bass', 'ensemble', 'sonata', 'solo', 'orchestra', 'op', 'vocal', 'percussion', 'keyboard', 'drum')
+
+
+Sentence:
+---------
+
+1st order:
+('car', 'touring', 'chevrolet', 'bmw', 'gt', 'ferrari', 'gm', 'chassis', 'jaguar', 'honda', 'toyota', 'holden', 'lotus', 'parking', 'trailer', 'lap', 'racing', 'auto', 'driver', 'luxury', 'compartment')
+('bus', 'transit', 'livery', 'rout', 'commuter', 'interchange', 'tram', 'taxi', 'subway', 'terminal', 'fare', 'depot', 'metro', 'route', 'hyderabad', 'shuttle', 'terminus', 'rack', 'chassis', 'parking', 'underneath')
+('hospital', 'here', 'psychiatric', 'nh', 'clinic', 'acute', 'mir', 'surgical', 'healthcare', 'insane', 'mercy', 'bed', 'nursing', 'ambulance', 'nurse', 'surgery', 'addiction', 'middlesex', 'surgeon', 'andrea', 'sick')
+('hotel', 'casino', 'luxury', 'resort', 'sol', 'dining', 'plaza', 'havana', 'inn', 'restaurant', 'nightclub', 'accommodation', 'traveller', 'bedroom', 'windsor', 'lagoon', 'traveler', 'monica', 'cater', 'canary', 'carlton')
+('gun', 'turret', 'armament', 'mm', 'ammunition', 'mk', 'mortar', 'machine', 'barrel', 'grenade', 'firing', 'pistol', 'he', 'rifle', 'battleship', 'bolt', 'firearm', 'pod', 'battery', 'bullet', 'aa')
+('bomb', 'explode', 'luftwaffe', 'atomic', 'ira', 'disposal', 'bombing', 'explosive', 'explosion', 'baghdad', 'injure', 'fuse', 'hydrogen', 'neutron', 'blast', 'grenade', 'bomber', 'rack', 'libyan', 'invader', 'jin')
+('horse', 'thoroughbred', 'likewise', 'breeder', 'jockey', 'cart', 'stud', 'rid', 'arabian', 'handicap', 'trailer', 'drawn', 'mare', 'riding', 'rider', 'cattle', 'breed', 'bombay', 'racing', 'breeding', 'trainer')
+('fox', 'affiliation', 'hare', 'rabbit', 'newscast', 'subspecies', 'cnn', 'ufc', 'deer', 'cbs', 'nbc', 'abc', 'abundance', 'affiliate', 'holly', 'hunting', 'espn', 'beaver', 'sport', 'dana', 'statewide')
+('table', 'for', 'with', 'periodic', 'picnic', 'tennis', 'below', 'html', 'gospel', 'marking', 'heading', 'besides', 'slice', 'subscription', 'row', 'summarize', 'column', 'pdf', 'width', 'header', 'excel')
+('bowl', 'quiz', 'steelers', 'batsman', 'super', 'over', 'bowler', 'rose', 'wicket', 'pro', 'alley', 'sugar', 'pace', 'starter', 'bowling', 'streak', 'stir', 'bronco', 'interception', 'nfl', 'cotton')
+('guitar', 'percussion', 'bass', 'acoustic', 'keyboard', 'vocal', 'drum', 'saxophone', 'line-up', 'backing', 'rhythm', 'vintage', 'gibson', 'electric', 'violin', 'chord', 'bo', 'tenor', 'piano', 'trumpet', 'cello')
+('piano', 'cello', 'viola', 'op', 'sonata', 'concerto', 'violin', 'saxophone', 'trumpet', 'flute', 'soprano', 'pianist', 'percussion', 'lesson', 'trio', 'tenor', 'keyboard', 'franz', 'organist', 'conservatory', 'emerson')
+
+2nd order:
+('car', 'drive', 'race', 'men', 'train', 'aircraft', 'driver', 'put', 'choose', 'truck', 'pass', 'long', 'performance', 'total', 'replace', 'track', 'board', 'draw', 'stop', 'hand', 'medium')
+('bus', 'passenger', 'traffic', 'rail', 'transit', 'transportation', 'jack', 'metro', 'arm', 'double', 'vessel', 'web', 'direction', 'citizen', 'airport', 'bit', 'locomotive', 'plot', 'southeast', 'train', 'connection')
+('hospital', 'medical', 'chinese', 'latter', 'learn', 'step', 'store', 'stand', 'grant', 'transfer', 'separate', 'successful', 'associate', 'entire', 'condition', 'worker', 'big', 'seek', 'double', 'manage', 'intend')
+('hotel', 'restaurant', 'wood', 'room', 'abandon', 'fill', 'brand', 'slow', 'memorial', 'dr', 'contact', 'double', 'horse', 'walk', 'palace', 'garden', 'buy', 'rich', 'occupy', 'difficult', 'grant')
+('gun', 'rifle', 'fit', 'machine', 'enemy', 'demand', 'weapon', 'bar', 'intend', 'initial', 'battery', 'entire', 'pick', 'tank', 'wound', 'eye', 'hear', 'crew', 'shot', 'advance', 'piece')
+('bomb', 'raid', 'commit', 'enemy', 'fell', 'weapon', 'civilian', 'dozen', 'bomber', 'opponent', 'pilot', 'shot', 'mine', 'abandon', 'injure', 'daniel', 'reading', 'crash', 'sydney', 'defence', 'attract')
+('horse', 'poor', 'farm', 'fast', 'dog', 'existence', 'male', 'hunt', 'eye', 'farmer', 'owner', 'guide', 'combination', 'felt', 'wood', 'thousand', 'bar', 'citizen', 'latter', 'attract', 'zone')
+('fox', 'nbc', 'jackson', 'desire', 'adam', 'andrew', 'cbs', 'struggle', 'bbc', 'chris', 'abc', 'johnson', 'bob', 'latter', 'fame', 'cable', 'comedy', 'hire', 'nomination', 'drop', 'roll')
+('table', 'step', 'piece', 'couple', 'simple', 'opportunity', 'entry', 'hear', 'handle', 'plot', 'horse', 'internet', 'concept', 'i', 'entire', 'latter', 'basic', 'response', 'lay', 'mass', 'anything')
+('bowl', 'nfl', 'improvement', 'ncaa', 'super', 'pitch', 'quarterback', 'deliver', 'j', 'cricket', 'planet', 'defensive', 'pas', 'writing', 'victory', 'defend', 'limited', 'touchdown', 'trophy', 'chris', 'celebrate')
+('guitar', 'bass', 'drum', 'vocal', 'guitarist', 'piano', 'keyboard', 'bassist', 'solo', 'singer', 'musician', 'steve', 'chris', 'drummer', 'mike', 'tony', 'vocalist', 'percussion', 'brian', 'jim', 'dave')
+('piano', 'trumpet', 'bass', 'string', 'flute', 'composer', 'violin', 'solo', 'guitar', 'composition', 'recording', 'don', 'drum', 'chorus', 'orchestra', 'cello', 'trio', 'ensemble', '1970s', 'saxophone', 'concerto')
+
+
+word2vec
+--------
+
+Window=5:
+--------
+
+1st order
+car 'racing', 'mygale', 'bmw', 'driver', 'motor', 'cars', 'dealership', 'parked', 'rear-drive', 'accident', 'mid-engined', 'dealerships', 'touring', 'champ', 'race', 'toyota', 'rental', 'suv', 'truck', 'auto'
+bus 'buses', 'ksrtc', 'samtrans', 'seabus', 'smrt', 'connexxion', 'inter-city', 'intercity', 'msrtc', 'transit', 'double-decker', 'tram', 'commuter', 'apsrtc', 'services', 'routes', 'hiroden', 'metrobus', 'kmb', 'fixed-route'
+hospital 'bethlem', 'moorfields', 'psychiatric', 'hospitals', 'infirmary', 'foundling', 'siriraj', 'maudsley', 'westmead', 'bellevue', 'convalescent', 'polyclinic', 'maternity', 'sunnybrook', 'soroka', 'clinic', 'mulago', 'in-patient', 'dispensary', 'deaconess'
+hotel 'hotels', 'westin', 'radisson', 'kempinski', 'sofitel', 'ramada', 'biltmore', 'ritz-carlton', 'sheraton', 'marriott', 'waldorf-astoria', 'five-star', '5-star', 'crowne', 'doubletree', 'restaurant', 'hyatt', 'hilton', 'luxury', 'luxurious'
+gun 'guns', 'submachine', 'machine', 'gatling', 'sub-machine', 'howitzer', 'rifle', '40mm', '11-inch', 'emplacements', 'muzzle-loading', '20mm', '75mm', 'smoothbore', 'turrets', 'recoilless', '5-inch', 'turret', 'breech-loading', 'anti-aircraft'
+bomb 'bombs', 'detonated', 'detonates', 'detonate', 'atomic', 'exploded', 'detonating', 'bomber', 'bombing', 'blast', 'bombings', 'booby-trap', 'landmine', 'v-1', 'hiroshima', 'nuclear', 'laser-guided', 'explodes', 'blasts', 'detonation'
+horse 'horses', 'standardbred', 'thoroughbred', 'trotting', 'riding', 'racing', 'ridden', 'galloping', 'bred', 'gelding', 'stud', 'appaloosa', 'pommel', 'bareback', 'bronc', 'sired', 'thoroughbreds', 'friesian', 'stables', 'aqha'
+fox 'vulpes', 'news', 'movietone', 'owned-and-operated', 'nbc', 'cbs', 'terrier', 'affiliate', 'cnn', 'msnbc', 'abc', 'espn', 'mynetworktv', 'nine-tailed', 'wb', 'wish-tv', 'wtae-tv', 'blitzer', 'marten', 'cw'
+table 'sortable', 'tables', 'tennis', 'lookup', 'billiards', 'foosball', 'periodic', 'billiard', 'toc', 'look-up', 'hash', 'collapsible', 'snooker', 'below', 'round', 'carom', 'contents', 'tabular', 'bottom', 'headers'
+bowl 'xli', 'bowls', 'xliv', 'xxxviii', 'xliii', 'xlii', 'xlvi', 'xlv', 'super', 'xxxix', 'xxxv', 'xxxi', 'xxxvii', 'xxxvi', 'xlvii', 'xxxiii', 'xxv', 'xxvii', 'xxviii', 'xxxiv'
+guitar 'bass', 'guitars', 'drums', 'keyboards', 'nyckelharpa', 'glockenspiel', '6-string', 'tambourine', 'banjo', 'vocals', 'harmonica', 'fretless', 'ukulele', '12-string', 'benmont', 'six-string', 'riffs', 'piano', 'accordion', 'melodica'
+piano 'violin', 'sonata', 'cello', 'concerto', 'op', 'harpsichord', 'concertos', 'viola', 'violoncello', 'sonatas', 'divertimento', 'pianoforte', 'e-flat', 'concerti', 'concertante', 'clarinet', 'sonatina', 'bassoon', 'nyckelharpa', 'guitar'
+
+2nd order
+car 'cars', 'truck', 'automobile', 'vehicle', 'motorbike', 'motorcycle', 'driver', 'minivan', 'suv', 'lorry', 'motorcar', 'mid-engined', 'limousine', 'front-engined', 'moped', 'motorhome', 'mercedes-benz', 'bike', 'rear-engined', 'three-wheeled'
+bus 'buses', 'tram', 'metrobus', 'intercity', 'busses', 'fixed-route', 'minibus', 'inter-city', 'ksrtc', 'commuter', 'apsrtc', 'msrtc', 'inter-urban', 'dial-a-ride', 'mini-bus', 'light-rail', 'rail', 'transit', 'trolleybus', 'limited-stop'
+hospital 'clinic', 'hospitals', 'infirmary', 'hospice', 'lying-in', 'dispensary', 'polyclinic', 'sanatorium', 'convalescent', 'mulago', 'addenbrooke', 'bethlem', 'psychiatric', 'maudsley', 'siriraj', 'sanitarium', 'in-patient', 'incurables', 'orthopaedic', 'westmead'
+hotel 'motel', 'restaurant', 'doubletree', 'sheraton', 'hotels', 'ritz-carlton', 'sofitel', 'westin', 'ramada', 'casino', 'kempinski', 'mansion', 'inn', 'cafe', 'tavern', 'apartments', 'boutique', 'nightclub', 'marriott', 'travelodge'
+gun 'guns', 'cannon', 'howitzer', 'sub-machine', 'flamethrower', 'belt-fed', '37mm', 'smoothbore', 'pistol', 'shkas', '105mm', '40mm', 'gatling', 'recoilless', '76mm', '3-inch', 'rifle', '88mm', 'large-caliber', 'autocannons'
+bomb 'bombs', 'detonated', 'detonates', 'detonate', 'booby-trap', 'detonating', 'firebomb', 'car-bomb', 'exploded', 'detonation', 'warhead', '500-pound', 'b61', 'laser-guided', 'blast', 'explosives', 'detonations', 'landmine', 'tallboy', 'thermonuclear'
+horse 'horses', 'standardbred', 'saddlebred', 'gelding', 'thoroughbred', 'stallion', 'racehorses', 'dog', 'riderless', 'gaited', 'bronc', 'percheron', 'pony', 'trotting', 'harness', 'chariot', 'appaloosa', 'sulky', 'racehorse', 'greyhound'
+fox 'abc', 'cbs', 'nbc', 'wxyz-tv', 'msnbc', 'ctv', 'wsvn', 'familynet', 'wttg', 'wjbk', 'wfxt', 'espn', 'wofl', 'cnn', 'oln', 'blitzer', 'nesn', 'wesh', 'wb', 'wgn-tv'
+table 'tables', 'sortable', 'wikitable', 'look-up', 'foosball', 'toc', 'bulleted', 'ping-pong', 'billiard', 'table-tennis', 'textbox', 'tray', 'lookup', 'wikitables', 'brackets', 'header', 'footer', 'tabular', 'menu', 'carom'
+bowl 'xliii', 'xlii', 'xliv', 'bowls', 'xlvi', 'tostitos', 'xli', 'xxxviii', 'xlv', 'xxxv', 'xxxix', 'xxxvii', 'xlvii', 'xxxvi', 'xxxiv', 'bluebonnet', 'gator', 'xxviii', 'xxxii', 'xxxi'
+guitar 'harmonica', 'mandolin', 'bass', 'drums', 'guitars', 'keyboards', 'accordion', 'banjo', 'saxophone', '12-string', 'ukulele', 'trombone', 'fiddle', 'autoharp', 'melodica', 'percussion', 'vibraphone', 'tambourine', 'vocals', 'fretless'
+piano 'violin', 'cello', 'harpsichord', 'clarinet', 'viola', 'flute', 'bassoon', 'violoncello', 'oboe', 'concerto', 'saxophone', 'accordion', 'harp', 'trombone', 'sonatas', 'trumpet', 'mandolin', 'pianoforte', 'vibraphone', 'concertos'
+
+tree:
+----
+
+1st order
+car 'amod_street-legal', 'conj_hovercraft', 'amod_newly-designed', 'amod_liter', 'amod_late-model', 'poss_brink', 'compmod_m1918', 'adpmod:fromI_tossed', 'compmod_high-wing', 'poss_waltrip', 'adpmod:byI_escapes', 'amod_requisitioned', 'compmodI_rallying', 'nsubjI_drivers', 'compmod_rigid', 'adpmod:insideI_placing', 'compmod_hilux', 'apposI_bike', 'poss_matty', 'dobjI_onboard'
+bus 'amod_east-bound', 'conj_hovercraft', 'adpmod:onI_ridership', 'compmod_airlink', 'compmod_operates', 'conj_busses', 'compmod_xpt', 'compmod_yrt', 'dobjI_onboard', 'amod_20-bit', 'compmod_citybus', 'amod_requisitioned', 'adpmod:between_belfast', 'amod_street-legal', 'compmod_n11', 'compmodI_hookups', 'amod_newly-designed', 'adpmod:like_express', 'compmod_weka', 'compmod_hs2'
+hospital 'compmod_safdarjung', 'adpmod:of_nuova', 'compmod_strangeways', 'amod_maximum-security', 'compmod_armley', 'compmod_combermere', 'compmod_fresnes', 'compmod_eastview', 'compmod_desloge', 'compmod_monklands', 'compmod_nudgee', 'compmod_longmeadow', 'compmod_edgemont', 'compmod_southridge', 'compmod_archbold', 'compmod_shinagawa', 'compmod_eppley', 'compmod_nantong', 'compmod_ravenscourt', 'compmod_manresa'
+hotel 'compmod_dolmabah\xc3\xa7e', 'compmod_whitwell', 'conj_guesthouses', 'compmod_ravenscourt', 'compmod_hanworth', 'compmod_siriraj', 'compmod_strangeways', 'compmod_safdarjung', 'compmod_armley', 'adpmod:onI_renovations', 'compmod_manresa', 'rcmod_renting', 'compmod_portchester', 'compmod_eastview', 'compmod_combermere', 'adpmod:nearI_parked', 'compmod_kirkdale', 'compmod_edgemont', 'compmod_blackness', 'appos_acre'
+gun 'adpmod:withI_rearmed', 'compmod_m1918', 'compmodI_fellatio', 'num_60mm', 'adpmod:ofI_hilt', 'compmod_karabiner', 'compmod_t-55', 'adpmod:forI_cartridges', 'compmodI_cwt', 'compmod_varmint', 'amod_newly-designed', 'conjI_turban', 'rcmod_crushes', 'adpmod:fromI_bled', 'amod_point-and-shoot', 'compmod_mlrs', 'compmod_bvr', 'compmodI_set-ups', 'adpmod:withI_pistol', 'conjI_hellcat'
+bomb 'adpmod:on_pentagon', 'compmodI_splashes', 'adpmod:byI_unharmed', 'adpmod:withI_rearmed', 'compmod_single-car', 'compmod_m1918', 'compmod_phishing', 'compmodI_fellatio', 'rcmod_bursts', 'compmod_decapitation', 'adpmod:over_berlin', 'num_60mm', 'compmod_nega', 'rcmod_crushes', 'adpmod:at_wonsan', 'conjI_hellcat', 'compmod_bvr', 'compmod_econoline', 'compmod_t-55', 'adpmod:against_fortress'
+horse 'nsubjpassI_spooked', 'compmodI_drovers', 'dobjI_shoe', 'adpmod:byI_commute', 'rcmod_roams', 'poss_quixote', 'compmod_ch-53e', 'appos_pony', 'compmod_poitevin', 'adpmod:ofI_hilt', 'adpmod:byI_escapes', 'compmodI_fillet', 'compmodI_cogburn', 'compmod_beardless', 'apposI_bike', 'compmod_m1918', 'poss_quagmire', 'conjI_turban', 'adpmod:byI_foot', 'appos_canadensis'
+fox 'appos_canadensis', 'compmodI_subchannels', 'conj_mattel', 'compmod_jacki', 'conjI_raimi', 'conjI_corgan', 'conjI_leda', 'conj_bluebird', 'conj_nolte', 'conjI_browder', 'conj_keeler', 'conjI_steinem', 'conjI_thurmond', 'conjI_melly', 'conjI_seaver', 'compmodI_e-type', 'apposI_msnbc', 'conjI_devitt', "conj_o'hare", 'compmod_rayford'
+table 'adpmod:offI_knocks', 'adpmod:onI_seventh', 'amod_ten-foot', 'compmod_abydos', 'amod_25-metre', 'adpmod:intoI_face', 'adpmod:belowI_added', 'adpmod:throughI_throw', 'compmod_three-judge', 'adpmod:ontoI_projects', 'adpmod:aroundI_looked', 'adpmod:onI_substance', 'adpmod:onI_slides', 'amod_rooftop', 'adpmod:insideI_placing', 'adpmod:withinI_display', 'adpmod:onI_entities', 'dobjI_clogs', 'adpmod:aboveI_from', 'adpmod:onI_measurement'
+bowl 'conjI_preseason', 'adpmod:against_oklahoma', 'adpmod:inI_2-1', 'conj_play-offs', 'compmod_pan-pacific', 'adpmod:forI_stadiums', 'adpmod:atI_clinched', 'adpmod:intoI_win', 'amod_25-metre', 'conjI_regionals', 'amod_sm-liiga', 'adpmod:against_brentford', 'adpmod:ofI_tackle', 'poss_postman', 'adpmod:inI_semifinal', 'adpmod:against_walsall', 'adpmod:atI_pitcher', 'compmod_doomben', 'compmod_deuces', 'compmod_sundae'
+guitar 'amod_end-blown', 'conj_back-up', 'adpmod:onI_harris', 'adpmod:forI_adagio', 'adpmod:onI_thompson', 'appos_mandolin', 'dep_keyboard', 'adpmod:ofI_virtuoso', 'adpmod:onI_foster', 'amod_necked', 'conjI_flinders', 'adpmod:onI_supplemented', 'possI_pickups', 'amod_banjo', 'compmod_sandberg', 'adpmod:ofI_sweethearts', 'poss_diddley', 'depI_trumpet', 'adpmod:onI_pianist', 'dobjI_syncing'
+piano 'amod_end-blown', 'conjI_bongos', 'adpmod:onI_harris', 'adpmod:ofI_virtuoso', 'adpmod:onI_thompson', 'conj_back-up', 'compmod_kreutzer', 'compmod_vomeronasal', 'adpmod:onI_supplemented', 'appos_mandolin', 'apposI_prelude', 'adpmod:onI_foster', 'compmod_akiyoshi', 'dep_keyboard', 'compmod_sandberg', 'conjI_kabuki', 'amod_necked', 'dobjI_syncing', 'depI_trumpet', 'amod_12-tone'
+
+2nd order
+car 'truck', 'suv', 'vehicle', 'minivan', 'cars', 'speedboat', 'racecar', 'automobile', 'motorcar', 'jeep', 'limousine', 'minibus', 'lorry', 'limo', 'motorcycle', 'bike', 'motorhome', 'taxicab', 'roadster', 'wagon'
+bus 'minibus', 'tram', 'buses', 'jeepney', 'taxicab', 'motorcoach', 'taxi', 'trolleybus', 'lorry', 'truck', 'metrobus', 'streetcar', 'busses', 'ferryboat', 'trolley', 'tramcar', 'railcar', 'railmotor', 'intercityexpress', 'train'
+hospital 'sanatorium', 'hospice', 'sanitorium', 'hospitals', 'sanitarium', 'clinic', 'infirmary', 'polyclinic', 'dispensary', 'orphanage', 'poorhouse', 'almshouse', 'workhouse', 'institutet', 'leprosarium', 'rikshospitalet', 'heliport', 'gaol', 'guesthouse', 'motherhouse'
+hotel 'motel', 'hotels', 'casino', 'restaurant', 'inn', 'guesthouse', 'tavern', 'cafe', 'ritz-carlton', 'nightclub', 'travelodge', 'pizzeria', 'roadhouse', 'boardinghouse', 'caf\xc3\xa9', 'condo', 'brewpub', 'sheraton', 'steakhouse', 'brasserie'
+gun 'guns', 'handgun', 'machinegun', 'howitzer', 'pistol', 'rifle', 'shotgun', 'firearm', 'cannon', 'musket', 'crossbow', 'autocannon', 'phaser', 'flamethrower', 'revolver', 'carbine', 'machine-gun', 'weapon', 'carronade', 'pounder'
+bomb 'bombs', 'firebomb', 'landmine', 'car-bomb', 'grenade', 'torpedo', 'ied', 'warhead', 'bomber', 'bomblets', 'missile', 'nuke', 'detonator', 'booby-trap', 'kamikaze', 'munition', 'explosives', 'machinegun', 'a-bomb', 'firebombs'
+horse 'horses', 'goat', 'dog', 'stallion', 'mule', 'bronc', 'cow', 'unicycle', 'greyhound', 'bareback', 'camel', 'appaloosa', 'saddlebred', 'colt', 'zebu', 'donkey', 'sidesaddle', 'racehorse', 'elephant', 'pony'
+fox 'daystar', 'nbc', 'byutv', 'kron', 'wolf', 'cbs-tv', 'familynet', 'abc', 'wccb', 'oln', 'wjar', 'hdnet', 'telefutura', 'woodchuck', 'nbc-tv', 'soapnet', 'cinemax', 'wdiv', 'mundofox', 'coyote'
+table 'tables', 'leaderboard', 'sideboard', 'chessboard', 'textbox', 'taskbar', 'gameboard', 'worksheet', 'tray', 'viewport', 'dais', 'flowchart', 'playfield', 'mantelpiece', 'stepladder', 'cladogram', 'letterbox', 'windowsill', 'bookcase', 'wikitable'
+bowl 'bowls', 'superbowl', 'arenabowl', 'wcws', 'wnit', 'nlcs', 'arenacup', 'postseason', 'nit', 'xliii', 'llws', 'beanpot', 'xlv', 'tripleman\xc3\xada', 'alcs', 'nlds', 'cup', 'kvalserien', 'tourney', 'cws'
+guitar 'saxophone', 'bass', 'mandolin', 'harmonica', 'accordion', 'trombone', 'violin', 'banjo', 'guitars', 'cello', 'piano', 'vibraphone', 'sax', 'trumpet', 'autoharp', 'clarinet', 'sitar', 'fiddle', 'drums', 'marimba'
+piano 'violin', 'cello', 'harpsichord', 'saxophone', 'clarinet', 'guitar', 'trombone', 'mandolin', 'vibraphone', 'marimba', 'accordion', 'pianoforte', 'bassoon', 'fortepiano', 'violoncello', 'trumpet', 'harmonica', 'clavinet', 'clavichord', 'euphonium'
+

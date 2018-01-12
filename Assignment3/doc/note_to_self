@@ -1,0 +1,7 @@
+Dear future self,
+
+The following exercise possibly has two bugs:
+
+1) I used PMIs, not smoothed PMIs. If I have time I will add smoothing, as it makes big difference.
+
+2) Weighted jaccard matrix does not seem to give good results. It's good it is not part of the assignment
