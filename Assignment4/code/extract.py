@@ -29,7 +29,40 @@ def extract_ner_type(sentence, ner):
 
 
 def extract_constituent_path(sentence, ner1, ner2):
-    return "TODO_const"
+    loc1 = ner1[0]
+    loc2 = ner2[0]
+
+    path_ids_up = []
+    word = sentence[loc1]
+    while word[3] != 0: # not HEAD
+        path_ids_up.append(word[0]) #ID
+        word = sentence[word[3]-1]
+    path_ids_up.append(0)
+
+    path_ids_down = []
+    word = sentence[loc2]
+    while word[3] != 0:  # not HEAD
+        path_ids_down.append(word[0])  # ID
+        word = sentence[word[3]-1]
+    path_ids_down.append(0)
+
+    # Find lowest common ancestor
+    ancestor = None
+    ids_down_set = set(path_ids_down)
+    for id in path_ids_up:
+        if id in ids_down_set:
+            ancestor = id
+            break
+
+    remove_after_index = path_ids_up.index(ancestor)
+    path_ids_up = path_ids_up[:remove_after_index+1]
+    remove_after_index = path_ids_down.index(ancestor)
+    path_ids_down = path_ids_down[:remove_after_index+1]
+
+    path_up_str = " ".join([(sentence[id-1][2] if id!=0 else "S") + "_UP" for id in path_ids_up]) #POS UP
+    path_down_str = " ".join([(sentence[id-1][2] if id!=0 else "S") + "_DOWN" for id in reversed(path_ids_down)])
+
+    return path_up_str + " " + path_down_str
 
 
 def extract_base_sysntactic_chunk_path(sentence, ner1, ner2):
@@ -95,7 +128,7 @@ def read_processed_file(filename):
                 arr = line.split()
                 ner_type = arr[NER_IDX] if len(arr) > 8 else None
                 word = (
-                arr[ID_IDX], arr[WORD_IDX], arr[POS_IDX], arr[HEAD_IDX], arr[TREE_IDX], arr[NER_P_IDX], ner_type)
+                int(arr[ID_IDX]), arr[WORD_IDX], arr[POS_IDX], int(arr[HEAD_IDX]), arr[TREE_IDX], arr[NER_P_IDX], ner_type)
                 sentence.append(word)
             else:
                 if not saw_empty_line:
