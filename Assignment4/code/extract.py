@@ -234,7 +234,10 @@ if __name__ == '__main__':
     feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
     Counters, DevX, DevY = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key,Counters=Counters)
 
+    import utils
+    class_dict = utils.inverse_dict(Counters[-1].S2I)
+
     import svm
-    svm.run_svm_print_result(TrainX, TrainY, DevX, DevY)
+    svm.run_svm_print_result(TrainX, TrainY, DevX, DevY, class_dict)
 
     print("Done")

@@ -36,3 +36,6 @@ class StringCounter:
             S2I[k] = v + n
         self.S2I = S2I
 
+
+def inverse_dict(dict):
+    return {v: k for k, v in dict.iteritems()}

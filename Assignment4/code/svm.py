@@ -6,16 +6,22 @@ Will be deleted later
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import svm, datasets
+from sklearn.metrics import precision_score, accuracy_score, recall_score
 
-def run_svm_print_result(trainX, trainY, devX, devY):
+
+def run_svm_print_result(trainX, trainY, devX, devY, classes_dict):
     svc = svm.SVC(kernel='linear', C=1, gamma='auto', class_weight='balanced').fit(trainX, trainY)
     devPrediction = svc.predict(devX)
 
     assert len(devPrediction) == len(devY)
-    total = len(devY)
-    correct = sum(devPrediction == devY)
-    print(1.0 * correct / total)
-    print("{}/{}".format(correct, total))
+
+    precision = precision_score(devY, devPrediction, average=None)
+    recall = recall_score(devY, devPrediction, average=None)
+    accuracy = accuracy_score(devY, devPrediction)
+
+    print("Accuracy: {}".format(accuracy))
+    print("Precision: {}".format({classes_dict[i]:("%.3f" % p) for i, p in enumerate(precision)}))
+    print("Recall: {}".format({classes_dict[i]:("%.3f" % r) for i, r in enumerate(recall)}))
 
 
 def run_svm_show_result(X,y):
