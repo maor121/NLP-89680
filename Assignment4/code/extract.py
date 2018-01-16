@@ -67,6 +67,42 @@ def process_sentence(sentence):
 
     return result
 
+def read_processed_file(filename):
+    ID_IDX = 0
+    WORD_IDX = 1
+    POS_IDX = 3
+    HEAD_IDX = 5
+    TREE_IDX = 6
+    NER_P_IDX = 7
+    NER_IDX = 8
+
+    features_by_sent_id = {}
+    with open(filename) as inp_file:
+        sentence = []
+        saw_empty_line = True
+        sent_id = None
+        for line in inp_file:
+            line = line.strip()
+            if line.startswith("#"):
+                if line.__contains__("#id"):
+                    sent_id = line.split()[-1]
+                continue  # Comment, skip
+            if len(line) > 0:
+                saw_empty_line = False
+                arr = line.split()
+                ner_type = arr[NER_IDX] if len(arr) > 8 else None
+                word = (
+                arr[ID_IDX], arr[WORD_IDX], arr[POS_IDX], arr[HEAD_IDX], arr[TREE_IDX], arr[NER_P_IDX], ner_type)
+                sentence.append(word)
+            else:
+                if not saw_empty_line:
+                    features = process_sentence(sentence)
+                    features_by_sent_id[sent_id] = features
+                    sentence = []
+                saw_empty_line = True
+    return features_by_sent_id
+
+
 def read_annotations_file(filename):
     relation_by_sent_id = {}
     with open(filename) as anno_file:
@@ -84,37 +120,9 @@ def read_annotations_file(filename):
 
 
 if __name__ == '__main__':
-    ID_IDX = 0
-    LEMMA_IDX = 2
-    POS_IDX = 3
-    HEAD_IDX = 5
-    TREE_IDX = 6
-    NER_P_IDX = 7
-    NER_IDX = 8
 
-    features_by_sent_id = {}
-    with open("../data/Corpus.TRAIN.processed") as inp_file:
-        sentence = []
-        saw_empty_line = True
-        sent_id = None
-        for line in inp_file:
-            line = line.strip()
-            if line.startswith("#"):
-                if line.__contains__("#id"):
-                    sent_id = line.split()[-1]
-                continue # Comment, skip
-            if len(line) > 0:
-                saw_empty_line = False
-                arr = line.split()
-                ner_type = arr[NER_IDX] if len(arr) > 8 else None
-                word = (arr[ID_IDX], arr[LEMMA_IDX], arr[POS_IDX], arr[HEAD_IDX], arr[TREE_IDX], arr[NER_P_IDX], ner_type)
-                sentence.append(word)
-            else:
-                if not saw_empty_line:
-                    features = process_sentence(sentence)
-                    features_by_sent_id[sent_id] = features
-                    sentence = []
-                saw_empty_line = True
-        print(features_by_sent_id)
+    features_by_sent_id = read_processed_file("../data/Corpus.TRAIN.processed")
+    anno_by_sent_id = read_annotations_file("../data/TRAIN.annotations")
 
-    print(read_annotations_file("../data/TRAIN.annotations"))
+    print(features_by_sent_id)
+    print(anno_by_sent_id)
