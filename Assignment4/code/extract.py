@@ -122,26 +122,20 @@ def read_annotations_file(filename):
     return relation_by_sent_id
 
 
-if __name__ == '__main__':
-
-    features_by_sent_id = read_processed_file("../data/Corpus.TRAIN.processed")
-    anno_by_sent_id = read_annotations_file("../data/TRAIN.annotations")
-
-    print(features_by_sent_id)
-    print(anno_by_sent_id)
-
+def compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id):
     # Number of sentences should be the same
     assert len(features_by_sent_id) == len(anno_by_sent_id)
     sent_ids = features_by_sent_id.keys()
 
-    #For each annotation, find it's features from the input
-    #Note: They are not always the same :_(
+    # For each annotation, find it's features from the input
+    # Note: They are not always the same :_(
     # i.e "United States" in .annotations is "the United States" in .processed
     from difflib import SequenceMatcher
     anno_key_to_features_key = {}
     SIM_THRESHOLD = 0.7
+    removed_anno_count = 0
     for sent_id in sent_ids:
-        for anno_key, rel in anno_by_sent_id[sent_id].items():
+        for anno_key in anno_by_sent_id[sent_id]:
             anno_ner1, anno_ner2 = anno_key
             found_f_key = None
             f_key_score = 0.0
@@ -156,8 +150,13 @@ if __name__ == '__main__':
                     found_f_key = f_key
                     both_passed_threshold = ner1_sim > SIM_THRESHOLD and ner2_sim > SIM_THRESHOLD
                     both_passed_shared_word = \
-                        len(set(anno_ner1.split()) & set(f_ner1.split())) > 0 and \
-                        len(set(anno_ner2.split()) & set(f_ner2.split())) > 0
+                        len(set(anno_ner1.replace(".", "").split()) & set(f_ner1.replace(".", "").split())) > 0 and \
+                        len(set(anno_ner2.replace(".", "").split()) & set(f_ner2.replace(".", "").split())) > 0
+
+            """ 
+                Uncomment to see warnings of low-percent matching. I chose to remove those without at least one shared word
+                I observed that if a NER exists in the possibilities it would choose it correctly, if it doesn't it chooses a bad one
+                But both_passed_shared_word would be False on those occasions
 
             if not both_passed_threshold:
                 print("WARNING: match for annotation key didn't pass threshold")
@@ -167,5 +166,27 @@ if __name__ == '__main__':
                 if not both_passed_shared_word:
                     print("WARNING: extra low rating. Consider filtering out")
                 print("\n")
-            anno_key_to_features_key[found_f_key] = anno_key
-    print(anno_key_to_features_key)
+            """
+            if both_passed_shared_word:
+                anno_key_to_features_key[found_f_key] = anno_key
+            else:
+                print("Sentence id: " + sent_id)
+                print("Removed match: " + str(anno_key) + " -> " + str(found_f_key))
+                print("")
+                removed_anno_count += 1
+
+    print("Found: {} annotations. Removed (because could not find match): {}"
+          .format(len(anno_key_to_features_key), removed_anno_count))
+    return anno_key_to_features_key
+
+if __name__ == '__main__':
+
+    features_by_sent_id = read_processed_file("../data/Corpus.TRAIN.processed")
+    anno_by_sent_id = read_annotations_file("../data/TRAIN.annotations")
+
+    print(features_by_sent_id)
+    print(anno_by_sent_id)
+
+    anno_key_to_features_key = compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id)
+
+    print("Done")
