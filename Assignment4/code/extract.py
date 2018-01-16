@@ -67,6 +67,7 @@ def process_sentence(sentence):
 
     return result
 
+
 def read_processed_file(filename):
     ID_IDX = 0
     WORD_IDX = 1
