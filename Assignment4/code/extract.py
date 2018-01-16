@@ -168,9 +168,9 @@ def compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id):
                     print("WARNING: extra low rating. Consider filtering out")
                 print("\n")
             """
+            if sent_id not in feature_key_to_anno_key:
+                feature_key_to_anno_key[sent_id] = {}
             if both_passed_shared_word:
-                if sent_id not in feature_key_to_anno_key:
-                    feature_key_to_anno_key[sent_id] = {}
                 if found_f_key in feature_key_to_anno_key[sent_id]:
                     print("Warning! double annotation for sentence: "+sent_id+" skipping.\n")
                 else:
@@ -194,21 +194,30 @@ def convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_ke
     sent_ids = features_by_sent_id.keys()
     features_dim_count = len(features_by_sent_id[sent_ids[0]].values()[0])
 
+    allowed_anno = set(["Work_For", "Live_In"])
+
     Counters = np.ndarray(shape=(features_dim_count+1), dtype=object)
     for i in range(features_dim_count+1):
         Counters[i] = StringCounter()
     X = []
     Y = []
     YCounter = Counters[-1]
+    removed_anno_count = 0
     for sent_id in sent_ids:
         for f_key, features in features_by_sent_id[sent_id].items():
             features_as_ids = tuple([Counters[i].get_id_and_update(f) for i,f in enumerate(features)])
             X.append(features_as_ids)
-            anno_key = feature_key_to_anno_key.get(f_key, None)
+            anno_key = feature_key_to_anno_key[sent_id].get(f_key, None)
             anno = anno_by_sent_id[sent_id].get(anno_key, None)
             if anno == None:
                 anno = "None"
+            else:
+                if anno not in allowed_anno:
+                    anno = "None"
+                    removed_anno_count += 1
             Y.append(YCounter.get_id_and_update(anno))
+
+    print("Removed {} annotations, because they are not in {}".format(removed_anno_count, allowed_anno))
 
     return Counters, X, Y
 
