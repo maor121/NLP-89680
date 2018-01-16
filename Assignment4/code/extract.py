@@ -4,6 +4,8 @@ def extract_ners_from_sentence(sentence):
     last_ner = []
     for i, word in enumerate(sentence):
         if word[5] == 'B':  # Begin NER entity
+            if len(last_ner) > 0:
+                ner_entities.append(last_ner)
             last_ner = [i]
         else:
             if word[5] == 'I':
