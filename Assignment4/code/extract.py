@@ -188,7 +188,7 @@ def compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id):
     return feature_key_to_anno_key
 
 
-def convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key):
+def convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key, Counters=None):
     from utils import StringCounter
     import numpy as np
     sent_ids = features_by_sent_id.keys()
@@ -196,9 +196,10 @@ def convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_ke
 
     allowed_anno = set(["Work_For", "Live_In"])
 
-    Counters = np.ndarray(shape=(features_dim_count+1), dtype=object)
-    for i in range(features_dim_count+1):
-        Counters[i] = StringCounter()
+    if Counters is None:
+        Counters = np.ndarray(shape=(features_dim_count+1), dtype=object)
+        for i in range(features_dim_count+1):
+            Counters[i] = StringCounter()
     X = []
     Y = []
     YCounter = Counters[-1]
@@ -225,15 +226,15 @@ if __name__ == '__main__':
 
     features_by_sent_id = read_processed_file("../data/Corpus.TRAIN.processed")
     anno_by_sent_id = read_annotations_file("../data/TRAIN.annotations")
-
-    print(features_by_sent_id)
-    print(anno_by_sent_id)
-
     feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
+    Counters, TrainX, TrainY = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key)
 
-    Counters, X, Y = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key)
+    features_by_sent_id = read_processed_file("../data/Corpus.DEV.processed")
+    anno_by_sent_id = read_annotations_file("../data/DEV.annotations")
+    feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
+    Counters, DevX, DevY = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key,Counters=Counters)
 
-    from svm import run_svm_show_result
-    run_svm_show_result(X,Y)
+    import svm
+    svm.run_svm_print_result(TrainX, TrainY, DevX, DevY)
 
     print("Done")

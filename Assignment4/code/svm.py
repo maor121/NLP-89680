@@ -7,6 +7,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import svm, datasets
 
+def run_svm_print_result(trainX, trainY, devX, devY):
+    svc = svm.SVC(kernel='linear', C=1, gamma='auto', class_weight='balanced').fit(trainX, trainY)
+    devPrediction = svc.predict(devX)
+
+    assert len(devPrediction) == len(devY)
+    total = len(devY)
+    correct = sum(devPrediction == devY)
+    print(1.0 * correct / total)
+    print("{}/{}".format(correct, total))
+
+    print(0)
+
 def run_svm_show_result(X,y):
     # we create an instance of SVM and fit out data. We do not scale our
     # data since we want to plot the support vectors
