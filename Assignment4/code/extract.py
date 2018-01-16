@@ -127,3 +127,32 @@ if __name__ == '__main__':
 
     print(features_by_sent_id)
     print(anno_by_sent_id)
+
+    # Number of sentences should be the same
+    assert len(features_by_sent_id) == len(anno_by_sent_id)
+    sent_ids = features_by_sent_id.keys()
+
+    #For each annotation, find it's features from the input
+    #Note: They are not always the same :_(
+    # i.e "United States" in .annotations is "the United States" in .processed
+    from difflib import SequenceMatcher
+    anno_key_to_features_key = {}
+    SIM_THRESHOLD = 0.7
+    for sent_id in sent_ids:
+        for anno_key, rel in anno_by_sent_id[sent_id].items():
+            anno_ner1, anno_ner2 = anno_key
+            found_f_key = None
+            for f_key in features_by_sent_id[sent_id]:
+                f_ner1, f_ner2 = f_key
+                ner1_sim = SequenceMatcher(None, anno_ner1, f_ner1).ratio()
+                ner2_sim = SequenceMatcher(None, anno_ner2, f_ner2).ratio()
+                if ner1_sim > SIM_THRESHOLD and ner2_sim > SIM_THRESHOLD:
+                    found_f_key = f_key
+                    break
+            if found_f_key == None:
+                print("Error: could not find match for annotation key:"+str(anno_key))
+                print("Sentence id: "+sent_id)
+                print("Possible matches: "+str(features_by_sent_id[sent_id].keys()))
+                raise
+            anno_key_to_features_key[found_f_key] = anno_key
+    print(anno_key_to_features_key)
