@@ -27,15 +27,15 @@ def extract_ner_type(sentence, ner):
 
 
 def extract_constituent_path(sentence, ner1, ner2):
-    pass
+    return "TODO_const"
 
 
 def extract_base_sysntactic_chunk_path(sentence, ner1, ner2):
-    pass
+    return "TODO_chunk"
 
 
 def extract_typed_dependency_path(sentence, ner1, ner2):
-    pass
+    return "TODO_dep"
 
 
 def print_ner_entities(sentence, ner_entities):
@@ -52,11 +52,14 @@ def process_sentence(sentence):
     import itertools
     ner_pairs = list(itertools.combinations(ner_entities, 2))
     for ner1, ner2 in ner_pairs:
+        name_1 = extract_ner_name(sentence, ner1)
+        name_2 = extract_ner_name(sentence, ner2)
         entity_type_1 = extract_ner_type(sentence, ner1)
         entity_type_2 = extract_ner_type(sentence, ner2)
         type_concated = entity_type_1+entity_type_2
         constituent_path = extract_constituent_path(sentence, ner1, ner2)
         chunk_path = extract_base_sysntactic_chunk_path(sentence, ner1, ner2)
+        dep_path = extract_typed_dependency_path(sentence, ner1, ner2)
 
 
 if __name__ == '__main__':
@@ -71,9 +74,12 @@ if __name__ == '__main__':
     with open("../data/Corpus.TRAIN.processed") as inp_file:
         sentence = []
         saw_empty_line = True
+        sent_id = None
         for line in inp_file:
             line = line.strip()
             if line.startswith("#"):
+                if line.__contains__("#id"):
+                    sent_id = line.split()[-1]
                 continue # Comment, skip
             if len(line) > 0:
                 saw_empty_line = False
