@@ -17,7 +17,6 @@ def run_svm_print_result(trainX, trainY, devX, devY):
     print(1.0 * correct / total)
     print("{}/{}".format(correct, total))
 
-    print(0)
 
 def run_svm_show_result(X,y):
     # we create an instance of SVM and fit out data. We do not scale our
