@@ -233,4 +233,7 @@ if __name__ == '__main__':
 
     Counters, X, Y = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key)
 
+    from svm import run_svm_show_result
+    run_svm_show_result(X,Y)
+
     print("Done")
