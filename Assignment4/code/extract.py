@@ -144,17 +144,28 @@ if __name__ == '__main__':
         for anno_key, rel in anno_by_sent_id[sent_id].items():
             anno_ner1, anno_ner2 = anno_key
             found_f_key = None
+            f_key_score = 0.0
+            both_passed_threshold = False
+            both_passed_shared_word = False
             for f_key in features_by_sent_id[sent_id]:
                 f_ner1, f_ner2 = f_key
                 ner1_sim = SequenceMatcher(None, anno_ner1, f_ner1).ratio()
                 ner2_sim = SequenceMatcher(None, anno_ner2, f_ner2).ratio()
-                if ner1_sim > SIM_THRESHOLD and ner2_sim > SIM_THRESHOLD:
+                if ner1_sim + ner2_sim > f_key_score:
+                    f_key_score = ner1_sim + ner2_sim
                     found_f_key = f_key
-                    break
-            if found_f_key == None:
-                print("Error: could not find match for annotation key:"+str(anno_key))
+                    both_passed_threshold = ner1_sim > SIM_THRESHOLD and ner2_sim > SIM_THRESHOLD
+                    both_passed_shared_word = \
+                        len(set(anno_ner1.split()) & set(f_ner1.split())) > 0 and \
+                        len(set(anno_ner2.split()) & set(f_ner2.split())) > 0
+
+            if not both_passed_threshold:
+                print("WARNING: match for annotation key didn't pass threshold")
                 print("Sentence id: "+sent_id)
-                print("Possible matches: "+str(features_by_sent_id[sent_id].keys()))
-                raise
+                print("Selected match: "+str(anno_key)+" -> "+str(found_f_key))
+                print("Possible matches: "+str(set([a for a,b in features_by_sent_id[sent_id].keys()])))
+                if not both_passed_shared_word:
+                    print("WARNING: extra low rating. Consider filtering out")
+                print("\n")
             anno_key_to_features_key[found_f_key] = anno_key
     print(anno_key_to_features_key)
