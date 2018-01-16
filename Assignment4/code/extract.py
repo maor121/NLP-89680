@@ -122,7 +122,7 @@ def read_annotations_file(filename):
     return relation_by_sent_id
 
 
-def compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id):
+def compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id):
     # Number of sentences should be the same
     assert len(features_by_sent_id) == len(anno_by_sent_id)
     sent_ids = features_by_sent_id.keys()
@@ -131,7 +131,7 @@ def compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id):
     # Note: They are not always the same :_(
     # i.e "United States" in .annotations is "the United States" in .processed
     from difflib import SequenceMatcher
-    anno_key_to_features_key = {}
+    feature_key_to_anno_key = {}
     SIM_THRESHOLD = 0.7
     removed_anno_count = 0
     added_anno_count = 0
@@ -169,12 +169,12 @@ def compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id):
                 print("\n")
             """
             if both_passed_shared_word:
-                if sent_id not in anno_key_to_features_key:
-                    anno_key_to_features_key[sent_id] = {}
-                if found_f_key in anno_key_to_features_key[sent_id]:
+                if sent_id not in feature_key_to_anno_key:
+                    feature_key_to_anno_key[sent_id] = {}
+                if found_f_key in feature_key_to_anno_key[sent_id]:
                     print("Warning! double annotation for sentence: "+sent_id+" skipping.\n")
                 else:
-                    anno_key_to_features_key[sent_id][found_f_key] = anno_key
+                    feature_key_to_anno_key[sent_id][found_f_key] = anno_key
                     added_anno_count += 1
             else:
                 print("Sentence id: " + sent_id)
@@ -182,10 +182,35 @@ def compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id):
                 print("")
                 removed_anno_count += 1
 
-    assert added_anno_count == sum([len(anno_key_to_features_key[k]) for k in anno_key_to_features_key])
+    assert added_anno_count == sum([len(feature_key_to_anno_key[k]) for k in feature_key_to_anno_key])
     print("Found: {} annotations. Removed (because could not find match): {}"
           .format(added_anno_count, removed_anno_count))
-    return anno_key_to_features_key
+    return feature_key_to_anno_key
+
+
+def convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key):
+    from utils import StringCounter
+    import numpy as np
+    sent_ids = features_by_sent_id.keys()
+    features_dim_count = len(features_by_sent_id[sent_ids[0]].values()[0])
+
+    Counters = np.ndarray(shape=(features_dim_count+1), dtype=object)
+    for i in range(features_dim_count+1):
+        Counters[i] = StringCounter()
+    X = []
+    Y = []
+    YCounter = Counters[-1]
+    for sent_id in sent_ids:
+        for f_key, features in features_by_sent_id[sent_id].items():
+            features_as_ids = tuple([Counters[i].get_id_and_update(f) for i,f in enumerate(features)])
+            X.append(features_as_ids)
+            anno_key = feature_key_to_anno_key.get(f_key, None)
+            anno = anno_by_sent_id[sent_id].get(anno_key, None)
+            if anno == None:
+                anno = "None"
+            Y.append(YCounter.get_id_and_update(anno))
+
+    return Counters, X, Y
 
 if __name__ == '__main__':
 
@@ -195,6 +220,8 @@ if __name__ == '__main__':
     print(features_by_sent_id)
     print(anno_by_sent_id)
 
-    anno_key_to_features_key = compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id)
+    feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
+
+    Counters, X, Y = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key)
 
     print("Done")
