@@ -134,6 +134,7 @@ def compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id):
     anno_key_to_features_key = {}
     SIM_THRESHOLD = 0.7
     removed_anno_count = 0
+    added_anno_count = 0
     for sent_id in sent_ids:
         for anno_key in anno_by_sent_id[sent_id]:
             anno_ner1, anno_ner2 = anno_key
@@ -168,15 +169,22 @@ def compute_anno_key_to_features_key(anno_by_sent_id, features_by_sent_id):
                 print("\n")
             """
             if both_passed_shared_word:
-                anno_key_to_features_key[found_f_key] = anno_key
+                if sent_id not in anno_key_to_features_key:
+                    anno_key_to_features_key[sent_id] = {}
+                if found_f_key in anno_key_to_features_key[sent_id]:
+                    print("Warning! double annotation for sentence: "+sent_id+" skipping.\n")
+                else:
+                    anno_key_to_features_key[sent_id][found_f_key] = anno_key
+                    added_anno_count += 1
             else:
                 print("Sentence id: " + sent_id)
                 print("Removed match: " + str(anno_key) + " -> " + str(found_f_key))
                 print("")
                 removed_anno_count += 1
 
+    assert added_anno_count == sum([len(anno_key_to_features_key[k]) for k in anno_key_to_features_key])
     print("Found: {} annotations. Removed (because could not find match): {}"
-          .format(len(anno_key_to_features_key), removed_anno_count))
+          .format(added_anno_count, removed_anno_count))
     return anno_key_to_features_key
 
 if __name__ == '__main__':
