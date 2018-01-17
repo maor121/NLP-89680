@@ -7,6 +7,8 @@ class StringCounter:
         self.UNK_WORD = UNK_WORD
         for s in initialStrList:
             self.get_id_and_update(s)
+        if UNK_WORD is not None:
+            self.get_id_and_update(UNK_WORD)
 
     def get_id_and_update(self, str, count=1):
         if not self.S2I.__contains__(str):

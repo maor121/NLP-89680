@@ -29,8 +29,8 @@ def extract_ner_type(sentence, ner):
 
 
 def extract_constituent_path(sentence, ner1, ner2):
-    loc1 = ner1[0]
-    loc2 = ner2[0]
+    loc1 = ner1[-1]
+    loc2 = ner2[-1]
 
     path_ids_up = []
     word = sentence[loc1]
@@ -233,13 +233,21 @@ def convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_ke
         Counters = np.ndarray(shape=(features_dim_count+1), dtype=object)
         for i in range(features_dim_count+1):
             Counters[i] = StringCounter()
+        for sent_id in sent_ids:
+            for f_key, features in features_by_sent_id[sent_id].items():
+                [Counters[i].get_id_and_update(f) for i, f in enumerate(features)]
+        # Filter rare features
+        for i in range(features_dim_count):
+            Counters[i].filter_rare_words(2) #Min appearance: 2
+            Counters[i] = StringCounter(Counters[i].S2I.keys(), "*UNK*")
+
     X = []
     Y = []
     YCounter = Counters[-1]
     removed_anno_count = 0
     for sent_id in sent_ids:
         for f_key, features in features_by_sent_id[sent_id].items():
-            features_as_ids = tuple([Counters[i].get_id_and_update(f) for i,f in enumerate(features)])
+            features_as_ids = tuple([Counters[i].get_id(f) for i,f in enumerate(features)])
             X.append(features_as_ids)
             anno_key = feature_key_to_anno_key[sent_id].get(f_key, None)
             anno = anno_by_sent_id[sent_id].get(anno_key, None)
