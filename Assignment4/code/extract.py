@@ -319,7 +319,10 @@ if __name__ == '__main__':
     class_dict = utils.inverse_dict(Counters[-1].S2I)
 
     import svm
+    #svm.run_svm_print_result(TrainX, TrainY, DevX, DevY, class_dict)
 
-    svm.run_svm_print_result(TrainX, TrainY, DevX, DevY, class_dict)
+    import mlp
+    features_per_dim = [len(c.S2I) for c in Counters[:-1]]
+    mlp.run_mlp_print_result(TrainX, TrainY, DevX, DevY, class_dict, features_per_dim)
 
     print("Done")
