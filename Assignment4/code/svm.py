@@ -18,11 +18,12 @@ def run_svm_print_result(trainX, trainY, devX, devY, classes_dict):
     precision = precision_score(devY, devPrediction, average=None)
     recall = recall_score(devY, devPrediction, average=None)
     accuracy = accuracy_score(devY, devPrediction)
+    f1 = 2 * precision*recall / (precision + recall)
 
     print("Accuracy: {}".format(accuracy))
     print("Precision: {}".format({classes_dict[i]:("%.3f" % p) for i, p in enumerate(precision)}))
     print("Recall: {}".format({classes_dict[i]:("%.3f" % r) for i, r in enumerate(recall)}))
-
+    print("F1: {}".format({classes_dict[i]: ("%.3f" % f) for i, f in enumerate(f1)}))
 
 def run_svm_show_result(X,y):
     # we create an instance of SVM and fit out data. We do not scale our
