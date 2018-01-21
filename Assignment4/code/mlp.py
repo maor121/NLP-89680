@@ -8,8 +8,7 @@ def run_mlp_print_result(trainX, trainY, devX, devY, classes_dict, features_per_
     onehot_devX = onehot_encoder.fit_transform(devX)
 
     clf = MLPClassifier(solver='lbfgs', alpha=1e-5,
-    hidden_layer_sizes = (len(classes_dict)), random_state = 1,
-                        verbose=False)
+    hidden_layer_sizes = (len(classes_dict)), random_state = 1)
     clf.fit(onehot_trainX, trainY)
 
     devPrediction = clf.predict(onehot_devX)
