@@ -104,8 +104,8 @@ def extract_typed_dependency_path(sentence, ner1, ner2):
     remove_after_index = path_idx_left.index(ancestor)
     path_idx_left = path_idx_left[:remove_after_index][::-1]
 
-    path_left = ' '.join('%s L-%s' % (sentence[id - 1][1], sentence[id - 1][4]) for id in path_idx_left)
-    path_right = ' '.join('%s R-%s' % (sentence[id - 1][1], sentence[id - 1][4]) for id in path_ids_right)
+    path_left = ' '.join('L-%s' % (sentence[id - 1][4]) for id in path_idx_left)
+    path_right = ' '.join('R-%s' % (sentence[id - 1][4]) for id in path_ids_right)
     common = sentence[ancestor - 1][1]
     return path_left + common + path_right
 
