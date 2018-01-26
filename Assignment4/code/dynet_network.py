@@ -1,6 +1,6 @@
 import dynet as dy
 import numpy as np
-
+import random
 
 class Model(object):
     def __init__(self, vocab_size, arr_size, deps_size, params):
@@ -162,8 +162,10 @@ def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, d
     network = Model(vocab_size, arr_size, deps_size, params)
     trainer = dy.AdamTrainer(network.model)
 
+    train_data = zip(trainX, trainY)
     for epoch in xrange(25):
-        for inp, lbl in zip(trainX, trainY):
+        random.shuffle(train_data)
+        for inp, lbl in train_data:
             loss = network.create_network_return_loss(inp, lbl)
             loss_val = loss.value()  # run forward prop
             loss.backward()
