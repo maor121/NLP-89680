@@ -42,11 +42,11 @@ def compute_acc(anno_by_sent_gold, anno_by_sent_test):
                     # present in gold but absent from system
                     recall_errors[re_gold].append(gold_key+"-"+str(test_key)+"\t"+re_gold+"\t"+re_test)
             else: # false-positive: precision error
-                precision_errors[re_test].append("NO GOLD KEY-"+str(test_key) + '\tNO GOLD ANNO\t' + re_test)
+                precision_errors[re_test].append("NO GOLD KEY-"+str(test_key) + "\tNO GOLD ANNO\t" + re_test)
 
         for gold_key, re_gold in anno_by_sent_gold[sent_id].items():
             if gold_key not in gold_key_to_test_key[sent_id]:  # no match
-                recall_errors[re_gold].append(str(gold_key)+'-NO TEST KEY' + '\t'+re_gold+'\tNO TEST ANNO')
+                recall_errors[re_gold].append(str(gold_key)+'-NO TEST KEY' + "\t"+re_gold+"\tNO TEST ANNO")
 
         relevant.update([re_gold for re_gold in anno_by_sent_gold[sent_id].values()])
         retrieved.update([re_test for re_test in anno_by_sent_test[sent_id].values()])
@@ -88,10 +88,10 @@ if __name__ == '__main__':
 
         print 'PRECISION ERROS(sample):'
         print '(in test annotations but not in gold)'
-        print '\n'.join(prec_errors)
+        print [list(prec_errors[l]) for l in prec_errors]
         print '=' * 30
 
         print 'RECALL ERROS(sample):'
         print '(in gold annotations but not in test)'
-        print '\n'.join(rec_errors)
+        print [list(rec_errors[l]) for l in rec_errors]
         print '=' * 30
