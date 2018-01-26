@@ -1,13 +1,15 @@
 import dynet as dy
 import numpy as np
 
-embed_dim = 128
-cons_path_out_dim = 128
-deps_path_out_dim = 128
-
 
 class Model(object):
-    def __init__(self, model, vocab_size, arr_size, deps_size):
+    def __init__(self, model, vocab_size, arr_size, deps_size, params):
+        dep_dropout, cons_dropout, embed_dim, cons_dim, deps_dim = params
+        self.deps_dropout = dep_dropout
+        self.cons_dropout = cons_dropout
+        self.embed_dim = embed_dim
+        self.cons_dim = cons_dim
+        self.deps_dim = deps_dim
 
         # lookups for the inputs
         # idea - have different lookup for the different sequence models
@@ -16,12 +18,12 @@ class Model(object):
         self.dep_lookup = model.add_lookup_parameters((deps_size, embed_dim))
 
         # sequence LSTM's
-        self.cons_lstm = dy.LSTMBuilder(1, embed_dim, cons_path_out_dim, model)
-        self.deps_lstm = dy.LSTMBuilder(1, embed_dim, deps_path_out_dim, model)
+        self.cons_lstm = dy.LSTMBuilder(1, embed_dim, self.cons_dim, model)
+        self.deps_lstm = dy.LSTMBuilder(1, embed_dim, self.deps_dim, model)
 
         # idea - add b's (biases vectors)
         dims = (128, 64)
-        self.pW1 = model.add_parameters((dims[0], 4 + cons_path_out_dim + deps_path_out_dim))
+        self.pW1 = model.add_parameters((dims[0], 4 + self.cons_dim + self.deps_dim))
         self.pW2 = model.add_parameters((dims[1], dims[0]))
         self.pW3 = model.add_parameters((3, dims[1]))
 
@@ -34,15 +36,17 @@ class Model(object):
                 outvec.append(self.arrow_lookup[x])
         return outvec
 
-    def cons_output(self, cons_path):
+    def cons_output(self, cons_path, train=False):
         cons_path = self.cons_repr(cons_path)
+        if train:
+            cons_path = [dy.dropout(x, self.cons_dropout) for x in cons_path]  # apply dropout
         cons_lstm = self.cons_lstm.initial_state()
         if len(cons_path) > 0:
             lstm_out = cons_lstm.transduce(cons_path)
             cons_path = lstm_out[-1]
         else:
-            cons_path = dy.vecInput(cons_path_out_dim)
-            cons_path.set(np.zeros(cons_path_out_dim))
+            cons_path = dy.vecInput(self.cons_dim)
+            cons_path.set(np.zeros(self.cons_dim))
         return cons_path
 
     def deps_repr(self, deps_path):
@@ -54,17 +58,21 @@ class Model(object):
                 outvec.append(self.arrow_lookup[x])
             else:
                 outvec.append(self.dep_lookup[x])
+
         return outvec
 
-    def deps_output(self, deps_path):
+    def deps_output(self, deps_path, train=False):
         deps_path = self.deps_repr(deps_path)
+        if train:
+            deps_path = [dy.dropout(x, self.deps_dropout) for x in deps_path]  # apply dropout
+
         deps_lstm = self.deps_lstm.initial_state()
         if len(deps_path) > 0:
             lstm_out = deps_lstm.transduce(deps_path)
             deps_path = lstm_out[-1]
         else:
-            deps_path = dy.vecInput(deps_path_out_dim)
-            deps_path.set(np.zeros(deps_path_out_dim))
+            deps_path = dy.vecInput(self.deps_dim)
+            deps_path.set(np.zeros(self.deps_dim))
         return deps_path
 
     def ners_output(self, ners):
@@ -72,14 +80,14 @@ class Model(object):
         ners_input.set(ners)
         return ners_input
 
-    def build_graph(self, inputs):
+    def build_graph(self, inputs, train=False):
         ners, cons_path, deps_path = inputs
 
         dy.renew_cg()
 
         ners_vec = self.ners_output(ners)
-        cons_vec = self.cons_output(cons_path)
-        deps_vec = self.deps_output(deps_path)
+        cons_vec = self.cons_output(cons_path, train)
+        deps_vec = self.deps_output(deps_path, train)
 
         mlp_input = dy.concatenate([ners_vec, cons_vec, deps_vec])
 
@@ -92,7 +100,7 @@ class Model(object):
         return output
 
     def create_network_return_loss(self, inputs, output):
-        out = self.build_graph(inputs)
+        out = self.build_graph(inputs, True)
         loss = -dy.log(dy.pick(out, output))
         return loss
 
@@ -136,11 +144,22 @@ def compute_acc(devY, goldY):
 def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, deps_size):
     assert len(trainX) == len(trainY)
 
+    # dep_dropout, cons_dropout, embed_dim, cons_dim, deps_dim = params
+    params = (0.3, 0.3, 1, 11, 11)
+
+    print '=' * 30
+    print 'TRAINING THE NETWORK'
+    print '\tdep_dropout \t%f' % params[0]
+    print '\tcons_dropout\t%f' % params[1]
+    print '\tembed_dim   \t%d' % params[2]
+    print '\tcons_dim    \t%d' % params[3]
+    print '\tdeps_dim    \t%d' % params[4]
+    print '=' * 30
     m = dy.ParameterCollection()
-    network = Model(m, vocab_size, arr_size, deps_size)
+    network = Model(m, vocab_size, arr_size, deps_size,params)
     trainer = dy.AdamTrainer(m)
 
-    for epoch in xrange(20):
+    for epoch in xrange(50):
         for inp, lbl in zip(trainX, trainY):
             loss = network.create_network_return_loss(inp, lbl)
             loss_val = loss.value()  # run forward prop
@@ -156,8 +175,11 @@ def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, d
     dev_output = [network.create_network_return_best(inp) for inp in devX]
     assert len(dev_output) == len(devY)
     # compute accuracies
+    print '=' * 30
+    print 'RESULTS:'
     acc, recall, prec, f1 = compute_acc(dev_output, devY)
-    print 'Acc:', acc
-    print 'Recall:', recall
-    print 'prec:', prec
-    print 'f1:', f1
+    print '\tacc:   ', acc
+    print '\trecall:', recall
+    print '\tprec:  ', prec
+    print '\tf1:    ', f1
+    print '=' * 30

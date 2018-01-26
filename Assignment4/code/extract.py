@@ -358,6 +358,8 @@ def features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno
                 continue
             anno = anno_by_sent_id[sent_id][anno_key]
             if anno not in anno2i:
+                X.append(feat2vec(features, dicts))
+                Y.append(anno2i[UNK])
                 continue
             # annontion is allowed, and we know its type.
             input_vec = feat2vec(features, dicts)
