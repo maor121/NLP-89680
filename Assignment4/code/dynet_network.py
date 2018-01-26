@@ -3,7 +3,7 @@ import numpy as np
 
 
 class Model(object):
-    def __init__(self, model, vocab_size, arr_size, deps_size, params):
+    def __init__(self, vocab_size, arr_size, deps_size, params):
         dep_dropout, cons_dropout, embed_dim, cons_dim, deps_dim = params
         self.deps_dropout = dep_dropout
         self.cons_dropout = cons_dropout
@@ -11,21 +11,26 @@ class Model(object):
         self.cons_dim = cons_dim
         self.deps_dim = deps_dim
 
+        self._model = dy.ParameterCollection()
         # lookups for the inputs
         # idea - have different lookup for the different sequence models
-        self.word_lookup = model.add_lookup_parameters((vocab_size, embed_dim))
-        self.arrow_lookup = model.add_lookup_parameters((arr_size, embed_dim))
-        self.dep_lookup = model.add_lookup_parameters((deps_size, embed_dim))
+        self.word_lookup = self.model.add_lookup_parameters((vocab_size, embed_dim))
+        self.arrow_lookup = self.model.add_lookup_parameters((arr_size, embed_dim))
+        self.dep_lookup = self.model.add_lookup_parameters((deps_size, embed_dim))
 
         # sequence LSTM's
-        self.cons_lstm = dy.LSTMBuilder(1, embed_dim, self.cons_dim, model)
-        self.deps_lstm = dy.LSTMBuilder(1, embed_dim, self.deps_dim, model)
+        self.cons_lstm = dy.LSTMBuilder(1, embed_dim, self.cons_dim, self.model)
+        self.deps_lstm = dy.LSTMBuilder(1, embed_dim, self.deps_dim, self.model)
 
         # idea - add b's (biases vectors)
         dims = (128, 64)
-        self.pW1 = model.add_parameters((dims[0], 4 + self.cons_dim + self.deps_dim))
-        self.pW2 = model.add_parameters((dims[1], dims[0]))
-        self.pW3 = model.add_parameters((3, dims[1]))
+        self.pW1 = self.model.add_parameters((dims[0], 4 + self.cons_dim + self.deps_dim))
+        self.pW2 = self.model.add_parameters((dims[1], dims[0]))
+        self.pW3 = self.model.add_parameters((3, dims[1]))
+
+    @property
+    def model(self):
+        return self._model
 
     def cons_repr(self, cons_path):
         outvec = []
@@ -154,9 +159,8 @@ def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, d
     print '\tembed_dim   \t%d' % params[2]
     print '\tcons_dim    \t%d' % params[3]
     print '\tdeps_dim    \t%d' % params[4]
-    m = dy.ParameterCollection()
-    network = Model(m, vocab_size, arr_size, deps_size,params)
-    trainer = dy.AdamTrainer(m)
+    network = Model(vocab_size, arr_size, deps_size, params)
+    trainer = dy.AdamTrainer(network.model)
 
     for epoch in xrange(25):
         for inp, lbl in zip(trainX, trainY):
@@ -169,7 +173,7 @@ def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, d
         dev_output = [network.create_network_return_best(inp) for inp in devX]
         trainacc, _, _, _ = compute_acc(train_output, trainY)
         devacc, _, _, _ = compute_acc(dev_output, devY)
-        #print '%d %f %f' % (epoch, trainacc, devacc)
+        # print '%d %f %f' % (epoch, trainacc, devacc)
 
     dev_output = [network.create_network_return_best(inp) for inp in devX]
     assert len(dev_output) == len(devY)
