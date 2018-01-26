@@ -1,4 +1,11 @@
-MAX_CLEN = 0
+UNK = '_UNK_'
+UP = 'U'
+DOWN = 'D'
+LEFT = 'L'
+RIGHT = 'R'
+ROOT = 'S'
+
+anno2i = {UNK: 0, "Work_For": 1, "Live_In": 2}
 
 
 def extract_ners_from_sentence(sentence):
@@ -30,8 +37,11 @@ def extract_ner_type(sentence, ner):
     return ner_type
 
 
+def extract_ner_tag(sentence, ner):
+    return sentence[ner[0]][2]
+
+
 def extract_constituent_path(sentence, ner1, ner2):
-    global MAX_CLEN
     loc1 = ner1[-1]
     loc2 = ner2[-1]
 
@@ -60,16 +70,12 @@ def extract_constituent_path(sentence, ner1, ner2):
     remove_after_index = path_ids_up.index(ancestor)
     path_ids_up = path_ids_up[:remove_after_index + 1]
     remove_after_index = path_ids_down.index(ancestor)
-    path_ids_down = path_ids_down[:remove_after_index + 1]
+    path_ids_down = path_ids_down[:remove_after_index + 1][::-1]
 
-    lens = len(path_ids_down) + len(path_ids_up)
-    if lens > MAX_CLEN:
-        MAX_CLEN = lens
+    path_up_str = ' '.join('%s-%s' % ((sentence[id - 1][2] if id != 0 else ROOT), UP) for id in path_ids_up)  # POS UP
+    path_down_str = ' '.join('%s-%s' % ((sentence[id - 1][2] if id != 0 else ROOT), DOWN) for id in path_ids_down)
 
-    path_up_str = " ".join([(sentence[id - 1][2] if id != 0 else "S") + "_UP" for id in path_ids_up])  # POS UP
-    path_down_str = " ".join([(sentence[id - 1][2] if id != 0 else "S") + "_DOWN" for id in reversed(path_ids_down)])
-
-    return path_up_str + " " + path_down_str
+    return path_up_str, path_down_str
 
 
 def extract_typed_dependency_path(sentence, ner1, ner2):
@@ -97,17 +103,18 @@ def extract_typed_dependency_path(sentence, ner1, ner2):
             break
 
     if ancestor is None:
-        return ''
+        return None
 
     remove_after_index = path_ids_right.index(ancestor)
     path_ids_right = path_ids_right[:remove_after_index][::-1]
     remove_after_index = path_idx_left.index(ancestor)
     path_idx_left = path_idx_left[:remove_after_index][::-1]
 
-    path_left = ' '.join('L-%s' % (sentence[id - 1][4]) for id in path_idx_left)
-    path_right = ' '.join('R-%s' % (sentence[id - 1][4]) for id in path_ids_right)
-    common = sentence[ancestor - 1][1]
-    return path_left + common + path_right
+    # word-dir-dep
+    path_left = ' '.join('%s-%s-%s' % (sentence[idx - 1][1], LEFT, sentence[idx - 1][4]) for idx in path_idx_left)
+    path_right = ' '.join('%s-%s-%s' % (sentence[idx - 1][1], RIGHT, sentence[idx - 1][4]) for idx in path_ids_right)
+    common = sentence[ancestor - 1][2]
+    return path_left, path_right
 
 
 def print_ner_entities(sentence, ner_entities):
@@ -130,11 +137,12 @@ def process_sentence(sentence):
             name_2 = extract_ner_name(sentence, ner2)
             entity_type_1 = extract_ner_type(sentence, ner1)
             entity_type_2 = extract_ner_type(sentence, ner2)
-            type_concated = entity_type_1 + entity_type_2
+            ner_tag_1 = extract_ner_tag(sentence, ner1)
+            ner_tag_2 = extract_ner_tag(sentence, ner2)
             dep_path = extract_typed_dependency_path(sentence, ner1, ner2)
             constituent_path = extract_constituent_path(sentence, ner1, ner2)
 
-            result[(name_1, name_2)] = (entity_type_1, entity_type_2, type_concated, constituent_path, dep_path)
+            result[(name_1, name_2)] = (entity_type_1, ner_tag_1, entity_type_2, ner_tag_2, constituent_path, dep_path)
 
     return result
 
@@ -301,28 +309,126 @@ def convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_ke
     return Counters, X, Y
 
 
+def feat2vec(feats, dicts):
+    w2i, t2i, n2i, d2i, a2i = dicts
+
+    vec = []
+    entity_type_1, ner_tag_1, entity_type_2, ner_tag_2, constituent_path, dep_path = feats
+    ners = [n2i.get(entity_type_1, 0), t2i.get(ner_tag_1, 0), n2i.get(entity_type_2, 0), t2i.get(ner_tag_2, 0)]
+    vec.append(ners)
+
+    cpath = []
+    if constituent_path is not None:
+        # do your thing
+        path_up, path_down = constituent_path
+        path_up = path_up.strip().split()
+        path_down = path_down.strip().split()
+        for path in [path_up, path_down]:
+            for p in path:
+                cons_tag, cons_dir = p.split('-')
+                cpath.extend([t2i.get(cons_tag, 0), a2i[cons_dir]])
+    vec.append(cpath)
+
+    dpath = []
+    if dep_path is not None:
+        # do your thing
+        path_left, path_right = dep_path
+        path_left = path_left.strip().split()
+        path_right = path_right.strip().split()
+        for path in [path_left, path_right]:
+            for p in path:
+                dep_word, dep_dir, dep = p.split('-')
+                dpath.extend([w2i.get(dep_word, 0), a2i[dep_dir], d2i.get(dep, 0)])
+
+    vec.append(dpath)
+    return vec
+
+
+def features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key, dicts):
+    X = []
+    Y = []
+
+    sent_ids = features_by_sent_id.keys()
+    for sent_id in sent_ids:
+        for f_key, features in features_by_sent_id[sent_id].items():
+            if f_key not in feature_key_to_anno_key[sent_id]:
+                continue
+            anno_key = feature_key_to_anno_key[sent_id][f_key]
+            if anno_key not in anno_by_sent_id[sent_id]:
+                continue
+            anno = anno_by_sent_id[sent_id][anno_key]
+            if anno not in anno2i:
+                continue
+            # annontion is allowed, and we know its type.
+            input_vec = feat2vec(features, dicts)
+            X.append(input_vec)
+            Y.append(anno2i[anno])
+    return X, Y
+
+
+def get_dicts(filename):
+    a2i = {UNK: 0, UP: 1, DOWN: 2, LEFT: 3, RIGHT: 4}
+    w2i = {UNK: 0}
+    t2i = {UNK: 0, ROOT: 1}
+    n2i = {UNK: 0}
+    d2i = {UNK: 0}
+    with open(filename, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith('#'):
+                continue
+            line = line.split()
+            if len(line) == 0:
+                continue
+
+            word = line[1]
+            tag = line[3]
+            dep = line[6]
+
+            if word not in w2i:
+                w2i[word] = len(w2i)
+            if tag not in t2i:
+                t2i[tag] = len(t2i)
+
+            if dep not in d2i:
+                d2i[dep] = len(d2i)
+
+            if len(line) > 8:
+                ner = line[8]
+                if ner not in n2i:
+                    n2i[ner] = len(n2i)
+    return w2i, t2i, n2i, d2i, a2i
+
+
 if __name__ == '__main__':
     features_by_sent_id = read_processed_file("../data/Corpus.TRAIN.processed")
     anno_by_sent_id = read_annotations_file("../data/TRAIN.annotations")
     feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
     Counters, TrainX, TrainY = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id,
                                                            feature_key_to_anno_key)
+    dicts = get_dicts("../data/Corpus.TRAIN.processed")
+    X, Y = features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key, dicts)
 
     features_by_sent_id = read_processed_file("../data/Corpus.DEV.processed")
     anno_by_sent_id = read_annotations_file("../data/DEV.annotations")
     feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
-    Counters, DevX, DevY = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key,
-                                                       Counters=Counters)
+    DevX, DevY = features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key, dicts)
 
-    import utils
+    from dynet_network import *
 
-    class_dict = utils.inverse_dict(Counters[-1].S2I)
+    w2i, t2i, n2i, d2i, a2i = dicts
+    run_network_print_result(X, Y, DevX, DevY, len(w2i), len(a2i), len(d2i))
 
-    import svm
-    #svm.run_svm_print_result(TrainX, TrainY, DevX, DevY, class_dict)
-
-    import mlp
-    features_per_dim = [len(c.S2I) for c in Counters[:-1]]
-    mlp.run_mlp_print_result(TrainX, TrainY, DevX, DevY, class_dict, features_per_dim)
+    # import utils
+    #
+    # class_dict = utils.inverse_dict(anno2i)
+    #
+    # import svm
+    # # svm.run_svm_print_result(TrainX, TrainY, DevX, DevY, class_dict)
+    #
+    # import mlp
+    #
+    # features_per_dim = [len(c.S2I) for c in Counters[:-1]]
+    # mlp.run_mlp_print_result(TrainX, TrainY, DevX, DevY, class_dict, features_per_dim)
 
     print("Done")
