@@ -22,7 +22,7 @@ class Model(object):
         self.deps_lstm = dy.LSTMBuilder(1, embed_dim, self.deps_dim, model)
 
         # idea - add b's (biases vectors)
-        dims = (32, 8)
+        dims = (128, 64)
         self.pW1 = model.add_parameters((dims[0], 4 + self.cons_dim + self.deps_dim))
         self.pW2 = model.add_parameters((dims[1], dims[0]))
         self.pW3 = model.add_parameters((3, dims[1]))
