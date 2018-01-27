@@ -207,7 +207,7 @@ def read_annotations_file(filename):
 def compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id):
     # Number of sentences should be the same
     #assert len(features_by_sent_id) == len(anno_by_sent_id)
-    sent_ids = features_by_sent_id.keys()
+    sent_ids = set.union(set(features_by_sent_id.keys()) ,set(anno_by_sent_id.keys()))
 
     # For each annotation, find it's features from the input
     # Note: They are not always the same :_(
@@ -218,13 +218,13 @@ def compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id):
     removed_anno_count = 0
     added_anno_count = 0
     for sent_id in sent_ids:
-        for anno_key in anno_by_sent_id[sent_id]:
+        for anno_key in anno_by_sent_id.get(sent_id,{}):
             anno_ner1, anno_ner2 = anno_key
             found_f_key = None
             f_key_score = 0.0
             both_passed_threshold = False
             both_passed_shared_word = False
-            for f_key in features_by_sent_id[sent_id]:
+            for f_key in features_by_sent_id.get(sent_id,{}):
                 f_ner1, f_ner2 = f_key
                 ner1_sim = SequenceMatcher(None, anno_ner1, f_ner1).ratio()
                 ner2_sim = SequenceMatcher(None, anno_ner2, f_ner2).ratio()
