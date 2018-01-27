@@ -52,8 +52,8 @@ def compute_acc(anno_by_sent_gold, anno_by_sent_test):
         retrieved.update([re_test for re_test in anno_by_sent_test.get(sent_id,{}).values()])
 
     acc = good / (good + bad)
-    recall = {l: relevant_retrieved[l] / relevant[l] if relevant[l]>0 else 0 for l in gold_labels}
-    prec = {l:relevant_retrieved[l] / retrieved[l] if retrieved[l]>0 else 0 for l in gold_labels}
+    recall = {l: 1.0 * relevant_retrieved[l] / relevant[l] if relevant[l]>0 else 0 for l in gold_labels}
+    prec = {l:1.0 * relevant_retrieved[l] / retrieved[l] if retrieved[l]>0 else 0 for l in gold_labels}
     f1 = {l:(2.0 * recall[l] * prec[l]) / (recall[l] + prec[l]) if (recall[l] + prec[l])>0 else 0 for l in gold_labels}
 
     return acc, recall, prec, f1, precision_errors, recall_errors
