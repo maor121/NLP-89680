@@ -66,7 +66,7 @@ if __name__ == '__main__':
     test_filename = sys.argv[2]
 
     print_errors_sample = True
-    error_sample_size = 10
+    error_sample_size = 15
 
     anno_by_sent_gold = read_annotations_file(gold_filename)
     anno_by_sent_test = read_annotations_file(test_filename)
