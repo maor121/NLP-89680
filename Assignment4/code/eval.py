@@ -85,8 +85,9 @@ if __name__ == '__main__':
     if print_errors_sample:
         relations = anno2i.keys()
         relations.remove(UNK)
-        prec_errors = {l:numpy.random.choice(prec_errors[l], size=min(error_sample_size,len(prec_errors[l]))) for l in relations if len(prec_errors[l])>0}
-        rec_errors = {l:numpy.random.choice(rec_errors[l], size=min(error_sample_size,len(rec_errors[l]))) for l in relations if len(rec_errors[l])>0}
+
+        prec_errors = {l:numpy.random.choice(prec_errors[l], replace=False, size=min(error_sample_size,len(prec_errors[l]))) for l in relations if len(prec_errors[l])>0}
+        rec_errors = {l:numpy.random.choice(rec_errors[l], replace=False, size=min(error_sample_size,len(rec_errors[l]))) for l in relations if len(rec_errors[l])>0}
 
         print 'PRECISION ERROS(sample):'
         print '(in test annotations but not in gold)'
