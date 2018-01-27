@@ -163,14 +163,14 @@ def compute_acc(devY, goldY):
 def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, deps_size):
     assert len(trainX) == len(trainY)
 
-    params = (0.8, 0.8, 64, 64, 64)
-    print '=' * 30
-    print 'TRAINING THE NETWORK'
-    print '\tdep_dropout \t%f' % params[0]
-    print '\tcons_dropout\t%f' % params[1]
-    print '\tembed_dim   \t%d' % params[2]
-    print '\tcons_dim    \t%d' % params[3]
-    print '\tdeps_dim    \t%d' % params[4]
+    # params = (0.8, 0.8, 64, 64, 64)
+    # print '=' * 30
+    # print 'TRAINING THE NETWORK'
+    # print '\tdep_dropout \t%f' % params[0]
+    # print '\tcons_dropout\t%f' % params[1]
+    # print '\tembed_dim   \t%d' % params[2]
+    # print '\tcons_dim    \t%d' % params[3]
+    # print '\tdeps_dim    \t%d' % params[4]
     network = Model(vocab_size, arr_size, deps_size)
     trainer = dy.AdamTrainer(network.model)
 
