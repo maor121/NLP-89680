@@ -2,8 +2,9 @@ import dynet as dy
 import numpy as np
 import random
 
+
 class Model(object):
-    def __init__(self, vocab_size, arr_size, deps_size, params):
+    def __init__(self, vocab_size, arr_size, deps_size, params=(0.3, 0.3, 1, 12, 12)):
         dep_dropout, cons_dropout, embed_dim, cons_dim, deps_dim = params
         self.deps_dropout = dep_dropout
         self.cons_dropout = cons_dropout
@@ -140,8 +141,15 @@ def compute_acc(devY, goldY):
         sm = 0.0
         for r_gold in table:
             sm += table[r_gold][gold]
-        prec[gold] = tp / sm
-        f1[gold] = (2.0 * recall[gold] * prec[gold]) / (recall[gold] + prec[gold])
+        if sm > 0:
+            sm = tp / sm
+        prec[gold] = sm
+
+        denom = (recall[gold] + prec[gold])
+        if denom != 0:
+            f1[gold] = (2.0 * recall[gold] * prec[gold]) / denom
+        else:
+            f1[gold] = 0.0
 
     return acc, recall, prec, f1
 
@@ -149,9 +157,7 @@ def compute_acc(devY, goldY):
 def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, deps_size):
     assert len(trainX) == len(trainY)
 
-    # dep_dropout, cons_dropout, embed_dim, cons_dim, deps_dim = params
-    params = (0.3, 0.3, 1, 12, 12)
-
+    params = (0.8, 0.8, 64, 64, 64)
     print '=' * 30
     print 'TRAINING THE NETWORK'
     print '\tdep_dropout \t%f' % params[0]
@@ -159,11 +165,11 @@ def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, d
     print '\tembed_dim   \t%d' % params[2]
     print '\tcons_dim    \t%d' % params[3]
     print '\tdeps_dim    \t%d' % params[4]
-    network = Model(vocab_size, arr_size, deps_size, params)
+    network = Model(vocab_size, arr_size, deps_size)
     trainer = dy.AdamTrainer(network.model)
 
     train_data = zip(trainX, trainY)
-    for epoch in xrange(25):
+    for epoch in xrange(15):
         random.shuffle(train_data)
         for inp, lbl in train_data:
             loss = network.create_network_return_loss(inp, lbl)
@@ -173,9 +179,20 @@ def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, d
 
         train_output = [network.create_network_return_best(inp) for inp in trainX]
         dev_output = [network.create_network_return_best(inp) for inp in devX]
-        trainacc, _, _, _ = compute_acc(train_output, trainY)
-        devacc, _, _, _ = compute_acc(dev_output, devY)
-        # print '%d %f %f' % (epoch, trainacc, devacc)
+        t_acc, t_recall, t_prec, t_f1 = compute_acc(train_output, trainY)
+        d_acc, d_recall, d_prec, d_f1 = compute_acc(dev_output, devY)
+        print '-' * 30
+        print 'Epoch:', epoch
+        print 'Train:'
+        print '\tacc:   ', t_acc
+        print '\trecall:', t_recall
+        print '\tprec:  ', t_prec
+        print '\tf1:    ', t_f1
+        print 'DEV:'
+        print '\tacc:   ', d_acc
+        print '\trecall:', d_recall
+        print '\tprec:  ', d_prec
+        print '\tf1:    ', d_f1
 
     dev_output = [network.create_network_return_best(inp) for inp in devX]
     assert len(dev_output) == len(devY)
@@ -187,3 +204,4 @@ def run_network_print_result(trainX, trainY, devX, devY, vocab_size, arr_size, d
     print '\tprec:  ', prec
     print '\tf1:    ', f1
     print '=' * 30
+    return network, (acc, recall, prec, f1)

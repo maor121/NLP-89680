@@ -4,8 +4,12 @@ DOWN = 'D'
 LEFT = 'L'
 RIGHT = 'R'
 ROOT = 'S'
+WORK_FOR = 'Work_For'
+LIVE_IN = 'Live_In'
+anno2i = {UNK: 0, WORK_FOR: 1, LIVE_IN: 2}
 
-anno2i = {UNK: 0, "Work_For": 1, "Live_In": 2}
+MODEL_NAME = 'cactus_model'
+DICTS_NAME = 'cactus_dicts'
 
 
 def extract_ners_from_sentence(sentence):
@@ -202,7 +206,7 @@ def read_annotations_file(filename):
 
 def compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id):
     # Number of sentences should be the same
-    assert len(features_by_sent_id) == len(anno_by_sent_id)
+    #assert len(features_by_sent_id) == len(anno_by_sent_id)
     sent_ids = features_by_sent_id.keys()
 
     # For each annotation, find it's features from the input
@@ -325,7 +329,7 @@ def feat2vec(feats, dicts):
         path_down = path_down.strip().split()
         for path in [path_up, path_down]:
             for p in path:
-                cons_tag, cons_dir = p.split('-')
+                cons_tag, cons_dir = p.rsplit('-', 1)
                 cpath.extend([t2i.get(cons_tag, 0), a2i[cons_dir]])
     vec.append(cpath)
 
@@ -337,100 +341,64 @@ def feat2vec(feats, dicts):
         path_right = path_right.strip().split()
         for path in [path_left, path_right]:
             for p in path:
-                dep_word, dep_dir, dep = p.split('-')
+                dep_word, dep_dir, dep = p.rsplit('-', 2)
                 dpath.extend([w2i.get(dep_word, 0), a2i[dep_dir], d2i.get(dep, 0)])
 
     vec.append(dpath)
     return vec
 
 
-def features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key, dicts):
-    X = []
-    Y = []
+def main(src):
+    import os.path
+    if not os.path.isfile(MODEL_NAME):
+        print 'Error: Could not file model file.'
+        print 'In order to run extract.py, you have to run train.py before.'
+        exit()
+    if not os.path.isfile(DICTS_NAME):
+        print 'Error: Could not file dicts file.'
+        print 'In order to run extract.py, you have to run train.py before.'
+        exit()
 
-    sent_ids = features_by_sent_id.keys()
-    for sent_id in sent_ids:
+    import pickle
+    with open(DICTS_NAME, 'rb') as f:
+        dicts = pickle.load(f)
+    w2i, t2i, n2i, d2i, a2i = dicts
+
+    from dynet_network import Model
+    network = Model(len(w2i), len(a2i), len(d2i))
+    network.model.populate(MODEL_NAME)
+
+
+
+    preds = {}
+    i2anno = {v: k for k, v in anno2i.iteritems()}
+    features_by_sent_id = read_processed_file(src)
+
+    for sent_id in features_by_sent_id:
         for f_key, features in features_by_sent_id[sent_id].items():
-            if f_key not in feature_key_to_anno_key[sent_id]:
+            # if we want to predict live_in, then its PERSON -> LOC
+            # if we want to predict works_for, then its PERSON -> ORG
+            if features[0] != 'PERSON':
                 continue
-            anno_key = feature_key_to_anno_key[sent_id][f_key]
-            if anno_key not in anno_by_sent_id[sent_id]:
+            if features[2] not in ['ORG','LOC']:
                 continue
-            anno = anno_by_sent_id[sent_id][anno_key]
-            if anno not in anno2i:
-                X.append(feat2vec(features, dicts))
-                Y.append(anno2i[UNK])
+            feat_vec = feat2vec(features, dicts)
+            pred = network.create_network_return_best(feat_vec)
+            if pred == anno2i[UNK]:
                 continue
-            # annontion is allowed, and we know its type.
-            input_vec = feat2vec(features, dicts)
-            X.append(input_vec)
-            Y.append(anno2i[anno])
-    return X, Y
+            if sent_id not in preds:
+                preds[sent_id] = set()
+            preds[sent_id].add((f_key, i2anno[pred]))
 
-
-def get_dicts(filename):
-    a2i = {UNK: 0, UP: 1, DOWN: 2, LEFT: 3, RIGHT: 4}
-    w2i = {UNK: 0}
-    t2i = {UNK: 0, ROOT: 1}
-    n2i = {UNK: 0}
-    d2i = {UNK: 0}
-    with open(filename, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith('#'):
-                continue
-            line = line.split()
-            if len(line) == 0:
-                continue
-
-            word = line[1]
-            tag = line[3]
-            dep = line[6]
-
-            if word not in w2i:
-                w2i[word] = len(w2i)
-            if tag not in t2i:
-                t2i[tag] = len(t2i)
-
-            if dep not in d2i:
-                d2i[dep] = len(d2i)
-
-            if len(line) > 8:
-                ner = line[8]
-                if ner not in n2i:
-                    n2i[ner] = len(n2i)
-    return w2i, t2i, n2i, d2i, a2i
+    ids = sorted([int(s[4:]) for s in preds])
+    ids = ['sent%d' % i for i in ids]
+    with open('blah', 'w') as f:
+        for sent_id in ids:
+            for p in preds[sent_id]:
+                ners = p[0]
+                rel = p[1]
+                f.write('%s\t%s\t%s\t%s\n' % (sent_id, ners[0], rel, ners[1]))
 
 
 if __name__ == '__main__':
-    features_by_sent_id = read_processed_file("../data/Corpus.TRAIN.processed")
-    anno_by_sent_id = read_annotations_file("../data/TRAIN.annotations")
-    feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
-    Counters, TrainX, TrainY = convert_features_to_numbers(features_by_sent_id, anno_by_sent_id,
-                                                           feature_key_to_anno_key)
-    dicts = get_dicts("../data/Corpus.TRAIN.processed")
-    X, Y = features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key, dicts)
-
-    features_by_sent_id = read_processed_file("../data/Corpus.DEV.processed")
-    anno_by_sent_id = read_annotations_file("../data/DEV.annotations")
-    feature_key_to_anno_key = compute_feature_key_to_anno_key(anno_by_sent_id, features_by_sent_id)
-    DevX, DevY = features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno_key, dicts)
-
-    from dynet_network import *
-
-    w2i, t2i, n2i, d2i, a2i = dicts
-    run_network_print_result(X, Y, DevX, DevY, len(w2i), len(a2i), len(d2i))
-
-    # import utils
-    #
-    # class_dict = utils.inverse_dict(anno2i)
-    #
-    # import svm
-    # # svm.run_svm_print_result(TrainX, TrainY, DevX, DevY, class_dict)
-    #
-    # import mlp
-    #
-    # features_per_dim = [len(c.S2I) for c in Counters[:-1]]
-    # mlp.run_mlp_print_result(TrainX, TrainY, DevX, DevY, class_dict, features_per_dim)
-
-    print("Done")
+    main('../data/Corpus.DEV.processed')
