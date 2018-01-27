@@ -88,10 +88,10 @@ if __name__ == '__main__':
 
         print 'PRECISION ERROS(sample):'
         print '(in test annotations but not in gold)'
-        print '\n'.join([l+'\n'+'\n\t'.join(list(prec_errors[l])) for l in prec_errors])
+        print '\n'.join([l+'\n\t'+'\n\t'.join(list(prec_errors[l])) for l in prec_errors])
         print '=' * 30
 
         print 'RECALL ERROS(sample):'
         print '(in gold annotations but not in test)'
-        print '\n'.join([l+'\n'+'\n\t'.join(list(rec_errors[l])) for l in rec_errors])
+        print '\n'.join([l+'\n\t'+'\n\t'.join(list(rec_errors[l])) for l in rec_errors])
         print '=' * 30
