@@ -11,7 +11,7 @@ def compute_acc(anno_by_sent_gold, anno_by_sent_test):
     sent_ids = list(set(anno_by_sent_gold.keys() + anno_by_sent_test.keys()))
 
     for sent_id in sent_ids:
-        gold_key_to_test_key[sent_id] = utils.inverse_dict(test_key_to_gold_key[sent_id]) # 1 : 1
+        gold_key_to_test_key[sent_id] = utils.inverse_dict(test_key_to_gold_key.get(sent_id,{})) # 1 : 1
 
     relevant_retrieved = Counter()
     relevant = Counter()
@@ -25,7 +25,7 @@ def compute_acc(anno_by_sent_gold, anno_by_sent_test):
     precision_errors = {l:[] for l in gold_labels}
     recall_errors = {l:[] for l in gold_labels}
     for sent_id in sent_ids:
-        for test_key, re_test in anno_by_sent_test[sent_id].items():
+        for test_key, re_test in anno_by_sent_test.get(sent_id,{}).items():
             if test_key in test_key_to_gold_key[sent_id]: # matched
                 gold_key = test_key_to_gold_key[sent_id][test_key]
                 re_gold = anno_by_sent_gold[sent_id][gold_key]
@@ -37,24 +37,24 @@ def compute_acc(anno_by_sent_gold, anno_by_sent_test):
                     bad += 1
 
                     # extracted by the system but absent in the gold
-                    precision_errors[re_test].append(gold_key+"-"+str(test_key)+"\t"+re_gold+"\t"+re_test)
+                    precision_errors[re_test].append(str(gold_key)+"-"+str(test_key)+"\t"+re_gold+"\t"+re_test)
 
                     # present in gold but absent from system
-                    recall_errors[re_gold].append(gold_key+"-"+str(test_key)+"\t"+re_gold+"\t"+re_test)
+                    recall_errors[re_gold].append(str(gold_key)+"-"+str(test_key)+"\t"+re_gold+"\t"+re_test)
             else: # false-positive: precision error
                 precision_errors[re_test].append("NO GOLD KEY-"+str(test_key) + "\tNO GOLD ANNO\t" + re_test)
 
         for gold_key, re_gold in anno_by_sent_gold[sent_id].items():
-            if gold_key not in gold_key_to_test_key[sent_id]:  # no match
+            if gold_key not in gold_key_to_test_key.get(sent_id,{}):  # no match
                 recall_errors[re_gold].append(str(gold_key)+'-NO TEST KEY' + "\t"+re_gold+"\tNO TEST ANNO")
 
-        relevant.update([re_gold for re_gold in anno_by_sent_gold[sent_id].values()])
-        retrieved.update([re_test for re_test in anno_by_sent_test[sent_id].values()])
+        relevant.update([re_gold for re_gold in anno_by_sent_gold.get(sent_id,{}).values()])
+        retrieved.update([re_test for re_test in anno_by_sent_test.get(sent_id,{}).values()])
 
     acc = good / (good + bad)
-    recall = {l: relevant_retrieved[l] / relevant[l] for l in gold_labels}
-    prec = {l:relevant_retrieved[l] / retrieved[l] for l in gold_labels}
-    f1 = {l:(2.0 * recall[l] * prec[l]) / (recall[l] + prec[l]) for l in gold_labels}
+    recall = {l: relevant_retrieved[l] / relevant[l] if relevant[l]>0 else 0 for l in gold_labels}
+    prec = {l:relevant_retrieved[l] / retrieved[l] if retrieved[l]>0 else 0 for l in gold_labels}
+    f1 = {l:(2.0 * recall[l] * prec[l]) / (recall[l] + prec[l]) if (recall[l] + prec[l])>0 else 0 for l in gold_labels}
 
     return acc, recall, prec, f1, precision_errors, recall_errors
 
