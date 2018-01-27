@@ -87,7 +87,7 @@ def main(train_fname, train_anno, dev_fname, dev_anno):
     network, (_, _, _, f1) = run_network_print_result(X, Y, DevX, DevY, len(w2i), len(a2i), len(d2i))
 
     # max network out of 5
-    for i in xrange(5):
+    for i in xrange(0):
         net, (_, _, _, f1_new) = run_network_print_result(X, Y, DevX, DevY, len(w2i), len(a2i), len(d2i))
         if score(f1_new) > score(f1):
             f1 = f1_new

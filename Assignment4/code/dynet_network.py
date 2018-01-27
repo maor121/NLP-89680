@@ -26,8 +26,11 @@ class Model(object):
         # idea - add b's (biases vectors)
         dims = (128, 64)
         self.pW1 = self.model.add_parameters((dims[0], 4 + self.cons_dim + self.deps_dim))
+        self.pb1 = self.model.add_parameters(dims[0])
         self.pW2 = self.model.add_parameters((dims[1], dims[0]))
+        self.pb2 = self.model.add_parameters(dims[1])
         self.pW3 = self.model.add_parameters((3, dims[1]))
+        self.pb3 = self.model.add_parameters(3)
 
     @property
     def model(self):
@@ -98,10 +101,13 @@ class Model(object):
         mlp_input = dy.concatenate([ners_vec, cons_vec, deps_vec])
 
         W1 = dy.parameter(self.pW1)
+        b1 = dy.parameter(self.pb1)
         W2 = dy.parameter(self.pW2)
+        b2 = dy.parameter(self.pb2)
         W3 = dy.parameter(self.pW3)
+        b3 = dy.parameter(self.pb3)
 
-        output = dy.softmax(W3 * dy.tanh(W2 * dy.tanh(W1 * mlp_input)))
+        output = dy.softmax(W3 * dy.tanh(W2 * dy.tanh(W1 * mlp_input + b1)+ b2) + b3)
 
         return output
 
