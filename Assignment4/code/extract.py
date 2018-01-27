@@ -377,10 +377,10 @@ def main(src):
     for sent_id in features_by_sent_id:
         for f_key, features in features_by_sent_id[sent_id].items():
             # if we want to predict live_in, then its PERSON -> LOC, GPE
-            # if we want to predict works_for, then its PERSON -> ORG
+            # if we want to predict works_for, then its PERSON -> ORG, PERSON
             #if features[0] != 'PERSON':
             #    continue
-            #if features[2] not in ['ORG','LOC', 'GPE']:
+            #if features[2] not in ['ORG','LOC', 'GPE', 'PERSON', 'NORP']:
             #    continue
             feat_vec = feat2vec(features, dicts)
             pred = network.create_network_return_best(feat_vec)
