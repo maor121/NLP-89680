@@ -1,5 +1,5 @@
 import sys
-from extract import read_annotations_file, compute_feature_key_to_anno_key
+from extract import read_annotations_file, compute_feature_key_to_anno_key, anno2i, UNK
 from collections import Counter
 import utils
 import numpy.random
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     test_filename = sys.argv[2]
 
     print_errors_sample = True
-    error_sample_size = 10
+    error_sample_size = 30
 
     anno_by_sent_gold = read_annotations_file(gold_filename)
     anno_by_sent_test = read_annotations_file(test_filename)
@@ -83,8 +83,10 @@ if __name__ == '__main__':
     print '=' * 30
 
     if print_errors_sample:
-        prec_errors = {l:numpy.random.choice(prec_errors[l], size=min(error_sample_size,len(prec_errors[l]))) for l in prec_errors.keys() if len(prec_errors[l])>0}
-        rec_errors = {l:numpy.random.choice(rec_errors[l], size=min(error_sample_size,len(rec_errors[l]))) for l in rec_errors.keys() if len(rec_errors[l])>0}
+        relations = anno2i.keys()
+        relations.remove(UNK)
+        prec_errors = {l:numpy.random.choice(prec_errors[l], size=min(error_sample_size,len(prec_errors[l]))) for l in relations if len(prec_errors[l])>0}
+        rec_errors = {l:numpy.random.choice(rec_errors[l], size=min(error_sample_size,len(rec_errors[l]))) for l in relations if len(rec_errors[l])>0}
 
         print 'PRECISION ERROS(sample):'
         print '(in test annotations but not in gold)'
