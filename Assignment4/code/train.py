@@ -48,11 +48,12 @@ def features_to_inputs(features_by_sent_id, anno_by_sent_id, feature_key_to_anno
     for sent_id in sent_ids:
         for f_key, features in features_by_sent_id[sent_id].items():
 
-            if f_key not in feature_key_to_anno_key[sent_id]:
-                continue
-
             input_vec = feat2vec(features, dicts)
             X.append(input_vec)
+
+            if f_key not in feature_key_to_anno_key[sent_id]:
+                Y.append(anno2i[UNK])
+                continue
 
             anno_key = feature_key_to_anno_key[sent_id][f_key]
             if anno_key not in anno_by_sent_id[sent_id]:
