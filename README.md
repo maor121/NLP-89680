@@ -10,6 +10,13 @@ Assignment 2
 
 Assignment 3
 ------------
+**Distributional Semantics**
+Finding similar words by meaning using a combination of algorithms, and making a detailed report comparing them.<br/>
+Data: wikipedia<br/>
+Algorithms:
+- word contexts: (a) sentence (b) window (c) dependency tree (parent\son, direction of arc, jump over preposition)
+- similarity: (a) cosine distance (b) PMI
+- order: (a) 1st order similarity (b) 2nd order similarity
 
 Assignment 4
 ------------
