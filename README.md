@@ -7,7 +7,7 @@ Assignment 1
 
 Assignment 2
 ------------
-**PCFG (Probabilistic Context Free Grammar)**
+**PCFG (Probabilistic Context Free Grammar)**<br/>
 Writing a grammar that generates legal sentences in English. Exploring some (but not all) aspects of the English language, and their implementation in a grammar.
 
 Assignment 3
