@@ -10,7 +10,7 @@ Assignment 2
 
 Assignment 3
 ------------
-**Distributional Semantics**
+**Distributional Semantics**<br/>
 Finding similar words by meaning using a combination of algorithms, and making a detailed report comparing them.<br/>
 Data: wikipedia<br/>
 Algorithms:
