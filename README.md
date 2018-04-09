@@ -1,5 +1,7 @@
 # NLP-89680
-A repository for NLP course at uni.
+A repository for NLP course at uni.<br/>
+
+Language: Python<br/>
 
 Assignment 1
 ------------
